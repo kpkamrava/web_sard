@@ -1,10 +1,13 @@
 ﻿@model web_sard.Models.tbls.portage.portage
 
 @{
-    ViewData["Title"] = Model.KindTitle + " - " + Model._Contracttitle;
+    ViewData["Title"] = Model.KindTitle + " - " + Model.Customer.Title;
+
+    var listContract = (Dictionary<string, Guid>)ViewBag.ListContract;
+    var defContract = (Guid)ViewBag.defContract;
 }
 <div>
-    <a asp-action="Index" asp-route-idtype="@Model._Contract.FkContractType" class="fa fa-th-list btn btn-dark btn-block mb-3"> لیست ماشینهای داخل محوطه </a>
+    <a asp-action="Index" asp-route-idtype="@Model.FkContractType" class="fa fa-th-list btn btn-dark btn-block mb-3"> لیست ماشینهای داخل محوطه </a>
 </div>
 
 
@@ -20,15 +23,14 @@
 
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body ">
-                @{ 
-                          var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == Model.KindCode);
-     
+                @{
+                    var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == Model.KindCode);
 
                 }
-                <h5  >
-                    @Model.Code - @Model._Contracttitle <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                <h5>
+                    @Model.Code - @Model.Customer.Title <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
                 </h5>
-                <div  >
+                <div>
 
                     <ul class="list-group list-group-flush m-0 p-0">
                         <li class="list-group-item">
@@ -40,7 +42,7 @@
                             <span class="badge badge-@(kindcontract.classcolor) fa fa-mobile"> </span>@Model.CarTell
                         </li>
                         <li class="list-group-item">
-                            @if (Model._Contract.ContractTypeTbl.IsProduct1Packing0)
+                            @if (Model.ContractType.IsProduct1Packing0)
                             {
                                 <span class="badge badge-@(kindcontract.classcolor) fa fa-hdd"> </span>@Model.Weight1.GetValueOrDefault().ToString("###0.##")
 
@@ -54,9 +56,9 @@
 
 
                         <li>
-                             
+
                             <div class="row ">
-                                <div  class="col-sm-3">
+                                <div class="col-sm-3">
                                     <div class="card bg-info column">
                                         <div class="card-header"> پیوست جدید</div>
                                         <form asp-action="addDoc" enctype="multipart/form-data">
@@ -68,24 +70,24 @@
                                         </form>
                                     </div>
 
-                                    @await Html.PartialAsync("li/paintsign",Model.Id)
+                                    @await Html.PartialAsync("li/paintsign", Model.Id)
 
                                 </div>
-                           
+
                                 @foreach (var item in Model.Documents)
                                 {
-                            <div class="col-sm-3">
-                                <div class="card  ">
-                                    <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
-                                    @if (item.Kind == "Yard")
-                                    {
-                                        <div class="card-footer">
-                                            <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-del="@true" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+                                    <div class="col-sm-3">
+                                        <div class="card  ">
+                                            <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
+                                            @if (item.Kind == "Yard")
+                                            {
+                                                <div class="card-footer">
+                                                    <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-del="@true" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
 
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                </div>
-                            </div> 
+                                    </div>
 
                                 }
 
@@ -95,59 +97,79 @@
                     </ul>
 
 
-                  
+
                 </div>
 
 
 
 
-              
-            </div>
-    </div>
-    <div class="card border-info shadow">
-        <div class="card-header bg-info p-0" id="headingTwo">
-            <h5>
-                <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    وضعیت قرارداد
-                </button>
-            </h5>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body" id="contractvc">
+
             </div>
         </div>
+
     </div>
-    <div class="card  border-success shadow">
-        <div class="card-header p-0 bg-success" id="headingThree">
-            <h5>
-                <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    @(Model.KindCode < 10 ? "تخلیه" : "بارگیری") بار
-                </button>
-            </h5>
+
+    <div class="card bg-gradient-light">
+        <div class="card-body">
+            @foreach (var item in listContract)
+            {
+            <a asp-action="view" asp-route-id="@Model.Id" asp-route-defContract="@item.Value" class="btn btn-circle btn-info @(item.Value==defContract?"selected":"")">@item.Key</a>
+            }
         </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-                <input type="hidden" id="Id" value="@Model.Id" />
-                <input type="hidden" id="FkContract" value="@Model.FkContract" />
-                <input type="hidden" id="IsEntry" value="@Model._Contract.ContractTypeTbl.IsEntry" />
-                <input type="hidden" id="IsProduct1Packing0" value="@Model._Contract.ContractTypeTbl.IsProduct1Packing0" />
+    </div>
+
+    @if (defContract != Guid.Empty)
+    {
+
+        <div class="card border-info shadow">
+            <div class="card-header bg-info p-0" id="headingTwo">
                 <h5>
-                    @Model.Code - @Model._Contracttitle <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                    <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        وضعیت قرارداد
+                    </button>
                 </h5>
-                @*<input type="hidden" id="NeedLocation" value="@Model._Contract.ContractTypeTbl.OutControlByLocation" />*@
-
-                <partial name="TaxlieBargiriPartial" />
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body" id="contractvc">
+                </div>
             </div>
         </div>
-    </div>
-</div>
-</div>
-@section js{
-<script>
-   Contractbutton("#FkContract", contractvc);
-</script> 
-    <script src="~/assets/js/Vue.js"></script>
-    <script src="~/assets/TaxlieBargirilJs.js"></script>
+        <div class="card  border-success shadow">
+            <div class="card-header p-0 bg-success" id="headingThree">
+                <h5>
+                    <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        @(Model.KindCode < 10 ? "تخلیه" : "بارگیری") بار
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    <input type="hidden" id="Id" value="@Model.Id" />
+                    <input type="hidden" id="fkcontract" value="@defContract" />
+                    <input type="hidden" id="FkContractType" value="@Model.FkContractType" />
+                    <input type="hidden" id="FkCustomer" value="@Model.FkCustomer" />
+                    <input type="hidden" id="IsEntry" value="@Model.ContractType.IsEntry" />
+                    <input type="hidden" id="IsProduct1Packing0" value="@Model.ContractType.IsProduct1Packing0" />
+                    <h5>
+                        @Model.Code - @Model.Customer.Title <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                    </h5>
+            
+                    <partial name="TaxlieBargiriPartial" />
+                </div>
+            </div>
+        </div>
 
-}
- 
+
+        @section js{
+            <script>
+                Contractbutton("#FkContract", contractvc);
+            </script>
+            <script src="~/assets/js/Vue.js"></script>
+            <script src="~/assets/TaxlieBargirilJs.js"></script>
+
+        }
+
+    }
+
+
+</div>

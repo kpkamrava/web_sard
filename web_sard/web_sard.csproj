@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\api\**" />
+    <Content Remove="Models\api\**" />
+    <EmbeddedResource Remove="Models\api\**" />
+    <None Remove="Models\api\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap-select" Version="1.13.17" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.23.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
@@ -27,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\api\" />
     <Folder Include="wwwroot\Reports\" />
   </ItemGroup>
 

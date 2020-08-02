@@ -27,8 +27,7 @@ namespace web_sard.Models.tbls.portage
                 this.Date2time = new TimeSpan(row.Date2.Value.Hour, row.Date2.Value.Minute, 0);
 
             }
-            this.FkContract = row.FkContract;
-            this.FkSalmali = row.FkSalmali;
+             this.FkSalmali = row.FkSalmali;
             this.Id = row.Id;
             this.KindCode = row.KindCode;
             this.KindTitle = row.KindTitle;
@@ -47,15 +46,18 @@ namespace web_sard.Models.tbls.portage
 
             this.CarMashin = row.CarMashin;
 
+            this.Weight1IsBascul = row.Weight1IsBascul;
+            this.Weight2IsBascul = row.Weight2IsBascul;
+
+
 
             this.IsDel = row.IsDel;
             this.IsEnd = row.IsEnd;
 
             {
-                var c = db.TblContract.Find(row.FkContract);
-
-                this._Contract = new tbls.contract.contract(c, db, rowChilds, rowChilds);
-                this._Contracttitle = _Contract.Code + " " + _Contract.Custumer;
+             
+                this.FkCustomer = row.FkCustomer;
+                this.Customer =Models.tbls.customer.customer.get( db.TblCustomer.Find(FkCustomer),db);
             }
 
             this.Dateadd1 = row.Dateadd1.ToPersianDateTime();
@@ -67,8 +69,10 @@ namespace web_sard.Models.tbls.portage
             this.Dateedit2 = row.Dateedit2.ToPersianDateTime();
             this.UsAdd2 = (db.TblUser.Find(row.FkUsAdd2) ?? new web_db.TblUser()).Title;
             this.UsEdit2 = (db.TblUser.Find(row.FkUsEdit2) ?? new web_db.TblUser()).Title;
-
-
+            this.FkContractType = row.FkContracttype;
+            this.ContractType = new contract.ContractType(Models.cl._ListContractType.Single(a => a.Id == this.FkContractType));
+            this.FkCar = row.FkCar;
+             
 
             this.UsPermit = (db.TblUser.Find(row.FkUsPermit) ?? new web_db.TblUser()).Title;
             this.IsPermitOk = row.IsPermitOk;
@@ -104,12 +108,8 @@ namespace web_sard.Models.tbls.portage
 
         public Guid Id { get; set; }
         public int FkSalmali { get; set; }
-        [Display(Name ="قرارداد")]
-        [Required]
-        public Guid  FkContract { get; set; }
-        [Display(Name = "طرف قرارداد")]
-        public string _Contracttitle { get; set; } 
-        public contract.contract _Contract { get; set; }
+ 
+    
         [Display(Name = "کد")]
         
         public long Code { get; set; }
@@ -195,8 +195,9 @@ namespace web_sard.Models.tbls.portage
 
 
 
- 
+
         public Guid FkContractType { get; set; }
+        public Models.tbls.contract.ContractType ContractType { get; set; }
         [Display(Name = "طرف قرارداد"), Required]
         public Guid FkCustomer { get; set; }
         [Display(Name = "طرف قرارداد")]

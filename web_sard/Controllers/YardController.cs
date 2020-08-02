@@ -38,14 +38,16 @@ namespace web_sard.Controllers
 
             return View(x.ToList());
         }
-        public IActionResult View(Guid id)
+        public IActionResult View(Guid id,Guid defContract)
         {
             var x = db.TblPortage.Find(id);
             
             if (x.IsEnd||x.IsDel)
             {
                 return RedirectToAction("index",new {idtype=x.FkContracttype });
-            } 
+            }
+            ViewBag.ListContract =new Dictionary<string, Guid>( db.TblContract.Where(a=>a.FkContractType==x.FkContracttype).Select(a=>new KeyValuePair<string,Guid>(a.Code.ToString(),a.Id)));
+            ViewBag.defContract = defContract;// new Models.tbls.contract.contract( defPortage,db,;
             return View(new Models.tbls.portage.portage(x, db, true,false,true));
         }
 
@@ -96,7 +98,7 @@ namespace web_sard.Controllers
 
             return RedirectToAction("view",new { id = idp });
         }
-        public async Task<JsonResult> getlistRowsAsync(Guid id)
+        public async Task<JsonResult> getlistRowsAsync(Guid id,Guid fkcontract)
         {
 
 
@@ -105,8 +107,8 @@ namespace web_sard.Controllers
           
             
             var xrows =await( from n in db.TblPortageRow
-                    where n.FkPortage == id
-                    orderby n.Date  descending
+                    where n.FkPortage == id &&n.FkContract== fkcontract
+                              orderby n.Date  descending
                     select new Models.tbls.portage.PortageRow(n,db)).ToListAsync();
 
             var z = (xrows.FirstOrDefault() ?? new Models.tbls.portage.PortageRow());
@@ -123,7 +125,7 @@ namespace web_sard.Controllers
             if (portageContractType.IsProduct1Packing0==false)
             {
                
-                xpackings = await db.TblContractPacking.Where(a => a.FkContract == portage.FkContract).Include(a => a.FkPackingNavigation).Select(a => a.FkPackingNavigation).ToListAsync();
+                xpackings = await db.TblContractPacking.Where(a => a.FkContract == fkcontract).Include(a => a.FkPackingNavigation).Select(a => a.FkPackingNavigation).ToListAsync();
             }
 
 
@@ -133,7 +135,7 @@ namespace web_sard.Controllers
           if (portageContractType.IsProduct1Packing0 == true)
             {
                 
-                xproducts =await db.TblContractProduct.Where(a => a.FkContract == portage.FkContract).Include(a=>a.FkProductNavigation).Select(a=>a.FkProductNavigation).ToListAsync();
+                xproducts =await db.TblContractProduct.Where(a => a.FkContract == fkcontract).Include(a=>a.FkProductNavigation).Select(a=>a.FkProductNavigation).ToListAsync();
                 xinjury = Models.cl._ListInjury.Where(a=>a.IsActive).ToList();
             }
           
@@ -141,7 +143,7 @@ namespace web_sard.Controllers
             return Json(Newtonsoft.Json.JsonConvert.SerializeObject(new { rows=xrows, packings= xpackings, products=xproducts,injurys=xinjury }));
         }
 
-        public JsonResult AddlistRow(Guid idp,Guid id,int? L1, int? L2, int? L3, long Count,Guid FkPacking,Guid FkProduct,Guid[] FkInjurys,  string Txt)
+        public JsonResult AddlistRow(Guid idp,Guid id,int? L1, int? L2, int? L3, long Count,Guid fkcontract, Guid FkPacking,Guid FkProduct,Guid[] FkInjurys,  string Txt)
         {
 
 
@@ -204,7 +206,7 @@ namespace web_sard.Controllers
                     Id = Guid.NewGuid(),
                     Date = DateTime.Now,
                     Code = 1,
-                    FkPortage = idp,
+                    FkPortage = idp,FkContract=fkcontract
                  
                 };
                   db.TblPortageRow.Add(row);
