@@ -38,7 +38,7 @@ $(document).ready(function () {
     })
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });
 
-    if ($(window).width() > 600) {
+    if ($(window).width() > 767) {
         $(".menu-content").find("a.dropdown-item").each(function (index, e) {
 
             var aa = $(e);
@@ -103,10 +103,15 @@ function startBascul(idI, idButton, idInput) {
 
 
 
-function Contractbutton(FkC, vc) {
+function Contractbutton(FkC, vc, FkCadd) {
     var fkcontractid = $(FkC).val();
+    var ur = "/Contract/ViewContractAjax/" + fkcontractid;
+    if (FkCadd != null) {
+  var fkportageidAdd = $(FkCadd).val();
+        ur += "?fkportageidAdd=" + fkportageidAdd;
+    }
     $(vc).html("");
-    $.get("/Contract/ViewContractAjax/" + fkcontractid, function (data, status) {
+    $.get(ur, function (data, status) {
         $(vc).html(data);
     });
 

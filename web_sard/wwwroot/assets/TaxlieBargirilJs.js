@@ -7,6 +7,7 @@ var app = new Vue({
     el: '#app',
     data: {
         Id: "",
+        fkcontract: "",
         IsProduct1Packing0: true,
         IsEntry: true,
         NeedLocation:true,
@@ -26,10 +27,13 @@ var app = new Vue({
 }); 
  
 app.Id = $("#Id").val(); 
+ 
 app.IsEntry = $("#IsEntry").val();
 app.IsProduct1Packing0 = $("#IsProduct1Packing0").val();
+app.fkcontract = $("#fkcontract").val();
 readListrows();
- 
+
+
 function saveListrows(bbb) {
     if ($(bbb).find(".spinner-border").length == 0) {
         $(bbb).append("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>");
@@ -46,6 +50,8 @@ function saveListrows(bbb) {
     var _FkPacking = "&FkPacking=" + p.find("#FkPacking").val();
     var _FkProduct = "&FkProduct=" + p.find("#FkProduct").val();
     var _Txt = "&Txt=" + p.find("#Txt").val();
+
+    var fkcontract = "&fkcontract=" + app.fkcontract;
 
     //if (app.NeedLocation==false) {
     //    _CodeLocation = "";
@@ -68,7 +74,7 @@ function saveListrows(bbb) {
 
     });
 
-    var t = _id + _CodeLocation + _Count + _FkPacking + _FkProduct + _FkInjurys + _Txt;
+    var t = _id + fkcontract+ _CodeLocation + _Count + _FkPacking + _FkProduct + _FkInjurys + _Txt;
     $.get("/Yard/AddlistRow" +
         "?idp=" + app.Id +
         t
@@ -119,8 +125,8 @@ function removeListrows(bbb) {
 }
 
 function readListrows() {
-    
-    $.get("/Yard/getlistRows/" + app.Id, function (data, status) {
+
+    $.get("/Yard/getlistRows/" + app.Id + "?fkcontract=" + app.fkcontract, function (data, status) {
         var model = $.parseJSON(data);//rows packings products injurys
         app.ListRows = model.rows; 
         app.ListProducts = model.products;
