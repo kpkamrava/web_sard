@@ -1,0 +1,211 @@
+﻿@model IEnumerable<web_sard.Models.tbls.portage.portage>
+
+@{
+
+
+    var ContractType = (web_db.TblContractType)ViewData["type"];
+    var kindPortage = (int?)ViewData["kindPortage"];
+
+    ViewData["Title"] = "لیست بار های " + ContractType.Title;
+}
+
+<p>
+    <div class="btn-group btn-group-sm float-left">
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@null" class="btn  btn-outline-success fa fa-th-large @(kindPortage==null?" active":"") shadow"> محوطه</a>
+
+
+        @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract.Where(a => (ContractType.IsEntry ? a.isEntry : false) || (ContractType.IsExit ? (a.isEntry == false) : false)))
+        {
+            <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@item.code" class="btn  btn-outline-dark fa fa-list @(kindPortage==item.code?" active":"") shadow"> @item.txt</a>
+
+        }
+
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="-1" class="btn  btn-outline-success fa fa-th @(kindPortage==-1?" active":"") shadow"> همه</a>
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="-2" class="btn btn-outline-warning fa fa-th @(kindPortage==-2?" active":"") shadow"> ابطال ها</a>
+    </div>
+
+    @if (kindPortage > 0)
+    {
+        <div class="btn-group ">
+            <a asp-action="CreateIN" asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@kindPortage" class="btn btn-outline-primary fa fa-plus shadow"> جدید</a>
+
+        </div>
+    }
+    else
+    {
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary fa fa-plus dropdown-toggle  shadow" data-toggle="dropdown">
+                جدید <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu" role="menu">
+                @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract.Where(a => (ContractType.IsEntry ? a.isEntry : false) || (ContractType.IsExit ? (a.isEntry == false) : false)))
+                {
+                    <a asp-action="CreateIN" asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@item.code" class="dropdown-item"> @item.txt</a>
+                }
+            </div>
+        </div>
+
+    }
+
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <i class="	fa fa-sort-numeric-down"></i>
+
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model._Contracttitle)
+            </th>
+
+
+            @if (ContractType.IsProduct1Packing0)
+            {
+                <th>
+                    وزن
+                </th>
+            }
+
+            <th>
+                @Html.DisplayNameFor(model => model.PackingCount)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.PackingOfWeight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Txt)
+            </th>
+            <th>
+                <i class="	fa fa-calendar"></i>
+            </th>
+            <th>
+                <i class="	fa fa-user-edit"></i>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {  <tr  >
+                <td>
+                    @*@if (kindPortage.IsBargashti)
+                        {<i class="fa fa-undo"></i>}*@    @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item._Contracttitle)
+                        @if (!(kindPortage > 0)) 
+                        { 
+                            var kindPortagee = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a=>a.code==item.KindCode);
+                           <br />
+                          <span class="badge badge-@(kindPortagee.classcolor)" >@item.KindTitle </span> 
+
+                        
+                        }
+                    </td>
+
+
+                    @if (ContractType.IsProduct1Packing0)
+                    {
+                        <td>
+                            @item.WeightNet.GetValueOrDefault().ToString("###0.##")
+                            <br>
+                            <span class="badge badge-info"><span class="badge badge-secondary fa fa-hdd">1</span> @item.Weight1.GetValueOrDefault().ToString("###0.##")</span>
+
+                            <span class="badge badge-info"><span class="badge badge-secondary fa fa-hdd">2</span> @item.Weight2.GetValueOrDefault().ToString("###0.##")</span>
+
+
+                        </td>
+                    }
+                    <td>
+                        @item.PackingCount.GetValueOrDefault().ToString("###0.##")
+                    </td>
+
+
+                    <td>
+                        @item.PackingOfWeight.GetValueOrDefault().ToString("###0.##")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Txt)
+                    </td>
+                    <td>
+                        <span class="badge badge-secondary fa fa-calendar "> 1</span><small>@item.Date1.ToPersianDateMini()</small>
+                        @if (item.Date2.HasValue)
+                        {
+                            <br>
+
+                            <span class="badge badge-secondary fa fa-calendar"> 2</span><small>@item.Date2.ToPersianDateMini()</small>
+                        }
+
+                    </td>
+                    <td>
+
+
+                        <span class="badge badge-secondary fa fa-plus" data-toggle="tooltip" title="@item.UsAdd1 | @item.Dateadd1"> 1</span>
+
+                        @if (string.IsNullOrWhiteSpace(item.UsEdit1) == false)
+                        {
+                            <span class="badge badge-dark fa fa-edit" data-toggle="tooltip" title="@item.UsEdit1 | @item.Dateedit1"> 1</span>
+                        }
+
+                        @if (string.IsNullOrWhiteSpace(item.UsAdd2) == false)
+                        {
+                            <br />
+                            <span class="badge badge-secondary fa fa-plus" data-toggle="tooltip" title="@item.UsAdd2 | @item.Dateadd2"> 2</span>
+
+                        }
+                        @if (string.IsNullOrWhiteSpace(item.UsEdit2) == false)
+                        {
+                            <span class="badge badge-dark fa fa-edit" data-toggle="tooltip" title="@item.UsEdit2 | @item.Dateedit2"> 2</span>
+                        }
+                    </td>
+                    <td>
+
+                        @if (item.IsEnd)
+                        {
+                            <a asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-outline-success fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                            <a asp-action="Print" asp-route-id="@item.Id" target="_blank" class="btn btn-outline-info fa fa-print" data-toggle="tooltip" title="چاپ رسید"> </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-warning fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="حذف خروج"> </a>
+
+                        }
+                        else
+                        {
+                            <a asp-action="CreateIn" asp-route-id="@item.Id" class="btn btn-outline-success fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                            <a asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-outline-primary fa fa-share" data-toggle="tooltip" title="ثبت خروج"></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-warning fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="ابطال برگه"> </a>
+                        }
+
+
+                        @if (item.TxtPermit.IsEmpty() == false)
+                        {
+                            <span class="badge text-danger fa fa-1x fa-certificate float-left" data-toggle="tooltip" title="@item.UsPermit * @item.TxtPermit "> </span>
+
+                        }
+
+
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+
+
+@if (ViewData["printid"] != null)
+{
+
+    @section js{
+
+        <script>
+            $(function () {
+                window.open('@Url.Action("print",new {id=ViewData["printid"] })', '_blank')
+            });
+        </script>
+
+    }
+
+
+}

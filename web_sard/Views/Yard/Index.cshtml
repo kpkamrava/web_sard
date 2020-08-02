@@ -1,0 +1,72 @@
+﻿@model IEnumerable<web_sard.Models.tbls.portage.portage>
+
+@{
+    ViewData["Title"] = "لیست خودرو های داخل محوطه";
+        web_db.TblContractType ContractType=(web_db.TblContractType)ViewData["type"];
+           int? kindPortage=(int?)ViewData["kindPortage"];
+        
+}
+ 
+
+    <p>
+
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@null" class="btn  btn-outline-dark fa fa-th @(kindPortage==null?" active":"") shadow"> همه</a>
+        @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract.Where(a => (ContractType.IsEntry ? a.isEntry : false) || (ContractType.IsExit ? (a.isEntry == false) : false)))
+        {
+            <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@item.code" class="btn  btn-outline-@(item.classcolor) fa fa-list @(kindPortage==item.code?" active":"") shadow"> @item.txt</a>
+
+        }
+
+    </p>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == item.KindCode);
+           
+        <div class=" col-lg-4 colSearch">
+            <div class="card mb-4 shadow">
+                <div class="card-header">
+                    @item.Code - @item._Contracttitle <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                </div>
+                <div class="card-body">
+
+                    <ul class="list-group list-group-flush m-0 p-0">
+                        <li class="list-group-item">
+                            <span class="badge badge-@(kindcontract.classcolor) fa fa-truck"> </span>@item.CarMashin
+                            <span class="badge badge-@(kindcontract.classcolor) fa fa-user-cog"> </span> @item.CarRanande
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge badge-@(kindcontract.classcolor) fa fa-car-battery"> </span>@item.CarShMashin
+                            <span class="badge badge-@(kindcontract.classcolor) fa fa-mobile"> </span>@item.CarTell
+                        </li>
+                        <li class="list-group-item">
+                            @if (ContractType.IsProduct1Packing0)
+                            {
+                                <span class="badge badge-@(kindcontract.classcolor) fa fa-hdd"> </span>@item.Weight1.GetValueOrDefault().ToString("###0.##")
+
+                            }
+                            @if (item.Txt.IsEmpty() == false)
+                            {
+                                <span class="badge badge-@(kindcontract.classcolor) fa fa-paperclip"> </span>
+                                @item.Txt
+                            }
+                        </li>
+                    </ul>
+
+
+                    <a asp-action="View" asp-route-id="@item.Id" class="btn btn-@(kindcontract.classcolor) w-100 shadow-sm">
+                        انتخاب
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        }
+
+
+
+
+    </div>
+ 

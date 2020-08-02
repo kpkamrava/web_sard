@@ -1,0 +1,203 @@
+﻿@model web_sard.Models.reports.rep_gardeshlocation.gardeshlocationModel
+@using Stimulsoft.Report.Mvc
+@{
+    ViewData["Title"] = "گزارش گردش انبار";
+    web_sard.Models.reports.rep_gardeshlocation.gardeshlocationReport table = (web_sard.Models.reports.rep_gardeshlocation.gardeshlocationReport)(ViewBag.table);
+}
+
+
+<div class="card bg-gray-300">
+    <div class="card-body">
+
+
+        <form asp-action="printGardeshLocation" method="get">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-4 ">
+
+                    <div class="form-group">
+                        <label asp-for="kindPortage" class="control-label"></label>
+                        <select asp-for="kindPortage"   class="form-control form-control-sm" multiple>
+                            @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract)
+                            {
+                                <option value="@item.code">@item.txt </option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="kindPortage" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="pakings" class="control-label"></label>
+                        <select asp-for="pakings" class="form-control form-control-sm" multiple>
+                            @foreach (var item in web_sard.Models.cl._ListPacking)
+                            {
+                                <option value="@item.Id">@item.Code @item.Title</option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="pakings" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="prodocts" class="control-label"></label>
+                        <select asp-for="prodocts" class="form-control form-control-sm" multiple>
+                            @foreach (var item in web_sard.Models.cl._ListProduct)
+                            {
+                                <option value="@item.Id">@item.Code @item.Title</option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="prodocts" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="d1" class="control-label"></label>
+                        <input asp-for="d1" class="form-control form-control-sm datepicker" />
+                        <span asp-validation-for="d1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="d2" class="control-label"></label>
+                        <input asp-for="d2" class="form-control form-control-sm datepicker" />
+                        <span asp-validation-for="d2" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="locations" class="control-label"></label>
+                        <select asp-for="locations" class="form-control form-control-sm" multiple>
+                            @foreach (var item in web_sard.Models.cl._ListLocation.OrderBy(a => a.Kind).ThenBy(a => a.Ord))
+                            {
+                                <option value="@item.Id">@item.CodeFull @item.Title</option>
+
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="locations" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="kind" class="control-label"></label>
+                        <select asp-for="kind" class="form-control form-control-sm">
+                            @foreach (var item in Model.files)
+                            {
+                                <option value="@item.Value">@item.Value</option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="kind" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="چاپ" class="btn btn-primary float-left" />
+                <input type="submit" value="گزارش" name="table" class="btn btn-success float-left" />
+            </div>
+        </form>
+
+    </div>
+</div>
+@if (Model.isvalid && table == null)
+{
+    <div style="direction:ltr">
+        @Html.StiNetCoreViewer(new StiNetCoreViewerOptions()
+    {
+       Actions =
+
+        {
+
+       GetReport = "GetReportprintGardeshLocation",
+       ViewerEvent = "ViewerEvent",
+        },
+       Toolbar =
+
+    {
+    PrintDestination = Stimulsoft.Report.Web.StiPrintDestination.Direct,
+    },
+
+
+    })
+    </div>
+}
+
+
+@if (Model.isvalid && table != null)
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <i class="	fa fa-calendar"></i>
+
+            </th>
+
+            <th>
+                محصول و بسته بندی
+            </th>
+            <th>
+                قرارداد
+            </th>
+
+            <th>
+                تعداد
+            </th>
+
+            <th>
+                وزن
+            </th>
+
+
+            <th>
+                قرارداد
+            </th>
+            <th>
+                مکان
+            </th>
+            <th>
+                کاربر ثبت کننده
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in table.rows)
+        {
+            <tr>
+                <td>@item.datestr</td>
+                <td>@item.Product @item.Packing</td>
+                <td>@item.Contractcode @item.Contract </td>
+                <td>@item.Count</td>
+                <td>@item.Weight.ToString("###0.##")</td>
+                <td>@item.ContractType @item.Portagekindstr</td>
+                <td>@item.Location</td>
+                <td>@item.UserAdd</td>
+                <th></th>
+            </tr>
+        } 
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"> جمع</td>
+            <td>@table.rows.Sum(a=>a.Count)</td>
+            <td>@table.rows.Sum(a => a.Count*a.Weight).ToString("###0.##")</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+  
+    </tfoot>
+</table>
+
+
+
+
+}

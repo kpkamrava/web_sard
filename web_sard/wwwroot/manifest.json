@@ -1,0 +1,20 @@
+{
+  "short_name": "SP",
+  "name": "SradSibSP",
+  "icons": [
+    {
+      "src": "/assets/img/5491974.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    },
+    {
+      "src": "/assets/img/5491974.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
+  "start_url": "/Account/login",
+  "theme_color": "rgba(216,204,204,0)",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<web_sard.Models.tbls.user.user>
+
+@{
+    ViewData["Title"] = "لیست کاربران";
+}
+
+ 
+ 
+        <p>
+            <a asp-action="Create" class="btn btn-outline-success">کاربر جدید</a>
+        </p>
+   
+   
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>
+                        <i class="fa fa-user"></i>
+                    </th>
+                    <th>
+                        <i class="fa fa-mobile"></i>
+                    </th>
+                     
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Roles)
+                    </th>
+
+                   
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    
+                    <td>
+                        @if ( item.isActive==false)
+                        {
+                            <i class=" fa fa-close"></i>
+                        } 
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mob)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @item.Roles.Length
+                    </td>
+                     
+                    <td>
+                        <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
+
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+  

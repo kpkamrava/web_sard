@@ -1,0 +1,119 @@
+﻿@model web_sard.Models.tbls.portage.portage
+
+@{
+    var ContractType = (web_db.TblContractType)ViewData["type"];
+    ViewData["Title"] = "ثبت محموله - "+ContractType.Title+(Model.Id==Guid.Empty?"":(" - ویرایش "+Model._Contracttitle));
+}
+  
+ 
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          <input type="hidden" asp-for="Id" />
+
+          <div class="card">
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="card bg-gray-100">
+                              <div class="card-body">
+                                  <div class="card-title">مشخصات ورود</div>
+                                  <div class="form-group">
+                                      <label class="control-label">وزن</label>
+                                      <input asp-for="Weight1" class="form-control" />
+                                      <span asp-validation-for="Weight1" class="text-danger"></span>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="control-label">زمان</label>
+                                      <input asp-for="Date1" class="form-control" />
+                                      <span asp-validation-for="Date1" class="text-danger"></span>
+                                  </div>
+                              </div>
+
+                          </div>
+
+                      </div>
+                      <div class="col-md-6">
+                          <div class="card bg-gray-200">
+                              <div class="card-body">
+                                  <div class="card-title">مشخصات خروج</div>
+
+                                  <div class="form-group">
+                                      <label class="control-label">وزن</label>
+                                      <input asp-for="Weight2" class="form-control" />
+                                      <span asp-validation-for="Weight2" class="text-danger"></span>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="control-label"> زمان</label>
+                                      <input asp-for="Date2" class="form-control" />
+                                      <span asp-validation-for="Date2" class="text-danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+
+
+                      <div class="form-group">
+                          <label asp-for="WeightNet" class="control-label"></label>
+                          <input asp-for="WeightNet" class="form-control" />
+                          <span asp-validation-for="WeightNet" class="text-danger"></span>
+                      </div>
+
+
+
+                  </div>
+              </div>
+          </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FkContract" class="control-label"></label>
+                    <input asp-for="FkContract" class="form-control" />
+                    <span asp-validation-for="FkContract" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+               
+                <div class="form-group">
+                    <label asp-for="Txt" class="control-label"></label> 
+                    <textarea asp-for="Txt" class="form-control"></textarea>
+                    <span asp-validation-for="Txt" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="PackingCount" class="control-label"></label>
+                    <input asp-for="PackingCount" class="form-control" disabled />
+                    <span asp-validation-for="PackingCount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PackingOfWeight" class="control-label"></label>
+                    <input asp-for="PackingOfWeight" class="form-control" disabled />
+                    <span asp-validation-for="PackingOfWeight" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+       
+         
+      
+       
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+    
+
+<div>
+    <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+</div>
+

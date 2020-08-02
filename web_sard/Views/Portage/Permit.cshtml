@@ -1,0 +1,28 @@
+﻿@model web_sard.Models.tbls.portage.portage
+<div class="card bg-gradient-warning shadow">
+    <div class="card-body">
+        <h4 class="fa fa-certificate"> کنترل قرارداد - مجوز ثبت</h4>
+         
+        <form asp-action="Permit" asp-route-id="@Model.Id" method="post">
+            <div class="form-group">
+                <label class="control-label">توضیحات</label>
+
+                <textarea name="txt" minlength="7" class="form-control" required>@Model.TxtPermit</textarea>
+
+                @if(User._getRolAny(_UserRol._Rolls.PermitPortage))
+                    {
+
+                <button type="submit" class="btn btn-primary "> اجازه خروج خودرو</button>
+                }
+                else
+                {
+
+                    <div class="alert alert-danger"> شما اجازه ثبت خروج را ندارید</div>
+
+                }
+
+            </div>
+
+        </form>
+    </div>
+</div>

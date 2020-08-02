@@ -1,0 +1,43 @@
+﻿@model IEnumerable<web_sard.Models.tbls.injury.injury>
+
+@{
+    ViewData["Title"] = "لیست صدمات";
+}
+
+ 
+<p>
+    <a asp-action="Create" class="btn btn-outline-success fa fa-plus">صدمه جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+          
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+           
+       
+            <td>
+                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"> </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

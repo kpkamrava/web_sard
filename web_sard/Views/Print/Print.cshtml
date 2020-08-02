@@ -1,0 +1,30 @@
+﻿@model web_sard.Models.printclass
+@using Stimulsoft.Report.Mvc
+    <div class="btn-group float-left">
+
+        @foreach (var item in Model.files)
+        {
+         <a asp-action="Print" asp-route-kind="@item.Value" asp-route-id="@Model.id" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-success fa  fa-print @(Model.kind==item.Value?"active":"")"> فرمت @item.Value</a>
+        } 
+
+    </div>
+<br />
+<div style="direction:ltr">
+    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions()
+{
+   Actions =
+
+    {
+
+   GetReport = "GetReport",
+   ViewerEvent = "ViewerEvent",
+    },
+   Toolbar =
+
+{ 
+PrintDestination = Stimulsoft.Report.Web.StiPrintDestination.Direct,
+},
+
+
+})
+</div>

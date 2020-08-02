@@ -1,0 +1,258 @@
+﻿@model web_sard.Models.tbls.contract.contract
+@using web_lib
+@{
+
+     var  ContractType =(web_db.TblContractType)ViewData["type"];
+
+    ViewData["Title"] = Model.Id == Guid.Empty ? $"ثبت {ContractType.Title} جدید" : $" ویرایش {ContractType.Title} ";
+}
+
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="FkContractType" />
+
+    @if (Model.Id != Guid.Empty)
+    {
+        <input type="hidden" asp-for="FkCustomer" />
+        <input type="hidden" asp-for="Custumer" />
+    }
+
+<div class="row">
+    <div class="col-md-4">
+
+        <div class="form-group">
+            <label asp-for="Code" class="control-label"></label>
+            <input asp-for="Code" class="form-control" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FkCustomer" class="control-label"></label>
+
+            @if (Model.Id == Guid.Empty)
+            {
+                <select asp-for="FkCustomer" class="form-control">
+                    @foreach (var item in web_sard.Models.cl._ListCustomer)
+                    {
+                        <option value="@item.Id">@item.Title</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <input asp-for="Custumer" class="form-control" disabled />
+
+            }
+
+            <span asp-validation-for="FkCustomer" class="text-danger"></span>
+        </div>
+
+        @if (ContractType.IsProduct1Packing0)
+        {
+            <div class="form-group">
+                <label asp-for="prodoctsId" class="control-label"></label>
+
+                <select asp-for="prodoctsId" class="form-control">
+                    @foreach (var item in web_sard.Models.cl._ListProduct)
+                    {
+                        if (Model.prodoctsId != null && Model.prodoctsId.Any(a => a == item.Id))
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+
+                </select>
+                <span asp-validation-for="prodoctsId" class="text-danger"></span>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="packingsId" class="control-label"></label>
+
+                <select asp-for="packingsId" class="form-control">
+                    @foreach (var item in web_sard.Models.cl._ListPacking)
+                    {
+                        if (Model.packingsId != null && Model.packingsId.Any(a => a == item.Id))
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+
+                </select>
+
+                <span asp-validation-for="packingsId" class="text-danger"></span>
+            </div>
+        }
+
+    </div>
+    <div class="col-md-4">
+
+
+        @if (ContractType.IsProduct1Packing0)
+        {
+            @if (ContractType.IsEntry)
+            {
+                <div class="form-group ">
+                    <label asp-for="WeightMaxIn" class="control-label"></label>
+                    <input asp-for="WeightMaxIn" value="@Model.WeightMaxIn.GetValueOrDefault().ToString("###")" type="number" class="form-control" />
+                    <span asp-validation-for="WeightMaxIn" class="text-danger"></span>
+                </div>
+            }
+            @if (ContractType.IsExit)
+            {
+                @if (ContractType.OutControlByPercent)
+                {
+                    <div class="form-group ">
+                        <label asp-for="PercentForOut" class="control-label"></label>
+                        <input asp-for="PercentForOut" value="@Model.PercentForOut.GetValueOrDefault().ToString("0")" min="0" max="100" type="number" class="form-control" />
+                        <span asp-validation-for="PercentForOut" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group ">
+                        <label asp-for="WeightMaxOut" class="control-label"></label>
+                        <input asp-for="WeightMaxOut" value="@Model.WeightMaxOut.GetValueOrDefault().ToString("###")" type="number" class="form-control" />
+                        <span asp-validation-for="WeightMaxOut" class="text-danger"></span>
+                    </div>
+                }
+
+            }
+
+
+        }
+        else
+        {
+            @if (ContractType.IsEntry)
+            {
+                <div class="form-group ">
+                    <label asp-for="CountMaxIn" class="control-label"></label>
+                    <input asp-for="CountMaxIn" type="number" class="form-control" />
+                    <span asp-validation-for="CountMaxIn" class="text-danger"></span>
+                </div>
+            }
+            @if (ContractType.IsExit)
+            {
+                @if (ContractType.OutControlByPercent)
+                {
+                    <div class="form-group ">
+                        <label asp-for="PercentForOut" class="control-label"></label>
+                        <input asp-for="PercentForOut" value="@Model.PercentForOut.GetValueOrDefault().ToString("0")" min="0" max="100" type="number" class="form-control" />
+                        <span asp-validation-for="PercentForOut" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group ">
+                        <label asp-for="CountMaxOut" class="control-label"></label>
+                        <input asp-for="CountMaxOut" type="number" class="form-control" />
+                        <span asp-validation-for="CountMaxOut" class="text-danger"></span>
+                    </div>
+                }
+            }
+
+
+           }
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Azdate" class="control-label"></label>
+                    <input asp-for="Azdate" class="form-control datepicker" />
+
+                    <span asp-validation-for="Azdate" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-md-6">
+                    <label asp-for="Tadate" class="control-label"></label>
+                    <input asp-for="Tadate" class="form-control datepicker" />
+
+                    <span asp-validation-for="Tadate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Txt" class="control-label"></label>
+                <textarea asp-for="Txt" class="form-control"></textarea>
+
+                <span asp-validation-for="Txt" class="text-danger"></span>
+            </div>
+        </div>
+
+    <div class="col-md-4">
+
+
+        <div class="row">
+
+
+            @if (ContractType.IsEntry)
+            {
+                <div class="form-group col-md-6 ">
+                    <label asp-for="PriceOfBoxIn" class="control-label"></label>
+                    <input asp-for="PriceOfBoxIn" value="@Model.PriceOfBoxIn.ToString("#####0.###")" type="number" class="form-control" />
+                    <span asp-validation-for="PriceOfBoxIn" class="text-danger"></span>
+                </div>
+            }
+            @if (ContractType.IsExit)
+            {
+                <div class="form-group col-md-6 ">
+                    <label asp-for="PriceOfBoxOut" class="control-label"></label>
+                    <input asp-for="PriceOfBoxOut" value="@Model.PriceOfBoxOut.ToString("#####0.###")" type="number" class="form-control" />
+                    <span asp-validation-for="PriceOfBoxOut" class="text-danger"></span>
+                </div>
+            }
+
+
+
+
+
+        </div>
+        @if (ContractType.IsProduct1Packing0)
+         
+            {
+                <div class="row">
+
+                    @if (ContractType.IsEntry)
+                    {
+
+                        <div class="form-group  col-md-6 ">
+                            <label asp-for="PriceOfKiloIn" class="control-label"></label>
+                            <input asp-for="PriceOfKiloIn" value="@Model.PriceOfKiloIn.ToString("########0.###")" type="number" class="form-control" />
+                            <span asp-validation-for="PriceOfKiloIn" class="text-danger"></span>
+                        </div>
+                    }
+                    @if (ContractType.IsExit)
+                    {
+                        <div class="form-group  col-md-6 ">
+                            <label asp-for="PriceOfKiloOut" class="control-label"></label>
+                            <input asp-for="PriceOfKiloOut" value="@Model.PriceOfKiloOut.ToString("########0.###")" type="number" class="form-control" />
+                            <span asp-validation-for="PriceOfKiloOut" class="text-danger"></span>
+                        </div>
+                    }
+
+
+
+
+                </div>
+            }
+        </div>
+</div>
+    <div class="form-group">
+        <input type="submit" value="ثبت" class="btn btn-primary float-left" />
+    </div>
+</form>
+
+
+
+<div>
+    <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+</div>
+ 

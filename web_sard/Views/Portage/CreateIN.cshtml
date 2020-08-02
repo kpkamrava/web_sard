@@ -1,0 +1,182 @@
+﻿@model web_sard.Models.tbls.portage.portage
+@{
+    var ContractType = (web_db.TblContractType)ViewData["type"];
+
+    var kindPortage = (int)ViewData["kindPortage"];
+
+
+    ViewData["Title"] ="ثبت باسکول ورودی - "+ web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model._Contracttitle));
+
+    var listcontract = (List<web_sard.Models.tbls.contract.contract>)ViewData["listcontract"];
+}
+
+
+<form asp-action="CreateIn" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="_Contracttitle" />
+    <input type="hidden" name="idtype" value="@ContractType.Id" />
+    <input type="hidden" name="kindPortage" value="@kindPortage" />
+
+
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">مشخصات خودرو</div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="CarRanande" class="control-label"></label>
+                                <input asp-for="CarRanande" class="form-control" />
+                                <span asp-validation-for="CarRanande" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CarMashin" class="control-label"></label>
+                                <input asp-for="CarMashin" class="form-control" />
+                                <span asp-validation-for="CarMashin" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="CarShMashin" class="control-label"></label>
+                                <input asp-for="CarShMashin" class="form-control" />
+                                <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CarTell" class="control-label"></label>
+                                <input asp-for="CarTell" class="form-control" />
+                                <span asp-validation-for="CarTell" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @if (ContractType.IsProduct1Packing0 == true)
+                {
+                    <div class="col-md-3">
+                        <div class="card bg-gradient-success">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group ">
+                                        <label class="control-label text-white">وزن</label>
+                                        <div class="input-group">
+                                            <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")" class="form-control w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly />@*noactive*@
+                                            <div class="input-group-btn  w-50">
+                                                <button class="btn btn-light w-100" id="Weight1B" type="button">
+                                                    <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Weight1" class="text-danger"></span>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card bg-gray-200">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="form-group col-md-4">
+                                    <label asp-for="Code" class="control-label"></label>
+                                    <input asp-for="Code" class="form-control" readonly />
+                                    <span asp-validation-for="Code" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <label class="control-label">زمان</label>
+                                    <div class="input-group">
+                                        <input asp-for="Date1date" class="form-control datepicker" />
+                                        <input asp-for="Date1time" type="time" class="form-control" />
+                                    </div>
+
+                                    <span asp-validation-for="Date1date" class="text-danger "></span>
+                                    <span asp-validation-for="Date1time" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label asp-for="FkContract" class="control-label"></label>
+
+                                    <div class="input-group">
+
+                                        <select asp-for="FkContract" class="form-control" onchange="$('#CbContract').click()">
+                                            <option> </option>
+                                            @foreach (var item in listcontract)
+                                            {
+                                                <option value="@item.Id">@item.Code @item.Custumer</option>
+                                            }
+                                        </select>
+
+
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-light" type="button" id="CbContract" onclick="Contractbutton('#FkContract','#vaziatContract')">
+                                                <i class="fa fa-search-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <span asp-validation-for="FkContract" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Txt" class="control-label"></label>
+                        <textarea asp-for="Txt" class="form-control"></textarea>
+                        <span asp-validation-for="Txt" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-6" id="vaziatContract">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+<div>
+    <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+</div>
+
+@section js{
+    @if (ContractType.IsProduct1Packing0 == true)
+    {
+        <script>
+
+            startBascul("#Weight1I", "#Weight1B", "#Weight1");
+
+        </script>
+    }
+    @if (Model.FkContract!=Guid.Empty)
+    {<script>
+
+      Contractbutton('#FkContract','#vaziatContract')
+
+    </script>
+       
+    }
+
+}

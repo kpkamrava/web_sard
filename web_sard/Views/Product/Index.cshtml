@@ -1,0 +1,52 @@
+﻿@model IEnumerable<web_sard.Models.tbls.product.Product>
+
+@{
+    ViewData["Title"] = "لیست محصولات";
+}
+ 
+    <p>
+        <a asp-action="Create" class="btn btn-outline-success fa fa-plus">محصول جدید</a>
+    </p>
+
+
+    <table class="table">
+        
+        <thead>
+            <tr>
+
+                <th>
+                    <i class="	fa fa-sort-numeric-down"></i>
+                </th>
+                <th>
+                    عنوان
+                </th>
+                <th>
+                    فعال
+                </th> 
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isActive)
+                </td>
+            
+                <td>
+                    <a asp-action="Create" asp-route-id="@item.id" class="btn btn-outline-info fa fa-edit"></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+ 

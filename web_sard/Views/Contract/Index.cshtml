@@ -1,0 +1,147 @@
+﻿@model IEnumerable<web_sard.Models.tbls.contract.contract>
+
+@{
+
+
+ var  ContractType =(web_db.TblContractType)ViewData["type"];
+
+
+        ViewData["Title"] = "لیست قراردادها - "+(ContractType.Title);
+
+}
+
+ 
+<p>
+    <a asp-action="Create" asp-route-idtype="@ContractType.Id" class="btn btn-outline-success fa fa-plus"> قرارداد جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <i class="	fa fa-sort-numeric-down"></i>
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Custumer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractType)
+            </th>
+            @if (ContractType.IsEntry)
+            {
+                @if (ContractType.IsProduct1Packing0)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.WeightMaxIn)
+                    </th>
+
+                }
+                else
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.CountMaxIn)
+                    </th>
+                }
+            }
+            @if (ContractType.IsExit)
+            {
+                @if (ContractType.IsProduct1Packing0)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.WeightMaxOut)
+                    </th>
+
+                }
+                else
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.CountMaxOut)
+                    </th>
+                }
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Azdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tadate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Txt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Custumer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContractType)
+
+            </td>
+            @if (ContractType.IsEntry)
+            {
+                @if (ContractType.IsProduct1Packing0)
+                {
+                    <td>
+                        @item.WeightMaxIn.GetValueOrDefault().ToString("###0.##")
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CountMaxIn)
+                    </td>
+                }
+            }
+            @if (ContractType.IsExit)
+            {
+                @if (ContractType.IsProduct1Packing0)
+                {
+                    <td>
+                        @item.WeightMaxOut.GetValueOrDefault().ToString("###0.##")
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CountMaxOut)
+                    </td>
+                }
+            }
+
+            <td>
+                @item.Date.ToPersianDate()
+            </td>
+
+            <td>
+                @item.Azdate
+
+            </td>
+            <td>
+                @item.Tadate
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Txt)
+            </td>
+            <td>
+                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-warning fa fa-recycle"></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

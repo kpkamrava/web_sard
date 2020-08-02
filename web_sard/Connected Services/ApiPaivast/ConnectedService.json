@@ -1,0 +1,19 @@
+﻿{
+  "ProviderId": "Microsoft.VisualStudio.ConnectedService.Wcf",
+  "Version": "15.0.40203.910",
+  "ExtendedData": {
+    "inputs": [
+      "http://2.187.34.21:81/"
+    ],
+    "collectionTypes": [
+      "System.Collections.Generic.Dictionary`2",
+      "System.Collections.Generic.List`1"
+    ],
+    "messageContract": true,
+    "namespaceMappings": [
+      "*, ApiPaivast"
+    ],
+    "targetFramework": "netcoreapp3.0",
+    "typeReuseMode": "None"
+  }
+}

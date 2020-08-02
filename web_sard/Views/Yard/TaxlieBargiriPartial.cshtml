@@ -1,0 +1,88 @@
+﻿
+
+<div id="app">
+
+    <div v-for="item in ListRows" class="animated--fade-in">
+
+        <div class="card mt-2 mb-3" v-bind:class="{'border-primary':item.Id=='00000000-0000-0000-0000-000000000000' }">
+            <div class="card-header" >
+                <div v-if="item.Id=='00000000-0000-0000-0000-000000000000'">
+                    <button class="btn btn-info fa fa-plus" onclick="collapsebody(this);">جدید</button>
+                </div>
+                <div v-if="item.Id!='00000000-0000-0000-0000-000000000000'">
+
+                    <span class="badge badge-info">تعداد</span> {{item.Count}}
+
+                    <label v-if="IsProduct1Packing0">
+                        <span class="badge badge-info">مکان</span> {{item.CodeLocation}}
+                    </label>
+                  
+                    <label v-if="item.Txt!=null">
+                        <span class="badge badge-info">توضیحات</span> {{item.Txt}}
+                    </label>
+                     <button class="btn btn-success fa fa-edit float-left" onclick="collapsebody(this);"> ویرایش</button>
+
+                </div>
+            </div>
+            <div class="card-body" style="display: none;">
+                <input id="Id" type="hidden" v-bind:value="item.Id">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label class="control-label">تعداد شمارش</label>
+                            <input id="Count" v-bind:value="item.Count" type="number" min="0" placeholder="تعداد" class="form-control">
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="control-label">بسته بندی</label>
+                            <select id="FkPacking" v-bind:value="item.FkPacking" class="form-control">
+                                <option v-for="item2 in ListPackings" v-bind:value="item2.Id">{{item2.Title}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" v-if="IsProduct1Packing0">
+                            <label class="control-label">محصول</label>
+                            <select id="FkProduct" v-bind:value="item.FkProduct" class="form-control">
+                                <option v-for="item2 in ListProducts" v-bind:value="item2.Id">{{item2.Title}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-sm-4 col-auto form-check " v-for="item2 in ListInjurys">
+                                <label class="form-check-label">
+                                    <input type="checkbox" id="FkInjurys" v-bind:value="item2.Id" v-bind:checked="ischeckInjury(item.ListInjurys,item2.Id)" class="form-check-input shadow" />  {{item2.Title}}
+                                </label>
+
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="form-group " v-if="NeedLocation"> 
+                            <label class="control-label">مکان <span class="badge badge-secondary">فرمت : فاز-سالن-طبقه 1-1-1</span></label>
+                            <div class="input-group">
+                                <input id="L1" v-bind:value="item.L1" class="form-control" type="number" placeholder="فاز ">
+                                <input id="L2" v-bind:value="item.L2" class="form-control" type="number" placeholder="سالن ">
+                                <input id="L3" v-bind:value="item.L3" class="form-control" type="number" placeholder="طبقه ">
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">توضیحات</label>
+                            <input id="Txt" v-bind:value="item.Txt" class="form-control" placeholder="توضیحات">
+
+                        </div>
+
+                    </div>
+                </div>
+                <button class="btn btn-primary fa fa-save" onclick="saveListrows(this)"> ثبت</button>
+                <button class="btn btn-danger btn-sm fa fa-recycle float-left" v-if="item.Id!='00000000-0000-0000-0000-000000000000'" onclick="removeListrows(this)"></button>
+
+            </div>
+        </div>
+
+    </div>
+   
+
+</div>
+
+ 

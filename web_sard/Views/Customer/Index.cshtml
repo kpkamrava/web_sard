@@ -1,0 +1,69 @@
+﻿@model IEnumerable<web_db.TblCustomer>
+
+@{
+    ViewData["Title"] = "لیست اشخاص";
+}
+ 
+
+    <form asp-action="CustomerPaivast" asp-controller="Customer"  method="post">
+        <div class="form-inline">
+            <div class="form-group form-inline">
+                <label class="control-label">شماره موبایل</label>
+                <input name="CellPhone" required  class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success fa fa-save">جستجو و ثبت شخص</button>
+        </div>
+
+       </form>
+<table class="table">
+    <thead>
+        <tr>
+     
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addras)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsEnable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdOtherSystem)
+            </th>
+         
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+          
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Addras)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsEnable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdOtherSystem)
+            </td> 
+        </tr>
+}
+    </tbody>
+</table>
