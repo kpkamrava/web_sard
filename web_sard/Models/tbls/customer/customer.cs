@@ -22,7 +22,7 @@ namespace web_sard.Models.tbls.customer
                 NationalCode = row.NationalCode,
                 Title = row.Title
             };
-            r.listContract = new List<contract.contract>();
+        //    r.listContract = new List<contract.contract>();
 
             return r;
 
@@ -38,7 +38,7 @@ namespace web_sard.Models.tbls.customer
         public bool IsEnable { get; set; }
         public string IdOtherSystem { get; set; }
         public int FkSalmali { get; set; }
-        public List<contract.contract> listContract { get; set; }
+      //  public List<contract.contract> listContract { get; set; }
 
     }
 }

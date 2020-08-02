@@ -58,7 +58,7 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model._Contracttitle)
+                @Html.DisplayNameFor(model => model.Customer)
             </th>
 
 
@@ -97,7 +97,7 @@
                         {<i class="fa fa-undo"></i>}*@    @Html.DisplayFor(modelItem => item.Code)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item._Contracttitle)
+                        @Html.DisplayFor(modelItem => item.Customer.Title)
                         @if (!(kindPortage > 0)) 
                         { 
                             var kindPortagee = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a=>a.code==item.KindCode);
