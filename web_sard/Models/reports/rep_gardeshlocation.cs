@@ -53,7 +53,7 @@ namespace web_sard.Models.reports
             public static gardeshlocationRows get(web_db.TblPortageRow row, web_db.sardweb_Context db)
             {
                 var por = db.TblPortage.Find(row.FkPortage);
-                var con = db.TblContract.Find(por.FkContract);
+                var con = db.TblContract.Find(row.FkContract);
                 var contype = db.TblContractType.Find(por.FkContracttype);
                 var cus = db.TblCustomer.Find(con.FkCustomer);
 

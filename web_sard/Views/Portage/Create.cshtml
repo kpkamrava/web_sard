@@ -2,7 +2,7 @@
 
 @{
     var ContractType = (web_db.TblContractType)ViewData["type"];
-    ViewData["Title"] = "ثبت محموله - "+ContractType.Title+(Model.Id==Guid.Empty?"":(" - ویرایش "+Model._Contracttitle));
+    ViewData["Title"] = "ثبت محموله - "+ContractType.Title+(Model.Id==Guid.Empty?"":(" - ویرایش "+Model.Customer.Title));
 }
   
  
@@ -73,9 +73,9 @@
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="FkContract" class="control-label"></label>
-                    <input asp-for="FkContract" class="form-control" />
-                    <span asp-validation-for="FkContract" class="text-danger"></span>
+                    <label asp-for="FkCustomer" class="control-label"></label>
+                    <input asp-for="FkCustomer" class="form-control" />
+                    <span asp-validation-for="FkCustomer" class="text-danger"></span>
                 </div>
 
             </div>

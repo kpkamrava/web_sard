@@ -5,16 +5,16 @@
     var kindPortage = (int)ViewData["kindPortage"];
 
 
-    ViewData["Title"] ="ثبت باسکول ورودی - "+ web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model._Contracttitle));
+    ViewData["Title"] ="ثبت باسکول ورودی - "+ web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model.Customer.Title));
 
-    var listcontract = (List<web_sard.Models.tbls.contract.contract>)ViewData["listcontract"];
+    var listcustumer = (List<web_sard.Models.tbls.customer.customer>)ViewData["listcustumer"];
 }
 
 
 <form asp-action="CreateIn" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="_Contracttitle" />
+    <input type="hidden" asp-for="Customer.Title" />
     <input type="hidden" name="idtype" value="@ContractType.Id" />
     <input type="hidden" name="kindPortage" value="@kindPortage" />
 
@@ -111,15 +111,15 @@
                                 </div>
 
                                 <div class="form-group col-md-12">
-                                    <label asp-for="FkContract" class="control-label"></label>
+                                    <label asp-for="FkCustomer" class="control-label"></label>
 
                                     <div class="input-group">
 
-                                        <select asp-for="FkContract" class="form-control" onchange="$('#CbContract').click()">
+                                        <select asp-for="FkCustomer" class="form-control" onchange="$('#CbContract').click()">
                                             <option> </option>
-                                            @foreach (var item in listcontract)
+                                            @foreach (var item in listcustumer)
                                             {
-                                                <option value="@item.Id">@item.Code @item.Custumer</option>
+                                                <option value="@item.Id">@item.Code @item.Title</option>
                                             }
                                         </select>
 
@@ -131,7 +131,7 @@
                                         </div>
                                     </div>
 
-                                    <span asp-validation-for="FkContract" class="text-danger"></span>
+                                    <span asp-validation-for="FkCustomer" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -170,10 +170,10 @@
 
         </script>
     }
-    @if (Model.FkContract!=Guid.Empty)
+    @if (Model.FkCustomer!=Guid.Empty)
     {<script>
 
-      Contractbutton('#FkContract','#vaziatContract')
+      Contractbutton('#FkCustomer','#vaziatContract')
 
     </script>
        

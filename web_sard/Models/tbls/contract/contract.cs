@@ -14,52 +14,52 @@ namespace web_sard.Models.tbls.contract
 
         public static bool IsPermitOK(web_db.TblPortage por, web_db.sardweb_Context db)
         {
+            return false;
+            //mandeHesabclass m = new mandeHesabclass(por.FkContract, db, false);
 
-            mandeHesabclass m = new mandeHesabclass(por.FkContract, db, false);
+            //var contype = db.TblContractType.Find(por.FkContracttype);
 
-            var contype = db.TblContractType.Find(por.FkContracttype);
-
-            if (contype.OutControlByContract==false) return true;
+            //if (contype.OutControlByContract==false) return true;
              
-            if (por.KindCode < 10)//in
-            {
-                if (contype.IsProduct1Packing0)
-                {
-                    if (m.MaxWeightInMande>por.WeightNet)
-                    {
-                        return true;
-                    }   
+            //if (por.KindCode < 10)//in
+            //{
+            //    if (contype.IsProduct1Packing0)
+            //    {
+            //        if (m.MaxWeightInMande>por.WeightNet)
+            //        {
+            //            return true;
+            //        }   
 
-                }
-                else
-                {
-                    if (m.MaxCountOutMande>por.PackingCount)
-                    {
-                        return true;
-                    }
+            //    }
+            //    else
+            //    {
+            //        if (m.MaxCountOutMande>por.PackingCount)
+            //        {
+            //            return true;
+            //        }
                     
-                }
+            //    }
 
-            }
-            else//out
-            { 
+            //}
+            //else//out
+            //{ 
                 
                 
-                if (contype.IsProduct1Packing0)
-                {
-                    if (m.MaxWeightOutMande>por.WeightNet)
-                    {
-                        return true;
-                    } 
-                }
-                if (m.MaxCountOutMande > por.PackingCount)
-                {
-                    return true;
-                }
+            //    if (contype.IsProduct1Packing0)
+            //    {
+            //        if (m.MaxWeightOutMande>por.WeightNet)
+            //        {
+            //            return true;
+            //        } 
+            //    }
+            //    if (m.MaxCountOutMande > por.PackingCount)
+            //    {
+            //        return true;
+            //    }
              
               
               
-           }
+        //   }
 
 
 
@@ -146,37 +146,37 @@ namespace web_sard.Models.tbls.contract
             public mandeHesabclass(Guid FkContract, web_db.sardweb_Context db,bool portagesok=true) {
 
                 var con = db.TblContract.Find(FkContract);
-                var contype = db.TblContractType.Find(con.FkContractType);
-                var ppp = db.TblPortage.Where(a => a.FkContract == FkContract && a.IsDel == false && a.IsEnd);
+                //var contype = db.TblContractType.Find(con.FkContractType);
+                //var ppp = db.TblPortage.Where(a => a.FkContract == FkContract && a.IsDel == false && a.IsEnd);
 
-                SumCountIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.PackingCount) ?? 0)
-                      - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.PackingCount) ?? 0);
+                //SumCountIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.PackingCount) ?? 0)
+                //      - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.PackingCount) ?? 0);
 
 
-                SumCountOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.PackingCount) ?? 0)
-                - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.PackingCount) ?? 0);
+                //SumCountOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.PackingCount) ?? 0)
+                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.PackingCount) ?? 0);
 
-                SumWeightIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.WeightNet) ?? 0)
-                - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.WeightNet) ?? 0);
+                //SumWeightIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.WeightNet) ?? 0)
+                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.WeightNet) ?? 0);
 
-                SumWeightOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.WeightNet) ?? 0)
-                - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.WeightNet) ?? 0);
+                //SumWeightOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.WeightNet) ?? 0)
+                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.WeightNet) ?? 0);
                  
 
 
-                MaxWeightOutContract = con.WeightMaxOut ?? 0;
-                MaxCountOutContract = con.CountMaxOut ?? 0;
+                //MaxWeightOutContract = con.WeightMaxOut ?? 0;
+                //MaxCountOutContract = con.CountMaxOut ?? 0;
 
-                MaxWeightInContract = con.WeightMaxIn ?? 0;
-                MaxCountInContract = con.CountMaxIn ?? 0;
+                //MaxWeightInContract = con.WeightMaxIn ?? 0;
+                //MaxCountInContract = con.CountMaxIn ?? 0;
 
 
-                if (contype.OutControlByPercent)
-                {
-                    MaxWeightOutContract = SumWeightIN * (con.PercentForOut ?? 0) / 100;
-                    MaxCountOutContract = SumCountIN * (con.PercentForOut ?? 0) / 100;
+                //if (contype.OutControlByPercent)
+                //{
+                //    MaxWeightOutContract = SumWeightIN * (con.PercentForOut ?? 0) / 100;
+                //    MaxCountOutContract = SumCountIN * (con.PercentForOut ?? 0) / 100;
 
-                }
+                //}
 
 
             }

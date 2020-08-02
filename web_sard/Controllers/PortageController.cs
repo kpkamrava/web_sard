@@ -64,7 +64,7 @@ namespace web_sard.Controllers
                     return Redirect( Request.UrlReferer());
                 }
                 model = new Models.tbls.portage.portage(row,db);
-                idtype =model._Contract.FkContractType;
+                idtype =model.FkContractType;
                 kindPortage =model.KindCode;
             }
 
@@ -74,8 +74,8 @@ namespace web_sard.Controllers
             }
             
             ViewData["type"] = db.TblContractType.Find(idtype);
-            ViewData["kindPortage"] = kindPortage; 
-            ViewData["listcontract"] = db.TblContract.Where(a=>a.FkSalmali==User._getuserSalMaliDef()&&a.FkContractType==idtype).Select(a=>new   Models.tbls.contract.contract(a,db,false,false)).ToList();
+            ViewData["kindPortage"] = kindPortage;
+            ViewData["listcustumer"] = db.TblCustomer.Where(a => a.FkSalmali == User._getuserSalMaliDef()).Select(a => Models.tbls.customer.customer.get(a, db)).ToList();
             return View(model);
         }
 
@@ -125,10 +125,11 @@ namespace web_sard.Controllers
                 x.CarRanande = model.CarRanande;
                 x.CarShMashin = model.CarShMashin;
                 x.CarTell = model.CarTell;
-                x.FkContract = model.FkContract;
-                x.Fkcustomer = db.TblContract.Find(model.FkContract).FkCustomer;
+                x.FkCar = model.FkCar;
+                x.FkCustomer = model.FkCustomer;
+
                 x.Weight1 = model.Weight1;
-                x.Weight1IsBascul = model.Weight1.HasValue;
+                x.Weight1IsBascul = model.Weight1IsBascul;
                 x.Txt = model.Txt;
                 x.Date1 = model.Date1date.ToDate().AddHours(model.Date1time.Hours).AddMinutes(model.Date1time.Minutes);
                 x.IsDel = false;
@@ -142,7 +143,7 @@ namespace web_sard.Controllers
 
             ViewData["type"] = db.TblContractType.Find(idtype);
             ViewData["kindPortage"] = kindPortage;
-            ViewData["listcontract"] = db.TblContract.Where(a => a.FkSalmali == User._getuserSalMaliDef() && a.FkContractType == idtype).Select(a => new Models.tbls.contract.contract(a, db, false,false)).ToList();
+            ViewData["listcustumer"] = db.TblCustomer.Where(a => a.FkSalmali == User._getuserSalMaliDef()  ).Select(a =>   Models.tbls.customer.customer.get(a,db)).ToList();
             return View(model);
         }
 
@@ -165,10 +166,10 @@ namespace web_sard.Controllers
         public IActionResult CreateOut(Models.tbls.portage.portage model,string print)
         {   var x = db.TblPortage.Find(model.Id);
 
-            model._Contract = new Models.tbls.contract.contract(db.TblContract.Find(x.FkContract), db);
+            model.ContractType = new Models.tbls.contract.ContractType(Models.cl._ListContractType.Single(a=>a.Id==model.FkContractType));
             ModelState.Remove("Date1date");
             ModelState.Remove("Date1time");
-            if (model._Contract.ContractTypeTbl.IsProduct1Packing0 == false)
+            if (model.ContractType.IsProduct1Packing0 == false)
             {
                 ModelState.Remove("Weight1");
                 ModelState.Remove("Weight2");
@@ -182,7 +183,7 @@ namespace web_sard.Controllers
                 x.Weight2 = model.Weight2;
                 x.WeightNet = x.Weight2 - x.Weight1;
                 x.WeightNet =  x.WeightNet<0?(-x.WeightNet): x.WeightNet;
-                x.Weight2IsBascul = model.Weight2.HasValue;
+                x.Weight2IsBascul = model.Weight2IsBascul;
                 x.Txt = model.Txt;
                 x.Date2 = model.Date2date.ToDate().AddHours(model.Date2time.Value.Hours).AddMinutes(model.Date2time.Value.Minutes);
                  x.IsDel = false;
