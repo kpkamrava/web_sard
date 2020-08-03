@@ -45,7 +45,22 @@ namespace web_lib
             return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController) ?
                 cssClass : String.Empty;
         }
-
+        public static string ToMoney(this decimal number)
+        {
+            return number.ToString("###,###,##0.##");
+        }
+        public static string ToMoney(this decimal? number)
+        {
+            return number.HasValue ? number.Value.ToMoney() : "";
+        }
+        public static string ToKilo(this decimal number)
+        {
+            return number.ToString("######,##0");
+        }
+        public static string ToKilo(this decimal? number)
+        {
+            return number.HasValue ? number.Value.ToKilo() : "";
+        }
         public static decimal gadrmotlagh(this decimal number)
         {
             return number<0?-number:number;

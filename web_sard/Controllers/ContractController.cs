@@ -22,7 +22,7 @@ namespace web_sard.Controllers
             var x = from n in db.TblContract
                     where n.FkContractType==idtype&& n.FkSalmali == User._getuserSalMaliDef()
                     orderby n.Date
-                    select new Models.tbls.contract.contract(n, db,false,false);
+                    select new Models.tbls.contract.contract(n, db,false,false,null);
             return View(x.ToList());
         }
         [LoginAuth(_UserRol._Rolls.Contract)]
@@ -218,7 +218,7 @@ namespace web_sard.Controllers
 
 
 
-        public IActionResult ViewContractAjax(Guid id,Guid fkportage)
+        public IActionResult ViewContractAjax(Guid id,Guid fkportageAdd)
         {
           
           var rows=new List< Models.tbls.contract.contract>();
@@ -233,7 +233,7 @@ namespace web_sard.Controllers
               var x2=db.TblContract.Where(a=>a.FkCustomer==id);
               foreach(var item in x2 )
               {
-                    rows.Add(new Models.tbls.contract.contract(item, db, true, true, fkportage));
+                    rows.Add(new Models.tbls.contract.contract(item, db, true, true, fkportageAdd));
               }
               
             }

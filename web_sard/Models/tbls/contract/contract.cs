@@ -140,7 +140,8 @@ namespace web_sard.Models.tbls.contract
                       
                        )
                         select n; 
-            
+                mandeHesab.Add(new mandeHesabclass(x, this,true));
+
                 var t = x.AsEnumerable().GroupBy(a =>new { a.FkPacking ,a.FkProduct}  ).ToList();
                 foreach (var item in t)
                 {
@@ -152,8 +153,7 @@ namespace web_sard.Models.tbls.contract
 
                 }
 
-                mandeHesab.Add(new mandeHesabclass(x, this));
-
+            
 
             }
         }
@@ -163,7 +163,7 @@ namespace web_sard.Models.tbls.contract
         {
             public string txt { get; set; }
             public mandeHesabclass() { }
-            public mandeHesabclass(IEnumerable<web_db.TblPortageRow> x, contract contr)
+            public mandeHesabclass(IEnumerable<web_db.TblPortageRow> x, contract contr,bool c=false)
             {
 
                 { var xin = x.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.In);
@@ -173,13 +173,14 @@ namespace web_sard.Models.tbls.contract
 
                     this.Count = new mohasebe<long?>
                     {
-                        InMaxContract = contr.CountMaxIn ?? 0,
+                        InMaxContract = contr.CountMaxIn ,
                         InSum = xin.Sum(a => a.Count) - xinback.Sum(a => a.Count),
                         OutMaxContract = contr.CountMaxOut,
                         OutSum = xout.Sum(a => a.Count) - xoutback.Sum(a => a.Count)
 
 
                     };
+                   
                     this.Weight = new mohasebe<Decimal?>
                     {
                         InMaxContract = contr.WeightMaxIn,
@@ -190,11 +191,46 @@ namespace web_sard.Models.tbls.contract
 
                     };
 
+
+                    if (c == false)
+                    {
+                        Count.InMaxContract = null;
+                        Weight.InMaxContract = null;
+                         
+                    }
+                  
                     if (contr.ContractType.OutControlByPercent)
                     {
                         this.Count.OutMaxContract = this.Count.InSum * contr.PercentForOut / 100;
                         this.Weight.OutMaxContract = this.Weight.InSum * contr.PercentForOut / 100;
 
+                    }
+
+
+                    if (contr.ContractType.IsProduct1Packing0)
+                    {
+                        if (c)
+                        {
+                            Weight.InMandeContract = Weight.InMaxContract - Weight.InSum;
+                            Weight.OutMandeContract = Weight.OutMaxContract - Weight.OutSum;
+                            Count.OutMandeContract = Count.OutMaxContract - Count.OutSum;
+
+                        }
+                        else
+                        {
+                            Weight.OutMaxContract = null;
+                            Count.OutMaxContract = null;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (c)
+                        {
+                            Count.InMandeContract = Count.InMaxContract - Count.InSum;
+                            Count.OutMandeContract = Count.OutMaxContract - Count.OutSum;
+                        }
                     }
 
 
@@ -219,10 +255,10 @@ namespace web_sard.Models.tbls.contract
             {
                 public T InSum { get; set; }
                 public T InMaxContract { get; set; }
-                public T InMandeContract { get { return (((dynamic)InMaxContract) - ((dynamic)InSum)); } }
+                public T InMandeContract { get; set; }
                 public T OutSum { get; set; }
                 public T OutMaxContract { get; set; }
-                public T OutMandeContract { get { return (((dynamic)OutMaxContract) - ((dynamic)OutSum)); } }
+                public T OutMandeContract { get; set; }
 
             }
 
