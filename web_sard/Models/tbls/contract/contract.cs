@@ -14,60 +14,36 @@ namespace web_sard.Models.tbls.contract
 
         public static bool IsPermitOK(web_db.TblPortage por, web_db.sardweb_Context db)
         {
-            return false;
-            //mandeHesabclass m = new mandeHesabclass(por.FkContract, db, false);
+            foreach (var item in db.TblPortageRow.Where(a=>a.FkPortage==por.Id).GroupBy(a=>a.FkContract).Select(a=>a.Key).Distinct())
+            {
+                var row = new Models.tbls.contract.contract(db.TblContract.Find(item), db, false, true, por.Id);
 
-            //var contype = db.TblContractType.Find(por.FkContracttype);
+                foreach (var m in row.mandeHesab)
+                {
 
-            //if (contype.OutControlByContract==false) return true;
-             
-            //if (por.KindCode < 10)//in
-            //{
-            //    if (contype.IsProduct1Packing0)
-            //    {
-            //        if (m.MaxWeightInMande>por.WeightNet)
-            //        {
-            //            return true;
-            //        }   
-
-            //    }
-            //    else
-            //    {
-            //        if (m.MaxCountOutMande>por.PackingCount)
-            //        {
-            //            return true;
-            //        }
+                    if (m.Count.OutMandeContract < 0)  return false;
                     
-            //    }
 
-            //}
-            //else//out
-            //{ 
+                    if (row.ContractType.IsProduct1Packing0)
+                    {
+                        if ((m.Count.InSum - m.Count.OutSum < 0))  return false;
+                        
+                    }
+                    else
+                    {
+                        if (m.Count.InMandeContract < 0)  return false;
+                         
+                    }
                 
-                
-            //    if (contype.IsProduct1Packing0)
-            //    {
-            //        if (m.MaxWeightOutMande>por.WeightNet)
-            //        {
-            //            return true;
-            //        } 
-            //    }
-            //    if (m.MaxCountOutMande > por.PackingCount)
-            //    {
-            //        return true;
-            //    }
+
+                  
+
+
+                }    
+            }
              
-              
-              
-        //   }
 
-
-
-
-
-
-
-            return false;
+            return true;
 
         }
 
@@ -228,8 +204,8 @@ namespace web_sard.Models.tbls.contract
                     {
                         if (c)
                         {
-                            Count.InMandeContract = Count.InMaxContract - Count.InSum;
-                            Count.OutMandeContract = Count.OutMaxContract - Count.OutSum;
+                            Count.InMandeContract = (Count.InMaxContract - Count.InSum);
+                            Count.OutMandeContract = (Count.OutMaxContract - Count.OutSum);
                         }
                     }
 

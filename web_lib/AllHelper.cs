@@ -61,6 +61,10 @@ namespace web_lib
         {
             return number.HasValue ? number.Value.ToKilo() : "";
         }
+        public static long? gadrmotlagh(this long? number)
+        {
+            return number.HasValue ? (long?)number.Value.gadrmotlagh() : null;
+        }
         public static decimal gadrmotlagh(this decimal number)
         {
             return number<0?-number:number;

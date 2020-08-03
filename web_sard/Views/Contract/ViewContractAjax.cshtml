@@ -29,45 +29,50 @@
 
 
                                     <td class="small">ورود - خروج</td>
+                                    @if (item.ContractType.IsProduct1Packing0)
+                                    {
+                                        <td class="small">موجودی</td>
+                                    }
+                                        <td class="small"> مانده جهت ورود</td>
+                                        <td class="small"> مانده جهت خروج</td>
 
-                                    <td class="small">موجودی</td>
-                                    <td class="small"> مانده جهت ورود</td>
-                                    <td class="small"> مانده جهت خروج</td>
 
-
-                                </tr>
+                                    </tr>
                             </thead>
                             @foreach (var row in item.mandeHesab)
                             {
-                                <tr>
-                                    <td>
-                                        <small>
-                                            @row.txt
-                                        </small> <br />
-                                        @foreach (var l in row.mandelocations)
-                                        {
-                                            <span class="badge badge-light">@l.Key <span class="badge badge-dark badge-pill badge-counter"> @l.Value</span></span> 
-                                        }
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">@row.Weight.InSum.ToKilo() - @row.Weight.OutSum.ToKilo()</span> <br />
-                                        <span class="badge badge-warning">  @row.Count.InSum - @row.Count.OutSum</span>
+                        <tr>
+                            <td>
+                                <small>
+                                    @row.txt
+                                </small> <br />
+                                @foreach (var l in row.mandelocations)
+                                {
+                                    <span class="badge badge-light">@l.Key <span class="badge badge-dark badge-pill badge-counter"> @l.Value</span></span>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge badge-info ">@row.Weight.InSum.ToKilo() - @row.Weight.OutSum.ToKilo()</span> <br />
+                                <span class="badge badge-warning">  @row.Count.InSum - @row.Count.OutSum</span>
 
-
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">@((row.Weight.InSum - row.Weight.OutSum).ToKilo())</span>
-                                        <span class="badge badge-warning">@(row.Count.InSum - row.Count.OutSum)</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info  @(row.Weight.InMandeContract.HasValue?"":"invisible ")">@row.Weight.InMandeContract.ToKilo() از <small>@row.Weight.InMaxContract.ToKilo()</small></span>
-                                        <span class="badge badge-warning @(row.Count.InMandeContract.HasValue?"":"invisible ")">@row.Count.InMandeContract از <small>@row.Count.InMaxContract</small></span>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info @(row.Weight.OutMandeContract.HasValue?"":"invisible ")">@row.Weight.OutMandeContract.ToKilo() از <small>@row.Weight.OutMaxContract.ToKilo()</small></span>
-                                        <span class="badge badge-warning @(row.Count.OutMandeContract.HasValue?"":"invisible ")">@row.Count.OutMandeContract از <small>@row.Count.OutMaxContract</small></span>
-                                    </td>
-                                </tr>
+                            </td>
+                            @if (item.ContractType.IsProduct1Packing0)
+                            {
+                                <td>
+                                    <span class="badge badge-info @((row.Weight.InSum - row.Weight.OutSum)<0?"badge-danger":"")">@((row.Weight.InSum - row.Weight.OutSum).ToKilo())</span>
+                                    <span class="badge badge-warning @((row.Count.InSum - row.Count.OutSum)<0?"badge-danger":"")">@(row.Count.InSum - row.Count.OutSum)</span>
+                                </td>
+                            }
+                            
+                            <td>
+                                <span class="badge badge-info  @(row.Weight.InMandeContract.HasValue?"":"invisible ") @(row.Weight.InMandeContract<0?"badge-danger":"")">@row.Weight.InMandeContract.ToKilo() از <small>@row.Weight.InMaxContract.ToKilo()</small></span>
+                                <span class="badge badge-warning @(row.Count.InMandeContract.HasValue?"":"invisible ") @(row.Count.InMandeContract<0?"badge-danger":"")">@row.Count.InMandeContract از <small>@row.Count.InMaxContract</small></span>
+                            </td>
+                            <td>
+                                <span class="badge badge-info @(row.Weight.OutMandeContract.HasValue?"":"invisible ")  @(row.Weight.OutMandeContract<0?"badge-danger":"")">@row.Weight.OutMandeContract.ToKilo() از <small>@row.Weight.OutMaxContract.ToKilo()</small></span>
+                                <span class="badge badge-warning @(row.Count.OutMandeContract.HasValue?"":"invisible ") @(row.Count.OutMandeContract<0?"badge-danger":"")">@row.Count.OutMandeContract از <small>@row.Count.OutMaxContract</small></span>
+                            </td>
+                        </tr>
                             }
 
                         </table>

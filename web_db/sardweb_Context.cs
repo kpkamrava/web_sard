@@ -32,6 +32,7 @@ namespace web_db
         public virtual DbSet<TblPortageRowLocation> TblPortageRowLocation { get; set; }
         public virtual DbSet<TblProduct> TblProduct { get; set; }
         public virtual DbSet<TblSalMali> TblSalMali { get; set; }
+        public virtual DbSet<TblStoreLog> TblStoreLog { get; set; }
         public virtual DbSet<TblUser> TblUser { get; set; }
         public virtual DbSet<TblUserPermis> TblUserPermis { get; set; }
 
@@ -509,6 +510,12 @@ namespace web_db
 
             modelBuilder.Entity<TblPortageRow>(entity =>
             {
+                entity.HasIndex(x => x.FkPacking)
+                    .HasName("IX_TblPortageRow");
+
+                entity.HasIndex(x => x.FkProduct)
+                    .HasName("IX_TblPortageRow_1");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedNever();
@@ -645,6 +652,29 @@ namespace web_db
                 entity.Property(e => e.SalTa)
                     .HasColumnName("salTa")
                     .HasColumnType("date");
+            });
+
+            modelBuilder.Entity<TblStoreLog>(entity =>
+            {
+                entity.HasKey(x => new { x.FkContractType, x.FkLocation, x.FkSalmali, x.FkCustomer, x.FkPacking, x.FkProduct });
+
+                entity.Property(e => e.FkContractType).HasColumnName("fkContractType");
+
+                entity.Property(e => e.FkLocation).HasColumnName("fkLocation");
+
+                entity.Property(e => e.FkSalmali).HasColumnName("fkSalmali");
+
+                entity.Property(e => e.FkCustomer).HasColumnName("fkCustomer");
+
+                entity.Property(e => e.FkPacking).HasColumnName("fkPacking");
+
+                entity.Property(e => e.FkProduct).HasColumnName("fkProduct");
+
+                entity.Property(e => e.FkContract).HasColumnName("fkContract");
+
+                entity.Property(e => e.WeightIn).HasColumnType("decimal(22, 2)");
+
+                entity.Property(e => e.WeightOut).HasColumnType("decimal(22, 2)");
             });
 
             modelBuilder.Entity<TblUser>(entity =>
