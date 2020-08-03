@@ -230,7 +230,11 @@ namespace web_sard.Controllers
               
               rows.Add(new Models.tbls.contract.contract(x,db,true,true));
             } else{
-              var x2=
+              var x2=db.TblContract.Where(a=>a.FkCustomer==id);
+              foreach(var item in x2 )
+              {
+                rows.Add(new Models.tbls.contract.contract(item,db,true,true))
+              }
               
             }
             
