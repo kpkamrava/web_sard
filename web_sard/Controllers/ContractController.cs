@@ -230,7 +230,7 @@ namespace web_sard.Controllers
               
               rows.Add(new Models.tbls.contract.contract(x,db,true,true));
             } else{
-              var x2
+              var x2=
               
             }
             
