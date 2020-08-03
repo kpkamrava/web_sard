@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -220,13 +220,22 @@ namespace web_sard.Controllers
 
         public IActionResult ViewContractAjax(Guid id)
         {
-            if (id==Guid.Empty)
-            {
-                return View(new Models.tbls.contract.contract());
-            }
+          
+          var rows=new List< Models.tbls.contract.contract>();
+          
+            
+            
             var x = db.TblContract.Find(id);
+            if(x!=null){
+              
+              rows.Add(new Models.tbls.contract.contract(x,db,true,true));
+            } else{
+              var x2
+              
+            }
+            
                     
-            return View(new Models.tbls.contract.contract(x,db,true,true));
+            return View();
         }
 
     }
