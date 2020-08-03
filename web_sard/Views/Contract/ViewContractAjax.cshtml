@@ -1,196 +1,68 @@
-﻿@model web_sard.Models.tbls.contract.contract
+﻿@model List<web_sard.Models.tbls.contract.contract>
 
 @{
     Layout = null;
 }
 
- 
-
+@foreach (var item in Model)
+{
     <div class="card bg-gradient-dark text-gray-100 shadow">
         <div class="card-body">
-            <h5 class="card-title"> وضعیت قرارداد @Model.Custumer @Model.Code</h5>
+            <h5 class="card-title"> وضعیت قرارداد @item.Custumer @item.Code</h5>
             <div class="row">
                 <div class="col-md-7">
 
-                    @if (Model.ContractTypeTbl.IsProduct1Packing0)
-                    {
-                        <span class="badge badge-info"> میزان قرارداد</span>
-
-                        if (Model.ContractTypeTbl.IsEntry)
-                        {
-                            <span class="badge badge-light"><span class="badge badge-secondary badge-counter fa fa-hdd">In</span> @Model.mandeHesab.MaxWeightInContract.ToString("###")</span>
-
-                        }
-                        if (Model.ContractTypeTbl.IsExit)
-                        {
-                            <span class="badge badge-light"><span class="badge badge-secondary badge-counter fa fa-hdd">Out</span> @Model.mandeHesab.MaxWeightOutContract.ToString("###")</span>
-                        }
-                        <br />
-
-                    }
-                    else
-                    {
-                        <span class="badge badge-info"> مقدار قرارداد </span>
-                        if (Model.ContractTypeTbl.IsEntry)
-                        {
-                            <span class="badge badge-light"><span class="badge badge-secondary badge-counter fa fa-hdd">In</span> @Model.mandeHesab.MaxCountInContract</span>
-                        }
-                        if (Model.ContractTypeTbl.IsExit)
-                        {
-                            <span class="badge badge-light"><span class="badge badge-secondary badge-counter fa fa-hdd">Out</span> @Model.mandeHesab.MaxCountOutContract</span>
-                        }
-                        <br />
-                    }
-
-
-                    <div class="card bg-gradient-info">
-                        <div class="card-body">
-
-                            @if (Model.ContractTypeTbl.IsEntry)
-                            {
-                                <span class="badge badge-info"> جمع ورودی  </span>
-
-
-                                @if (Model.ContractTypeTbl.IsProduct1Packing0)
-                                {<span class="badge badge-light">
-                                        @Model.mandeHesab.SumWeightIN.ToString("###0.##") کیلو
-                                    </span>
-                                }
-
-
-                                <span class="badge badge-light">
-                                    @Model.mandeHesab.SumCountIN جعبه
-                                </span>
-
-
-
-
-                                <br />
-                            }
-                            @if (Model.ContractTypeTbl.IsExit)
-                            {
-
-                                <span class="badge badge-info"> جمع خروجی </span>
-
-                                @if (Model.ContractTypeTbl.IsProduct1Packing0)
-                                {<span class="badge badge-light">
-
-                                        @Model.mandeHesab.SumWeightOut.ToString("###0.##") کیلو
-                                    </span>
-                                }
-                                <span class="badge badge-light">
-
-                                    @Model.mandeHesab.SumCountOut جعبه
-                                </span>
-
-
-                                <br />
-                            }
-
-
-                            <div class="card bg-gradient-warning">
-                                <div class="card-body">
-
-                                    @if (Model.ContractTypeTbl.IsEntry)
-                                    {
-
-                                        <span class="badge badge-info"> مانده ورود </span> <span class="badge badge-light">
-                                            @if (Model.ContractTypeTbl.IsProduct1Packing0)
-                                            {
-
-                                                @Model.mandeHesab.MaxWeightInMande.ToString("###0.##")
-                                            }
-                                            else
-                                            {
-                                                @Model.mandeHesab.MaxCountInMande
-
-                                            }
-
-
-                                        </span> <br />
-                                    }
-                                    @if (Model.ContractTypeTbl.IsExit)
-                                    {
-
-                                        <span class="badge badge-info"> مانده خروج </span>
-
-                                        @if (Model.ContractTypeTbl.IsProduct1Packing0)
-                                        {
-                                            <span class="badge badge-light">
-                                                @Model.mandeHesab.MaxWeightOutMande کیلو
-                                            </span>
-
-                                        }
-                                        @if (Model.ContractTypeTbl.IsProduct1Packing0 == false || Model.ContractTypeTbl.OutControlByPercent)
-                                        {
-                                            <span class="badge badge-light">
-                                                @Model.mandeHesab.MaxCountOutMande جعبه
-                                            </span>
-                                        }
-
-                                    }
-
-
-                                </div>
-
-                            </div>
-
-
-
-
-                        </div>
-                    </div>
-
+                 
                 </div>
 
 
                 <div class="col-md-5">
-                    @if (Model.Txt.IsEmpty() == false)
+                    @if (item.Txt.IsEmpty() == false)
                     {
                         <span class="badge badge-info"> توضیحات قرارداد</span>
-                        <span class="badge badge-light">  @Model.Txt</span>
+                        <span class="badge badge-light">  @item.Txt</span>
 
                         <br />
                     }
-                    <span class="badge badge-info"> زمان قرارداد</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"></span> @Model.Date.ToPersianDate() </span>
+                    <span class="badge badge-info"> زمان قرارداد</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"></span> @item.Date.ToPersianDate() </span>
                     <br />
-                    <span class="badge badge-info"> زمان تحویل</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"> از </span> @Model.Azdate <span class="badge badge-secondary badge-counter fa fa-calendar"> تا </span> @Model.Tadate</span>
+                    <span class="badge badge-info"> زمان تحویل</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"> از </span> @item.Azdate <span class="badge badge-secondary badge-counter fa fa-calendar"> تا </span> @item.Tadate</span>
                     <br />
                     <span class="badge badge-info  fa fa-plus"> </span><span class="badge badge-light">
-                        <span class="badge badge-secondary badge-counter fa fa-user"> </span>@Model.useradd
-                        <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@Model.dateadd
+                        <span class="badge badge-secondary badge-counter fa fa-user"> </span>@item.useradd
+                        <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@item.dateadd
                     </span>
                     <br />
-                    @if (string.IsNullOrWhiteSpace(Model.useredit) == false)
+                    @if (string.IsNullOrWhiteSpace(item.useredit) == false)
                     {
                         <span class="badge badge-info fa fa-edit"> </span><span class="badge badge-light">
-                            <span class="badge badge-secondary badge-counter fa fa-user"> </span>@Model.useredit
-                            <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@Model.dateedit
+                            <span class="badge badge-secondary badge-counter fa fa-user"> </span>@item.useredit
+                            <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@item.dateedit
                         </span>
                         <br />
                     }
 
                     <span class="badge badge-info"> نرخ هر جعبه  </span><span class="badge badge-light">
-                        @if (Model.ContractTypeTbl.IsEntry)
+                        @if (item.ContractType.IsEntry)
                         {
-                            <span class="badge badge-secondary badge-counter fa fa-money">In</span>@Model.PriceOfBoxIn.ToString("###,###,##0.##")
+                            <span class="badge badge-secondary badge-counter fa fa-money">In</span>@item.PriceOfBoxIn.ToString("###,###,##0.##")
                         }
-                        @if (Model.ContractTypeTbl.IsExit)
+                        @if (item.ContractType.IsExit)
                         {
-                            <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@Model.PriceOfBoxOut.ToString("###,###,##0.##")
+                            <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@item.PriceOfBoxOut.ToString("###,###,##0.##")
                         }
                     </span>
                     <br />
-                    @if (Model.ContractTypeTbl.IsProduct1Packing0)
+                    @if (item.ContractType.IsProduct1Packing0)
                     {
                         <span class="badge badge-info"> نرخ هر کیلو  </span><span class="badge badge-light">
-                            @if (Model.ContractTypeTbl.IsEntry)
+                            @if (item.ContractType.IsEntry)
                             {
-                                <span class="badge badge-secondary badge-counter fa fa-money">In</span>@Model.PriceOfKiloIn.ToString("###,###,##0.##")
+                                <span class="badge badge-secondary badge-counter fa fa-money">In</span>@item.PriceOfKiloIn.ToString("###,###,##0.##")
                             }
-                            @if (Model.ContractTypeTbl.IsExit)
+                            @if (item.ContractType.IsExit)
                             {
-                                <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@Model.PriceOfKiloOut.ToString("###,###,##0.##")
+                                <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@item.PriceOfKiloOut.ToString("###,###,##0.##")
                             }
                         </span>
                     }
@@ -205,4 +77,7 @@
 
         </div>
     </div>
- 
+
+}
+
+

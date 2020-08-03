@@ -107,8 +107,7 @@ namespace web_sard.Models.tbls.contract
             prodoctsId = new List<Guid>();
             packings = new List<Models.tbls.alltbl>();
             packingsId = new List<Guid>();
-            this.ContractTypeTbl = new ContractType(db.TblContractType.Find(row.FkContractType));
-             this.ContractType = ContractTypeTbl.Title;
+            this.ContractType  = new ContractType(db.TblContractType.Find(row.FkContractType));
             if (isProductsPackings)
                 {
                  
@@ -130,77 +129,107 @@ namespace web_sard.Models.tbls.contract
 
                 }
 
-            mandeHesab = new mandeHesabclass();
-
+           this. mandeHesab = new List<mandeHesabclass>();
+          
             if (mohasebeMande)
             {
+                var x = db.TblPortageRow.Where(a => a.FkContract == row.Id).Include(a => a.FkPortageNavigation);
 
-                mandeHesab = new mandeHesabclass(row.Id, db);
+                mandeHesab.Add( new mandeHesabclass(x ,this));
+
+              
+                foreach (var item in x.GroupBy(a=>new { a.FkPacking, a.FkProduct }))
+                {
+                    var str = (cl._ListProduct.SingleOrDefault(a => a.Id == item.Key.FkProduct) ?? new web_db.TblProduct()).Title
+                                 + " " + 
+                              (cl._ListPacking.SingleOrDefault(a => a.Id == item.Key.FkPacking) ?? new web_db.TblPacking()).Title;
+
+                    mandeHesab.Add(new mandeHesabclass(item.Select(a=>a), this) {txt= str });
+
+                }
+              
+
+
             }
         }
 
-        public  class mandeHesabclass 
-         
+        public class mandeHesabclass
+
         {
+            public string txt { get; set; }
             public mandeHesabclass() { }
-            public mandeHesabclass(Guid FkContract, web_db.sardweb_Context db,bool portagesok=true) {
+            public mandeHesabclass(IEnumerable<web_db.TblPortageRow> x, contract contr)
+            {
 
-                var con = db.TblContract.Find(FkContract);
-                //var contype = db.TblContractType.Find(con.FkContractType);
-                //var ppp = db.TblPortage.Where(a => a.FkContract == FkContract && a.IsDel == false && a.IsEnd);
+                { var xin = x.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.In);
+                    var xinback = x.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.InBack);
+                    var xout = x.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.Out);
+                    var xoutback = x.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.OutBack);
 
-                //SumCountIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.PackingCount) ?? 0)
-                //      - (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.PackingCount) ?? 0);
-
-
-                //SumCountOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.PackingCount) ?? 0)
-                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.PackingCount) ?? 0);
-
-                //SumWeightIN = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.In).Sum(a => a.WeightNet) ?? 0)
-                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.WeightNet) ?? 0);
-
-                //SumWeightOut = (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.Out).Sum(a => a.WeightNet) ?? 0)
-                //- (ppp.Where(a => a.KindCode == (int)Models.tbls.portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.WeightNet) ?? 0);
-                 
+                    this.Count = new mohasebe<long?>
+                    {
+                        InMaxContract = contr.CountMaxIn ?? 0,
+                        InSum = xin.Sum(a => a.Count) - xinback.Sum(a => a.Count),
+                        OutMaxContract = contr.CountMaxOut,
+                        OutSum = xout.Sum(a => a.Count) - xoutback.Sum(a => a.Count)
 
 
-                //MaxWeightOutContract = con.WeightMaxOut ?? 0;
-                //MaxCountOutContract = con.CountMaxOut ?? 0;
+                    };
+                    this.Weight = new mohasebe<Decimal?>
+                    {
+                        InMaxContract = contr.WeightMaxIn,
+                        InSum = xin.Sum(a => a.Count * a.FkPortageNavigation.PackingOfWeight) - xinback.Sum(a => a.Count * a.FkPortageNavigation.PackingOfWeight),
+                        OutMaxContract = contr.WeightMaxOut,
+                        OutSum = xout.Sum(a => a.Count * a.FkPortageNavigation.PackingOfWeight) - xoutback.Sum(a => a.Count * a.FkPortageNavigation.PackingOfWeight),
 
-                //MaxWeightInContract = con.WeightMaxIn ?? 0;
-                //MaxCountInContract = con.CountMaxIn ?? 0;
+
+                    };
+
+                    if (contr.ContractType.OutControlByPercent)
+                    {
+                        this.Count.OutMaxContract = this.Count.InSum * contr.PercentForOut / 100;
+                        this.Weight.OutMaxContract = this.Weight.InSum * contr.PercentForOut / 100;
+
+                    }
 
 
-                //if (contype.OutControlByPercent)
-                //{
-                //    MaxWeightOutContract = SumWeightIN * (con.PercentForOut ?? 0) / 100;
-                //    MaxCountOutContract = SumCountIN * (con.PercentForOut ?? 0) / 100;
 
-                //}
+                    this.mandelocations = new Dictionary<string, long>();
+                }
+                {
+                    foreach (var item in x.GroupBy(a => a.CodeLocation))
+                    {
+                        var xin = item.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.In).Sum(a => a.Count);
+                        var xinback = item.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.InBack).Sum(a => a.Count);
+                        var xout = item.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.Out).Sum(a => a.Count);
+                        var xoutback = item.Where(a => a.FkPortageNavigation.KindCode == (int)portage.kindPortage.kindPortageEnum.OutBack).Sum(a => a.Count);
 
+
+                        mandelocations.Add(item.Key, (xin- xinback)-(xout- xoutback));
+                    } 
+                }
 
             }
-            public long SumCountIN { get; set; }
-            public long SumCountOut { get; set; }
-            public decimal SumWeightIN { get; set; }
-            public decimal SumWeightOut { get; set; }
-             
-            public decimal MaxWeightInContract { get; set; }
-            public long MaxCountInContract { get; set; }
-             
-            public decimal MaxWeightOutContract { get; set; }
-            public long MaxCountOutContract { get; set; }
-             
-            public decimal MaxWeightInMande { get { return MaxWeightInContract- SumWeightIN; } }
-            public long MaxCountInMande { get { return MaxCountInContract - SumCountIN; } }
-             
-            public decimal MaxWeightOutMande { get { return MaxWeightOutContract - SumWeightOut; } }
-            public long MaxCountOutMande { get { return MaxCountOutContract - SumCountOut; } }
+            public class mohasebe<T> //where T //:Nullable<struct>
+            {
+                public T InSum { get; set; }
+                public T InMaxContract { get; set; }
+                public T InMandeContract { get { return (((dynamic)InMaxContract) - ((dynamic)InSum)); } }
+                public T OutSum { get; set; }
+                public T OutMaxContract { get; set; }
+                public T OutMandeContract { get { return (((dynamic)OutMaxContract) - ((dynamic)OutSum)); } }
+
+            }
+
+            public mohasebe<Decimal?> Weight { get; set; }
+            public mohasebe<long?> Count { get; set; }
+            public Dictionary<string, long> mandelocations { get; set; }
 
 
         }
 
-        public mandeHesabclass mandeHesab { get; set; }
+
+        public List<mandeHesabclass> mandeHesab { get; set; }
         public Guid Id { get; set; }
         [Display(Name ="کد")]
         [Required]
@@ -211,10 +240,9 @@ namespace web_sard.Models.tbls.contract
         public string  Custumer { get; set; }
         [Display(Name = "نوع قرارداد")]
          public Guid FkContractType { get; set; }
-        [Display(Name = "نوع قرارداد")] 
-        public string ContractType { get; set; }
+   
         [Display(Name = "نوع قرارداد")]
-        public ContractType ContractTypeTbl { get; set; }
+        public ContractType ContractType  { get; set; }
 
         [Display(Name = "حداکثر مقدار ورود")]
         [Required]

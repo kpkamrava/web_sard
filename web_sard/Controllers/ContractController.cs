@@ -233,13 +233,13 @@ namespace web_sard.Controllers
               var x2=db.TblContract.Where(a=>a.FkCustomer==id);
               foreach(var item in x2 )
               {
-                rows.Add(new Models.tbls.contract.contract(item,db,true,true))
+                    rows.Add(new Models.tbls.contract.contract(item, db, true, true));
               }
               
             }
             
                     
-            return View();
+            return View(rows);
         }
 
     }
