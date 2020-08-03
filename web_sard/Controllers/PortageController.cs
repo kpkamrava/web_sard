@@ -274,9 +274,12 @@ namespace web_sard.Controllers
         {
 
             var x = db.TblPortage.Find(id);
-
+                x.TxtPermit = "";
+                x.FkUsPermit =null;
+       
             if (x.IsEnd)
             {
+            
                 x.IsEnd = false;
             }
             else 

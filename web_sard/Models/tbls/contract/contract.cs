@@ -75,7 +75,7 @@ namespace web_sard.Models.tbls.contract
 
 
         public contract() { }
-        public contract(web_db.TblContract row,web_db.sardweb_Context db,bool isProductsPackings=false,bool mohasebeMande=false)
+        public contract(web_db.TblContract row,web_db.sardweb_Context db,bool isProductsPackings=false,bool mohasebeMande=false,Guid? fkportageadd=null)
         {
             var cus = db.TblCustomer.Find(row.FkCustomer)??new web_db.TblCustomer();
             this.Azdate = row.Azdate.ToPersianDate();
@@ -133,12 +133,16 @@ namespace web_sard.Models.tbls.contract
           
             if (mohasebeMande)
             {
-                var x = db.TblPortageRow.Where(a => a.FkContract == row.Id).Include(a => a.FkPortageNavigation);
-
-                mandeHesab.Add( new mandeHesabclass(x ,this));
-
-              
-                foreach (var item in x.GroupBy(a=>new { a.FkPacking, a.FkProduct }))
+                var x = from n in db.TblPortageRow.Include(a => a.FkPortageNavigation)
+                        where n.FkContract == row.Id&&
+                       (
+                       n.FkPortageNavigation.IsEnd||n.FkPortage==fkportageadd
+                      
+                       )
+                        select n; 
+            
+                var t = x.AsEnumerable().GroupBy(a =>new { a.FkPacking ,a.FkProduct}  ).ToList();
+                foreach (var item in t)
                 {
                     var str = (cl._ListProduct.SingleOrDefault(a => a.Id == item.Key.FkProduct) ?? new web_db.TblProduct()).Title
                                  + " " + 
@@ -147,7 +151,8 @@ namespace web_sard.Models.tbls.contract
                     mandeHesab.Add(new mandeHesabclass(item.Select(a=>a), this) {txt= str });
 
                 }
-              
+
+                mandeHesab.Add(new mandeHesabclass(x, this));
 
 
             }

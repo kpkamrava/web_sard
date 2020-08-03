@@ -123,7 +123,7 @@ namespace web_sard.Models.tbls.portage
         [Display(Name = "تماس راننده")]
         public string CarTell { get; set; }
         [Display(Name = "نوع ماشین")]
-        [Required]
+     
         public string CarMashin { get; set; }
           
         [Display(Name = "زمان باسکول اول")] 
@@ -204,6 +204,7 @@ namespace web_sard.Models.tbls.portage
         public  customer.customer Customer { get; set; }
      
         [Display(Name = "نوع ماشین"), Required]
+        
         public Guid? FkCar { get; set; }
        
         public bool? Weight1IsBascul { get; set; } 

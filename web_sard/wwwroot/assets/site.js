@@ -103,11 +103,11 @@ function startBascul(idI, idButton, idInput) {
 
 
 
-function Contractbutton(FkC, vc, FkCadd) {
+function Contractbutton(FkC, vc, fkportageidAdd) {
     var fkcontractid = $(FkC).val();
     var ur = "/Contract/ViewContractAjax/" + fkcontractid;
-    if (FkCadd != null) {
-  var fkportageidAdd = $(FkCadd).val();
+    if (fkportageidAdd != null) {
+  //var fkportageidAdd = $(FkCadd).val();
         ur += "?fkportageidAdd=" + fkportageidAdd;
     }
     $(vc).html("");

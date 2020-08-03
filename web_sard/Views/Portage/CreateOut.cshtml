@@ -12,6 +12,7 @@
         <input type="hidden" asp-for="Customer.Title" />
         <input type="hidden" asp-for="Weight1" />
         <input type="hidden" asp-for="FkCustomer" />
+        <input type="hidden" asp-for="Weight2IsBascul" />
         <input type="hidden" asp-for="FkContractType" />
         <input type="hidden" asp-for="KindTitle" />
         <div class="row">
@@ -77,9 +78,15 @@
                                     <span asp-validation-for="CarRanande" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="CarMashin" class="control-label"></label>
-                                    <input asp-for="CarMashin" class="form-control" />
-                                    <span asp-validation-for="CarMashin" class="text-danger"></span>
+                                    <label asp-for="FkCar" class="control-label"></label>
+                                    <select asp-for="FkCar" class="form-control">
+                                        <option> </option>
+                                        @foreach (var item in cl._ListCar)
+                                        {
+                                            <option value="@item.Id">  @item.Title</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="FkCar" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -116,7 +123,10 @@
                                             <span class="badge badge-info fa fa-hdd"> اول : @Model.Weight1.GetValueOrDefault().ToString("#####0.##")</span>
                                             <span class="badge badge-light h5 fa fa-hdd" id="WeightNet"> خالص : </span>
                                             <div class="input-group">
-                                                <input asp-for="Weight2" value="@Model.Weight2.GetValueOrDefault().ToString("#####0.##")" class="form-control w-50 @(Model.Weight2.HasValue?"noactive":"") " readonly />
+                                                <input asp-for="Weight2" value="@Model.Weight2.GetValueOrDefault().ToString("#####0.##")" 
+                                                       class="form-control w-50 @(Model.Weight2.HasValue?"noactive":"") " readonly 
+                                                        ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');"
+                                                       />
                                                 <div class="input-group-btn  w-50">
                                                     <button class="btn btn-light w-100" id="Weight2B" type="button">
                                                         <i class="fa fa-hdd" id="Weight2I"> @web_sard.Models.cl.bascul.WeightBacul </i>
@@ -260,7 +270,7 @@
     {
         <script>
 
-            Contractbutton('#FkContract', '#vaziatContract')
+            Contractbutton('#FkCustomer', '#vaziatContract','@Model.Id')
 
         </script>
 

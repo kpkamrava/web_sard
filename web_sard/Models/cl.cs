@@ -46,6 +46,7 @@ namespace web_sard.Models
         public static IEnumerable<web_db.TblInjury> _ListInjury { get; set; }
         public static IEnumerable<web_db.TblPacking> _ListPacking { get; set; }
         public static IEnumerable<web_db.TblLocation> _ListLocation { get; set; }
+        public static IEnumerable<web_db.TblCar> _ListCar { get; set; }
 
     }
 }

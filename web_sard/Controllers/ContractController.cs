@@ -218,7 +218,7 @@ namespace web_sard.Controllers
 
 
 
-        public IActionResult ViewContractAjax(Guid id)
+        public IActionResult ViewContractAjax(Guid id,Guid fkportage)
         {
           
           var rows=new List< Models.tbls.contract.contract>();
@@ -233,7 +233,7 @@ namespace web_sard.Controllers
               var x2=db.TblContract.Where(a=>a.FkCustomer==id);
               foreach(var item in x2 )
               {
-                    rows.Add(new Models.tbls.contract.contract(item, db, true, true));
+                    rows.Add(new Models.tbls.contract.contract(item, db, true, true, fkportage));
               }
               
             }

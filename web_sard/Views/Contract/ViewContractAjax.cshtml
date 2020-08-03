@@ -10,13 +10,74 @@
         <div class="card-body">
             <h5 class="card-title"> وضعیت قرارداد @item.Custumer @item.Code</h5>
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-lg-10">
+                    <div class="table-responsive">
+                        <table class="table table-secondary table-sm table-striped  ">
+                            <thead class="table-dark">
+                                <tr>
+                                <tr>
+                                    <td>
 
+                                        <span class="badge badge-info">
+                                            وزن
+                                        </span>
+                                        <span class="badge badge-warning">
+                                            تعداد
+
+                                        </span>
+                                    </td>
+
+
+                                    <td class="small">ورود - خروج</td>
+
+                                    <td class="small">موجودی</td>
+                                    <td class="small"> مانده جهت ورود</td>
+                                    <td class="small"> مانده جهت خروج</td>
+
+
+                                </tr>
+                            </thead>
+                            @foreach (var row in item.mandeHesab)
+                            {
+                                <tr>
+                                    <td>
+                                        <small>
+                                            @row.txt
+                                        </small> <br />
+                                        @foreach (var l in row.mandelocations)
+                                        {
+                                            <span class="badge badge-light">@l.Key  تعداد: @l.Value</span><br />
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">@row.Weight.InSum - @row.Weight.OutSum</span> <br />
+                                        <span class="badge badge-warning">  @row.Count.InSum - @row.Count.OutSum</span>
+
+
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">@(row.Weight.InSum - row.Weight.OutSum)</span>
+                                        <span class="badge badge-warning">@(row.Count.InSum - row.Count.OutSum)</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">@row.Weight.InMandeContract از <small>@row.Weight.InMaxContract</small></span>
+                                        <span class="badge badge-warning">@row.Count.InMandeContract از <small>@row.Count.InMaxContract</small></span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">@row.Weight.OutMandeContract از <small>@row.Weight.OutMaxContract</small></span>
+                                        <span class="badge badge-warning">@row.Count.OutMandeContract از <small>@row.Count.OutMaxContract</small></span>
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+
+                    </div>
                  
                 </div>
 
 
-                <div class="col-md-5">
+                <div class="col-lg-2">
                     @if (item.Txt.IsEmpty() == false)
                     {
                         <span class="badge badge-info"> توضیحات قرارداد</span>
@@ -24,32 +85,33 @@
 
                         <br />
                     }
-                    <span class="badge badge-info"> زمان قرارداد</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"></span> @item.Date.ToPersianDate() </span>
+                    <span class="badge badge-info" data-toggle="tooltip" title="@item.Date.ToPersianDate()"> زمان قرارداد</span>
+
+
+
                     <br />
-                    <span class="badge badge-info"> زمان تحویل</span><span class="badge badge-light"> <span class="badge badge-secondary badge-counter fa fa-calendar"> از </span> @item.Azdate <span class="badge badge-secondary badge-counter fa fa-calendar"> تا </span> @item.Tadate</span>
+                    <span class="badge badge-info" data-toggle="tooltip" title="از @item.Azdate   تا @item.Tadate "> زمان تحویل</span>
+
+
                     <br />
-                    <span class="badge badge-info  fa fa-plus"> </span><span class="badge badge-light">
-                        <span class="badge badge-secondary badge-counter fa fa-user"> </span>@item.useradd
-                        <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@item.dateadd
-                    </span>
-                    <br />
+                    <span class="badge badge-info  fa fa-plus" data-toggle="tooltip" title="@item.useradd @item.dateadd"> </span>
+
                     @if (string.IsNullOrWhiteSpace(item.useredit) == false)
                     {
-                        <span class="badge badge-info fa fa-edit"> </span><span class="badge badge-light">
-                            <span class="badge badge-secondary badge-counter fa fa-user"> </span>@item.useredit
-                            <span class="badge badge-secondary badge-counter fa fa-calendar"> </span>@item.dateedit
-                        </span>
-                        <br />
-                    }
+                        <span class="badge badge-info fa fa-edit"  data-toggle="tooltip" title="@item.useredit @item.dateedit"> </span> 
 
-                    <span class="badge badge-info"> نرخ هر جعبه  </span><span class="badge badge-light">
+                    } <br />
+
+                    <span class="badge badge-info" > نرخ هر جعبه  </span>
+                    
+                    <span class="badge badge-light">
                         @if (item.ContractType.IsEntry)
                         {
-                            <span class="badge badge-secondary badge-counter fa fa-money">In</span>@item.PriceOfBoxIn.ToString("###,###,##0.##")
+                            <span class="badge badge-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@item.PriceOfBoxIn.ToString("###,###,##0.##")">In</span>
                         }
                         @if (item.ContractType.IsExit)
                         {
-                            <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@item.PriceOfBoxOut.ToString("###,###,##0.##")
+                            <span class="badge badge-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@item.PriceOfBoxOut.ToString("###,###,##0.##")">Out</span>
                         }
                     </span>
                     <br />
@@ -58,11 +120,11 @@
                         <span class="badge badge-info"> نرخ هر کیلو  </span><span class="badge badge-light">
                             @if (item.ContractType.IsEntry)
                             {
-                                <span class="badge badge-secondary badge-counter fa fa-money">In</span>@item.PriceOfKiloIn.ToString("###,###,##0.##")
+                                <span class="badge badge-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@item.PriceOfKiloIn.ToString("###,###,##0.##")">In</span>
                             }
                             @if (item.ContractType.IsExit)
                             {
-                                <span class="badge badge-secondary badge-counter fa fa-money">Out</span>@item.PriceOfKiloOut.ToString("###,###,##0.##")
+                                <span class="badge badge-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@item.PriceOfKiloOut.ToString("###,###,##0.##")">Out</span>
                             }
                         </span>
                     }
