@@ -226,17 +226,30 @@ namespace web_sard.Controllers
             
             
             var x = db.TblContract.Find(id);
-            if(x!=null){
-              
-              rows.Add(new Models.tbls.contract.contract(x,db,true,true));
-            } else{
-              var x2=db.TblContract.Where(a=>a.FkCustomer==id);
-              foreach(var item in x2 )
-              {
-                    rows.Add(new Models.tbls.contract.contract(item, db, true, true, fkportageAdd));
-              }
-              
+            var x2 = db.TblContract.Where(a => a.FkCustomer == id);
+            if (x != null)
+            {
+
+                rows.Add(new Models.tbls.contract.contract(x, db, true, true));
             }
+            else if (x2 != null)
+            {
+
+                foreach (var item in x2)
+                {
+                    rows.Add(new Models.tbls.contract.contract(item, db, true, true, fkportageAdd));
+                }
+
+            }
+            else {
+                var x3 = db.TblPortageRow.Where(a => a.FkPortage == id).GroupBy(a => a.FkContract).Select(a => a.Key).Distinct();
+                foreach (var item in x3)
+                {
+                    rows.Add(new Models.tbls.contract.contract(db.TblContract.Find(item), db, true, true, fkportageAdd));  
+                }
+
+
+            }        
             
                     
             return View(rows);

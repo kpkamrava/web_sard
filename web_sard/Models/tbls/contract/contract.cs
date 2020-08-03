@@ -16,18 +16,34 @@ namespace web_sard.Models.tbls.contract
         {
             foreach (var item in db.TblPortageRow.Where(a=>a.FkPortage==por.Id).GroupBy(a=>a.FkContract).Select(a=>a.Key).Distinct())
             {
-                var row = new Models.tbls.contract.contract(db.TblContract.Find(item), db, false, true, por.Id);
+                var row = new contract(db.TblContract.Find(item), db, false, true, por.Id);
 
                 foreach (var m in row.mandeHesab)
                 {
 
-                    if (m.Count.OutMandeContract < 0)  return false;
-                    
+                    if (m.Count.OutMandeContract < 0) return false;
+               
 
                     if (row.ContractType.IsProduct1Packing0)
                     {
                         if ((m.Count.InSum - m.Count.OutSum < 0))  return false;
-                        
+
+
+
+                        if (m.Weight.OutMandeContract < 0) return false;
+                        if ((m.Weight.InSum - m.Weight.OutSum < 0)) return false;
+                        if (m.Weight.InMandeContract < 0) return false;
+
+                        if (row.ContractType.OutControlByLocation)
+                        {
+                            foreach (var ml in m.mandelocations)
+                            {
+                                if (ml.Value < 0) return false;
+                            }
+                        }
+                       
+
+
                     }
                     else
                     {

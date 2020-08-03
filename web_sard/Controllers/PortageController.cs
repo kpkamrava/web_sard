@@ -53,6 +53,7 @@ namespace web_sard.Controllers
                 Date1 = tim,
                 Date1date = tim.ToPersianDate(),
                 Date1time = new TimeSpan(tim.Hour, tim.Minute, 0),
+                Weight1IsBascul=true
             
             };
              
@@ -155,6 +156,7 @@ namespace web_sard.Controllers
             if (x.Date2.HasValue == false)
             {
                 x.Date2 = DateTime.Now;
+                x.Weight2IsBascul = true;
             }
            
             var model= new Models.tbls.portage.portage(x,db,true,false,true);

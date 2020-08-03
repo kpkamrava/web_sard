@@ -5,7 +5,7 @@
     var kindPortage = (int)ViewData["kindPortage"];
 
 
-    ViewData["Title"] ="ثبت باسکول ورودی - "+ web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model.Customer.Title));
+    ViewData["Title"] = "ثبت باسکول ورودی - " + web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model.Customer.Title));
 
     var listcustumer = (List<web_sard.Models.tbls.customer.customer>)ViewData["listcustumer"];
 }
@@ -25,17 +25,17 @@
             <div class="card-body">
                 <div class="card-title">مشخصات خودرو</div>
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="CarRanande" class="control-label"></label>
-                                    <input asp-for="CarRanande" class="form-control" />
+                                    <input asp-for="CarRanande" class="form-control form-control-sm" />
                                     <span asp-validation-for="CarRanande" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="FkCar" class="control-label"></label>
-                                    <select asp-for="FkCar" class="form-control">
+                                    <select asp-for="FkCar" class="form-control form-control-sm">
                                         <option> </option>
                                         @foreach (var item in cl._ListCar)
                                         {
@@ -49,74 +49,35 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="CarShMashin" class="control-label"></label>
-                                    <input asp-for="CarShMashin" class="form-control" />
+                                    <input asp-for="CarShMashin" class="form-control form-control-sm" />
                                     <span asp-validation-for="CarShMashin" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="CarTell" class="control-label"></label>
-                                    <input asp-for="CarTell" class="form-control" />
+                                    <input asp-for="CarTell" class="form-control form-control-sm" />
                                     <span asp-validation-for="CarTell" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    @if (ContractType.IsProduct1Packing0 == true)
-                    {
-                        <div class="col-md-3">
-                            <div class="card bg-gradient-success">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group ">
-                                            <label class="control-label text-white">وزن</label>
-                                            <div class="input-group">
-                                                <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")" 
-                                                       class="form-control w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
-                                                       ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');"
-                                                       
-                                                       />@*noactive*@
-                                                <div class="input-group-btn  w-50">
-                                                    <button class="btn btn-light w-100" id="Weight1B" type="button">
-                                                        <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <span asp-validation-for="Weight1" class="text-danger"></span>
-                                        </div>
 
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    }
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
+                    <div class="col-md-6">
                         <div class="card bg-gray-200">
                             <div class="card-body">
                                 <div class="row">
 
                                     <div class="form-group col-md-4">
                                         <label asp-for="Code" class="control-label"></label>
-                                        <input asp-for="Code" class="form-control" readonly />
+                                        <input asp-for="Code" class="form-control form-control-sm" readonly />
                                         <span asp-validation-for="Code" class="text-danger"></span>
                                     </div>
 
                                     <div class="form-group col-md-8">
                                         <label class="control-label">زمان</label>
                                         <div class="input-group">
-                                            <input asp-for="Date1date" class="form-control datepicker" />
-                                            <input asp-for="Date1time" type="time" class="form-control" />
+                                            <input asp-for="Date1date" class="form-control form-control-sm datepicker" />
+                                            <input asp-for="Date1time" type="time" class="form-control form-control-sm" />
                                         </div>
 
                                         <span asp-validation-for="Date1date" class="text-danger "></span>
@@ -128,7 +89,7 @@
 
                                         <div class="input-group">
 
-                                            <select asp-for="FkCustomer" class="form-control" onchange="$('#CbContract').click()">
+                                            <select asp-for="FkCustomer" class="form-control form-control-sm" onchange="$('#CbContract').click()">
                                                 <option> </option>
                                                 @foreach (var item in listcustumer)
                                                 {
@@ -138,7 +99,7 @@
 
 
                                             <div class="input-group-btn">
-                                                <button class="btn btn-light" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract')">
+                                                <button class="btn btn-light btn-sm" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract')">
                                                     <i class="fa fa-search-plus"></i>
                                                 </button>
                                             </div>
@@ -151,9 +112,21 @@
 
                             </div>
                         </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+
                         <div class="form-group">
                             <label asp-for="Txt" class="control-label"></label>
-                            <textarea asp-for="Txt" class="form-control"></textarea>
+                            <textarea asp-for="Txt" class="form-control form-control-sm"></textarea>
                             <span asp-validation-for="Txt" class="text-danger"></span>
                         </div>
 
@@ -162,15 +135,53 @@
 
 
             </div>
-            <div class="col-md-6" id="vaziatContract">
+            @if (ContractType.IsProduct1Packing0 == true)
+            {
+                <div class="col-md-3">
+                    <div class="card bg-gradient-success">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group ">
+                                    <label class="control-label text-white">وزن</label>
+                                    <div class="input-group">
+                                        <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")"
+                                               class="form-control form-control-sm w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
+                                               ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');" />@*noactive*@
+                                            <div class="input-group-btn  w-50">
+                                                <button class="btn btn-light btn-sm w-100" id="Weight1B" type="button">
+                                                    <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Weight1" class="text-danger"></span>
+                                    </div>
 
-            </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                }
+
+
         </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
+       
+            <input type="submit" value="ثبت ورود خودرو" class="btn btn-primary float-left" />
+
+         
+        <br />
+
     </form>
+<hr />
+<div id="vaziatContract">
+
+</div>
 <div>
+
     <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
 </div>
 
@@ -183,13 +194,14 @@
 
         </script>
     }
-    @if (Model.FkCustomer!=Guid.Empty)
-    {<script>
+    @if (Model.FkCustomer != Guid.Empty)
+    {
+        <script>
 
-      Contractbutton('#FkCustomer','#vaziatContract')
+            Contractbutton('#FkCustomer', '#vaziatContract')
 
-    </script>
-       
+        </script>
+
     }
 
 }

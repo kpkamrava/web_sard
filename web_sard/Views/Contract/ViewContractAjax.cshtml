@@ -8,7 +8,7 @@
 {
     <div class="card bg-gradient-dark text-gray-100 shadow">
         <div class="card-body">
-            <h5 class="card-title"> وضعیت قرارداد @item.Custumer @item.Code</h5>
+            <h5 class="card-title">  <span class="badge badge-light">@item.ContractType.Title</span> وضعیت قرارداد @item.Custumer @item.Code</h5>
             <div class="row">
                 <div class="col-lg-10">
                     <div class="table-responsive">
@@ -48,7 +48,7 @@
                                 </small> <br />
                                 @foreach (var l in row.mandelocations)
                                 {
-                                    <span class="badge badge-light">@l.Key <span class="badge badge-dark badge-pill badge-counter"> @l.Value</span></span>
+                                    <span class="badge badge-light  @(((item.ContractType.OutControlByLocation)&&(item.ContractType.IsProduct1Packing0)&&(l.Value<0))?"badge-danger":"")">@l.Key <span class="badge badge-dark badge-pill badge-counter"> @l.Value</span></span>
                                 }
                             </td>
                             <td>
