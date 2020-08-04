@@ -232,7 +232,7 @@ namespace web_sard.Controllers
 
                 rows.Add(new Models.tbls.contract.contract(x, db, true, true));
             }
-            else if (x2 != null)
+            else if (x2.Any())
             {
 
                 foreach (var item in x2)
@@ -246,12 +246,8 @@ namespace web_sard.Controllers
                 foreach (var item in x3)
                 {
                     rows.Add(new Models.tbls.contract.contract(db.TblContract.Find(item), db, true, true, fkportageAdd));  
-                }
-
-
-            }        
-            
-                    
+                } 
+            }         
             return View(rows);
         }
 

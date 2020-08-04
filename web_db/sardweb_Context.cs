@@ -561,7 +561,6 @@ namespace web_db
                 entity.HasOne(d => d.FkPortageNavigation)
                     .WithMany(p => p.TblPortageRow)
                     .HasForeignKey(x => x.FkPortage)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TblPortageRow_TblPortage");
             });
 

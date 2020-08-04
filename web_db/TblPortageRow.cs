@@ -13,7 +13,7 @@ namespace web_db
 
         public Guid Id { get; set; }
         public long Code { get; set; }
-        public Guid FkPortage { get; set; }
+        public Guid? FkPortage { get; set; }
         public DateTime Date { get; set; }
         public long Count { get; set; }
         public Guid? FkPacking { get; set; }

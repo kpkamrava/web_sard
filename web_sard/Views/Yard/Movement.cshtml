@@ -1,0 +1,82 @@
+﻿@model List<web_sard.Models.tbls.portage.store>
+@{
+    ViewData["Title"] = "نقل و انتقالات";
+}
+
+
+<div class="card bg-gray-200">
+    <div class="card-header">جستجو در موقعیت</div>
+    <div class="card-body">
+        <form asp-action="Movement" method="get">
+            <div class="form-group">
+                <label class="control-label">موقعیت</label>
+                <select name="fklocation" class="form-control form-control-sm">
+                    <option value="">---</option>
+                    @foreach (var item in web_sard.Models.cl._ListLocation.OrderBy(a => a.Kind).ThenBy(a => a.Ord))
+                    {
+
+                        if (ViewBag.fklocation == item.Id)
+                        {
+                            <option value="@item.Id" selected>@item.CodeFull @item.Title</option>
+
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.CodeFull @item.Title</option>
+
+                        }
+
+                    }
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-success">جستجو</button>
+        </form>
+    </div>
+</div>
+ 
+<div class="card bg-gradient-dark">
+    <div class="card-header">موجودی های در موقعیت</div>
+    <div class="card-body">
+        <table class="table table-striped table-light table-responsive">
+            <thead class="table-dark">
+                <tr>
+                    <td>
+                        مالک
+                    </td>
+                    
+                    <td>
+                        موقعیت
+                    </td>
+                    
+                    <td>
+                        محصول
+                    </td>
+                    <td>
+                        جعبه
+                    </td>
+                    <td>
+                        تعداد
+                    </td>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                @item.contracttype @item.customer @item.contract
+            </td>
+            <td>@item.location</td>
+            <td>@item.Prodoct</td>
+            <td>@item.Packing</td>
+            <td>@item.count</td>
+        </tr>
+            }
+
+        </table>
+    </div>
+</div>
+ 
+ 

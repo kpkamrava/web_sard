@@ -161,6 +161,7 @@ namespace web_sard.Controllers
           
             var pp = db.TblPortage.Find(idp);
             var ppp = db.TblContractType.Find(pp.FkContracttype);
+            var pkind = Models.tbls.portage.kindPortage.listkindcontract.Single(a => a.code == pp.KindCode);// = db.TblContractType.Find(pp.FkContracttype);
             if (ppp.IsProduct1Packing0==true)
             {
                 if (FkProduct == Guid.Empty)
@@ -263,7 +264,7 @@ namespace web_sard.Controllers
             }
              
 
-            row.Count = Count; 
+            row.Count =(pkind.Manfi?-1:1)* Count; 
             row.FkPacking = FkPacking;
             row.FkProduct = FkProduct;
             row.Txt = Txt;
@@ -287,6 +288,48 @@ namespace web_sard.Controllers
             db.SaveChanges(); 
             return Json(Newtonsoft.Json.JsonConvert.SerializeObject(new { ok = true, txt = "حذف انجام شد" }));
         }
+
+
+
+        public IActionResult Movement(Guid fklocation)
+        {
+            ViewBag.fklocation = fklocation;
+
+            var xx = db.TblPortageRow.Where(a => a.FkLocation1 == fklocation || a.FkLocation2 == fklocation || a.FkLocation3 == fklocation).Include(a => a.FkContractNavigation)
+                .AsEnumerable().GroupBy(a => new { a.FkLocation1, a.FkLocation2, a.FkLocation3, a.FkPacking, a.FkProduct, a.FkContract })
+                .Select(a => a);
+
+            var x = from a in xx
+                    let count = a.Sum(z => z.Count)
+                    where count != 0
+                    let contract = a.First().FkContractNavigation
+
+                    let loc3 = Models.cl._ListLocation.SingleOrDefault(z => z.Id == a.Key.FkLocation3)
+                    let loc2 = Models.cl._ListLocation.SingleOrDefault(z => z.Id == a.Key.FkLocation2)
+                    let loc1 = Models.cl._ListLocation.SingleOrDefault(z => z.Id == a.Key.FkLocation1)
+                    select new Models.tbls.portage.store 
+                        {
+                            fklocation1 = a.Key.FkLocation1,
+                            fklocation2 = a.Key.FkLocation2,
+                            fklocation3 = a.Key.FkLocation3,
+                            fkcontract = a.Key.FkContract,
+                            fkPacking = a.Key.FkPacking,
+                            fkProdoct = a.Key.FkProduct,
+                            count = count,
+                            location = (loc3 ?? loc2 ?? loc1 ?? new web_db.TblLocation()).CodeFull,
+                            contracttype = Models.cl._ListContractType.Single(z => z.Id == contract.FkContractType).Title,
+                            customer = db.TblCustomer.Find(contract.FkCustomer).Title,
+                            contract = contract.Code,
+                            Packing = (Models.cl._ListPacking.SingleOrDefault(z => z.Id == a.Key.FkPacking) ?? new web_db.TblPacking()).Title,
+                            Prodoct = (Models.cl._ListProduct.SingleOrDefault(z => z.Id == a.Key.FkProduct) ?? new web_db.TblProduct()).Title,
+
+                        };
+
+
+            return View(x.ToList());
+        }
+        
+
 
     }
 }

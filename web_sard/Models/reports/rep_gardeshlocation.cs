@@ -87,7 +87,7 @@ namespace web_sard.Models.reports
 
             }
             public Guid IdRow { get; set; }
-            public Guid IdPort { get; set; }
+            public Guid? IdPort { get; set; }
             public string datestr { get; set; }
             public DateTime date { get; set; }
             public long Count { get; set; }

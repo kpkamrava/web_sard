@@ -251,7 +251,11 @@ namespace web_sard.Controllers
             }
             ViewData["type"] = db.TblContractType.Find(x.FkContracttype);
             ViewData["kindPortage"] = x.KindCode;
-             return View(model);
+
+
+            model.Documents = db.TblPortageDocument.Where(a => a.FkPortage == model.Id).Select(a => new Models.tbls.portage.PortageDocument(a)).ToList();
+            model.ListRows = db.TblPortageRow.Where(a => a.FkPortage == model.Id).Select(a => new Models.tbls.portage.PortageRow(a,db)).ToList();
+            return View(model);
         }
 
         [HttpPost]
@@ -340,11 +344,6 @@ namespace web_sard.Controllers
             return StiNetCoreViewer.ViewerEventResult(this);
 
         }
-
-
-
-
-
-
+          
     }
 }
