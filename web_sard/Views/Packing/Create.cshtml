@@ -6,9 +6,11 @@
   
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" asp-action="Create">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+            <input asp-for="Id" type="hidden" />
+
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
                 <input asp-for="Code" class="form-control" />
@@ -29,10 +31,62 @@
                 <input asp-for="WightFull" class="form-control" />
                 <span asp-validation-for="WightFull" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="WightScale" class="control-label"></label>
+                <input asp-for="WightScale" class="form-control" />
+                <span asp-validation-for="WightScale" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                 </label>
+            </div> 
+
+            
+            <div class="form-group form-check">
+
+                 <label asp-for="ForContractType" class="control-label"></label>
+                 
+                <select asp-for="ForContractType" class="form-control">
+                    @foreach (var item in web_db.TblContractType.KindCotractTypeEnum.ASabad.GetAllItems())
+                    {
+                        if (Model.ForContractType!=null&& Model.ForContractType.Any(a => a == item))
+                        {
+                            <option value="@item.ToString()" selected>@item.ToDescriptionAttr()</option>
+
+                        }
+                        else
+                        {
+                            <option value="@item.ToString()">@item.ToDescriptionAttr()</option>
+
+                        }
+                    }
+                </select>
+
+            </div> 
+
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsNotAc" /> @Html.DisplayNameFor(model => model.IsNotAc)
+                </label>
+            </div>
+
+            <hr />
+            <div class="form-group">
+                <label asp-for="OtcodeKala" class="control-label"></label>
+                <input asp-for="OtcodeKala" class="form-control" />
+                <span asp-validation-for="OtcodeKala" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtcodeVahedShomaresh" class="control-label"></label>
+                <input asp-for="OtcodeVahedShomaresh" class="form-control" />
+                <span asp-validation-for="OtcodeVahedShomaresh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtcodeKalaAcc" class="control-label"></label>
+                <input asp-for="OtcodeKalaAcc" class="form-control" />
+                <span asp-validation-for="OtcodeKalaAcc" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="ثبت" class="btn btn-primary" />

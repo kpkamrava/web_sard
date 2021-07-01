@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace web_db
 {
     public partial class TblLocation
@@ -8,6 +10,7 @@ namespace web_db
         public TblLocation()
         {
             InverseFkPNavigation = new HashSet<TblLocation>();
+            //TblTempRows = new HashSet<TblTempRow>();
         }
 
         public Guid Id { get; set; }
@@ -20,8 +23,10 @@ namespace web_db
         public decimal? Wight { get; set; }
         public string CodeFull { get; set; }
         public bool ForProduct { get; set; }
+        public int? OtcodeAnbar { get; set; }
 
         public virtual TblLocation FkPNavigation { get; set; }
         public virtual ICollection<TblLocation> InverseFkPNavigation { get; set; }
+        //public virtual ICollection<TblTempRow> TblTempRows { get; set; }
     }
 }

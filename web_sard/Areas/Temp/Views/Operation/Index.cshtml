@@ -1,0 +1,74 @@
+﻿@model IEnumerable<web_db._temp.TblTemp>
+
+@{
+    ViewData["Title"] = "لیست روزها";
+}
+
+<h1>لیست روزها</h1>
+
+<p>
+    <a asp-action="Create">روز جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <span class="fa fa-calendar"></span>
+            </th>
+
+
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.Txt)
+            </th>
+
+            <th>
+                <span class="fa fa-user"></span>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTaiid)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @if (item.FkuserTaiid.HasValue)
+                {
+                    <span class="fa fa-check text-success"> </span>
+
+                }
+                @item.Date.ToPersianDate()
+            </td>
+              
+            <td>
+                @Html.DisplayFor(modelItem => item.Txt)
+            </td>
+            <td>
+                <span class="badge bg-secondary">  @item.UserAdd.Title</span>
+
+              
+
+                @if (item.FkuserTaiid.HasValue)
+                {
+                    <span class="badge bg-success">  @item.UserTaiid.Title</span>
+
+
+                }
+            </td>
+            <td>
+                @item.DateTaiid.ToPersianDatenull()
+            </td>
+            <td>
+                @Html.ActionLink("ویرایش", "Create", new { id=item.Id }) |
+                @Html.ActionLink("وضعیت", "Temp", new { id=item.Id }) 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,155 @@
+﻿@model IEnumerable<web_db._temp.TblTempRow>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>گزارشات</h1>
+
+<p>
+    <a asp-action="Create">جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fktemp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkLocation1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkLocation2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkLocation3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateEdit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkUserAdd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkUserEdit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinDama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxDama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MotorDama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.R)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.O)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.M)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.A)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nezafat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SamPashi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorZani)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Txt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fktemp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkLocation1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkLocation2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkLocation3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAdd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateEdit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkUserAdd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkUserEdit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinDama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxDama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MotorDama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.R)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.O)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.M)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.A)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nezafat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SamPashi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColorZani)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Txt)
+            </td>
+            <td>
+                @Html.ActionLink("ویرایش", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("وضعیت", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("حذف", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable< web_sard.Models.tbls.portage.store>
+@{
+    ViewData["Title"] = "گردش قرارداد";
+}
+<table class="table table-striped bg-light">
+    <thead>
+        <tr>
+            <th>
+                زمان
+            </th>
+            <th>
+                مکان
+            </th>
+
+            <th>
+                محصول
+            </th>
+
+            <th> ورود <span class="fa fa-plane-arrival"> </span></th>
+            <th>خروج <span class="fa fa-plane-departure"> </span></th>
+            <th>
+               توضیحات
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.date.ToPersianDateMini()
+            </td>
+
+            <td>
+                @item.location
+            </td>
+            <td>
+                @item.Prodoct  @item.Packing
+            </td>
+            <td>
+                <label> @item.countin.ToKilo()<i class="fa fa-box text-black-50"> </i></label>   |
+
+                <label>@item.Weightin.ToKilo()<i class="fa fa-boxes text-black-50"> </i></label>
+            </td>
+            <td>
+                <label>@item.countout.ToKilo()<i class="fa fa-box text-black-50"> </i></label>    |
+
+                <label>@item.Weightout.ToKilo()<i class="fa fa-boxes text-black-50"> </i></label>
+            </td>
+            <td>
+                @item.txt
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+ 

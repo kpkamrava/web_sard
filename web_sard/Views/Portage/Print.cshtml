@@ -1,30 +1,66 @@
 ﻿@model web_sard.Models.printclass
-@using Stimulsoft.Report.Mvc
-    <div class="btn-group float-left">
+
+
+
+
+<div class="btn-group float-left">
+    @if (Context.Request.IsAjaxRequest())
+    {
 
         @foreach (var item in Model.files)
         {
-         <a asp-action="Print" asp-route-kind="@item.Value" asp-route-id="@Model.id" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-success fa  fa-print @(Model.kind==item.Value?"active":"")"> فرمت @item.Value</a>
-        } 
-
-    </div>
-<br />
-<div style="direction:ltr">
-    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions()
-{
-   Actions =
-
+            <a asp-action="Print" isModal="true" asp-route-kind="@item.Value" asp-route-id="@Model.id" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-success fa  fa-print @(Model.kind == item.Value ? "active" : "")"> فرمت @item.Value</a>
+        }
+    }
+    else
     {
 
-   GetReport = "GetReport",
-   ViewerEvent = "ViewerEvent",
-    },
-   Toolbar =
+        @foreach (var item in Model.files)
+        {
+            <a asp-action="Print" asp-route-kind="@item.Value" asp-route-id="@Model.id" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-success fa  fa-print @(Model.kind == item.Value ? "active" : "")"> فرمت @item.Value</a>
+        }
+    }
 
-{ 
-PrintDestination = Stimulsoft.Report.Web.StiPrintDestination.Direct,
-},
-
-
-})
 </div>
+<div class="btn-group ">
+
+    @if (Context.Request.IsAjaxRequest())
+    {
+        <a target="_blank" asp-action="GetReport" asp-route-id="@Model.id" asp-route-json="true" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-info fa fa-code float-left"> </a>
+    }
+    else
+    { 
+        <a target="_blank" isModal="true" asp-action="GetReport" asp-route-id="@Model.id" asp-route-json="true" asp-route-contolltype="@Model.contolltype" asp-route-actiontype="@Model.actiontype" class="btn btn-outline-info fa fa-code float-left"> </a>
+ 
+    }
+
+
+</div>
+
+<br />
+
+<div id="contentp"  class="align-content-center align-content-between"  ></div>
+ 
+ 
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/Vue.js"></script>
+<script>
+
+    $.get("@Url.Action("PrintAjax", new { id=Model.id,kind=Model.kind })", function (dataa) {
+
+        var x = $.parseJSON(dataa);
+        $("#contentp").append(x.page);
+        var app = new Vue({
+            el: '#contentp',
+            data: {
+                ajax: {}
+            }
+        });
+        app.ajax = x.json;
+        setTimeout(function () { printtag("#contentp"); }, 1500);
+        
+    });
+
+
+</script>
+

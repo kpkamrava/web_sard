@@ -1,0 +1,216 @@
+﻿@model web_db._note.TblNote
+
+@{
+    ViewData["Title"] = "ثبت یاداوری";
+
+    var listuserr = (List<web_db.TblUser>)ViewBag.users;
+    Model.TblNoteDates = Model.TblNoteDates.OrderByDescending(a => a.FromDate.HasValue).ThenBy(a=>a.FromDate).ToList();
+}
+@if (Model.Id!=Guid.Empty)
+{
+<div class="alert bg-info text-light">
+    از طرف  <b>@listuserr.Single(a => a.Id == Model.FkuserAdd).Title</b> 
+     در <b>@Model.DateAdd.ToPersianDateMini()</b>
+
+</div>
+}
+
+<form asp-action="Add">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Id" type="hidden" />
+
+    <div class="row">
+
+
+        <div class="col-md-6">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Caption" class="control-label"></label>
+                <input asp-for="Caption" required placeholder="عنوان ..." class="form-control form-control-lg" />
+                <span asp-validation-for="Caption" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Txt" class="control-label"></label>
+                <textarea asp-for="Txt" required class="form-control"></textarea>
+                <span asp-validation-for="Txt" class="text-danger"></span>
+            </div>
+
+
+        </div>
+        <div class="col-md-6">
+
+
+
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+
+                    <label class="col-form-label">از </label>
+                </div>
+                <div class="col-auto">
+                    <input name="TblNoteDates[0]._FromDate" required value="@(Model.TblNoteDates.Any() ? Model.TblNoteDates[0].FromDate.ToPersianDatenull() : "")" autocomplete="off" class="form-control form-control-sm datepicker" />
+                </div>
+                <div class="col-auto">
+
+                    <label class="col-form-label">تا </label>
+                </div>
+                <div class="col-auto">
+                    <input name="TblNoteDates[0]._ToDate" required value="@(Model.TblNoteDates.Any() ? Model.TblNoteDates[0].ToDate.ToPersianDatenull() : "")" autocomplete="off" class="form-control form-control-sm datepicker" />
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label class="control-label">تکرار </label>
+                </div>
+                <div class="col-auto">
+                    <select name="TblNoteDates[0].KindBesorat" required>
+                        @foreach (var item in web_db._note.TblNoteDate.Kind.HarHafte.GetAllItems())
+                        {
+                            if (Model.TblNoteDates[0].KindBesorat == item)
+                            {
+                                <option value="@item" selected>@item.ToKPvalusAttr().Description</option>
+
+
+                            }
+                            else
+                            {
+                                <option value="@item">@item.ToKPvalusAttr().Description</option>
+
+                            }
+
+                        }
+
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="control-label">
+                        <input type="checkbox" name="TblNoteDates[0].SendSms" value="true" @( Model.TblNoteDates[0].SendSms ? "checked" : "") />
+                        ارسال SMS یاداوری
+                    </label>
+                </div>
+
+            </div>
+            <hr />
+
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+
+                    <label class="col-form-label">از </label>
+                </div>
+                <div class="col-auto">
+                    <input name="TblNoteDates[1]._FromDate"  value="@(Model.TblNoteDates.Count()>1 ? Model.TblNoteDates[1].FromDate.ToPersianDatenull() : "")" autocomplete="off" class="form-control form-control-sm datepicker" />
+                </div>
+                <div class="col-auto">
+
+                    <label class="col-form-label">تا </label>
+                </div>
+                <div class="col-auto">
+                    <input name="TblNoteDates[1]._ToDate"  value="@(Model.TblNoteDates.Count()>1 ? Model.TblNoteDates[1].ToDate.ToPersianDatenull() : "")" autocomplete="off" class="form-control form-control-sm datepicker" />
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label class="control-label">تکرار </label>
+                </div>
+                <div class="col-auto">
+                    <select name="TblNoteDates[1].KindBesorat" required>
+                        @foreach (var item in web_db._note.TblNoteDate.Kind.HarHafte.GetAllItems())
+                        {
+                            if (Model.TblNoteDates[1].KindBesorat == item)
+                            {
+                                <option value="@item" selected>@item.ToKPvalusAttr().Description</option>
+
+
+                            }
+                            else
+                            {
+                                <option value="@item">@item.ToKPvalusAttr().Description</option>
+
+                            }
+
+                        }
+
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="control-label">
+                        <input type="checkbox" name="TblNoteDates[1].SendSms" value="true" @(Model.TblNoteDates.Count()>1?( Model.TblNoteDates[1].SendSms ? "checked" : ""):"") />
+                        ارسال SMS یاداوری
+                    </label>
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+        </div>
+            @if (User._getRolAny(_UserRol._Rolls.NoteAdmin))
+            {
+                <hr />
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <h4>رولها</h4>
+                        <div class="row">
+                            @foreach (var item in cl._ListRoll)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+
+                                        <label><input type="checkbox" name="roll" value="@item" @(Model.TblNoteRolls.Any(a => a.ForUserroll == item.ToString()) ? "checked" : "") /> @item.ToKPvalusAttr().Description </label>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <h4>کاربران</h4>
+                        <div class="row">
+                            @foreach (var item in listuserr)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+
+                                        <label><input type="checkbox" name="us" value="@item.Id" @(Model.TblNoteRolls.Any(a => a.ForUserId == item.Id) ? "checked" : "") /> @item.Title </label>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+            }
+
+            <hr />
+            @if ((Model.FkuserAdd == User._getuserid()) || User._getRolAny(_UserRol._Rolls.TempAdmin))
+            {
+                <div class="form-group">
+
+                    <input type="submit" value="ذخیره" class="btn btn-primary float-left" />
+                    @if (Model.Id != Guid.Empty)
+                    {
+                        <input type="submit" value="حذف" name="delete" class="btn btn-danger btn-sm float-left" />
+                    }
+
+                </div>
+            }
+
+
+</form>
+<div>
+    <a asp-action="Index">بازگشت به لیست</a>
+</div>
+

@@ -1,0 +1,64 @@
+﻿@model web_db.TblConfig
+
+@{
+    ViewData["Title"] = "config";
+}
+
+<h1>config</h1>
+
+<h4>TblConfig</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="config">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KindOtherSystem" class="control-label"></label>
+                <input asp-for="KindOtherSystem" class="form-control" />
+                <span asp-validation-for="KindOtherSystem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiUrlPaivest" class="control-label"></label>
+                <input asp-for="ApiUrlPaivest" class="form-control" />
+                <span asp-validation-for="ApiUrlPaivest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiUser" class="control-label"></label>
+                <input asp-for="ApiUser" class="form-control" />
+                <span asp-validation-for="ApiUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiPass" class="control-label"></label>
+                <input asp-for="ApiPass" class="form-control" />
+                <span asp-validation-for="ApiPass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalMaliMain" class="control-label"></label>
+                <input asp-for="SalMaliMain" class="form-control" />
+                <span asp-validation-for="SalMaliMain" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DegatBascul" class="control-label"></label>
+                <input asp-for="DegatBascul" class="form-control" />
+                <span asp-validation-for="DegatBascul" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+     @foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()))
+     {
+         <a class="btn btn-info" asp-action="contracttype" asp-route-id="@item.Id"> ویرایش @item.Title</a>
+
+     }
+
+</div>
+
+ 

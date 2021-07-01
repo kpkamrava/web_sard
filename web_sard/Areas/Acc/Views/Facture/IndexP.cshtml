@@ -1,0 +1,92 @@
+﻿@model IEnumerable<web_db.TblPortage>
+@using web_lib
+@{
+    ViewData["Title"] = "لیست عملیات مالی";
+
+    bool SanadShode =  ViewBag.SanadShode;
+    Guid fkContractType = ViewBag.fkContractType ;
+    web_sard.Models.tbls.portage.kindPortage.kindPortageEnum? kindPortage = ViewBag.kindPortage;
+
+}
+
+<h1>لیست عملیات @(cl._ListContractType(User._getuserSalMaliDef()).Single(a=>a.Id==fkContractType).Title) @((kindPortage.HasValue? kindPortage.Value.ToKPvalusAttr().Description:"")) @((SanadShode? "سند شده" : "سند نشده"))</h1>
+
+<div>
+    @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract)
+    {
+        <a class="btn btn-light  @((item.code== (int?)kindPortage)?"active":"")" asp-action="index" asp-route-SanadShode="@SanadShode" asp-route-fkContractType="@fkContractType" asp-route-kindPortage="@item.code">@item.txt</a>
+    }
+    <a class="btn btn-light @((null==  kindPortage)?"active":"")" asp-action="index" asp-route-SanadShode="@SanadShode" asp-route-fkContractType="@fkContractType" asp-route-kindPortage="@null">همه</a>
+
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkCustomer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeightNet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackingCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Txt)
+            </th>
+
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.OtcodeResid)
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FkCustomerNavigation.Title)
+            </td>
+
+
+            <td>
+                @item.Date2.ToPersianDateTime()
+            </td>
+
+            <td>
+                @item.WeightNet.ToKilo()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PackingCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Txt)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.OtcodeResid)
+            </td>
+
+
+            <td>
+                <a asp-action="Acc" asp-route-id="@item.Id" ismodal="true" class="btn btn-success fa fa-pager"></a> @item.SumMoney.ToMoney()
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

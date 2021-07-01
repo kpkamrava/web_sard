@@ -1,0 +1,66 @@
+﻿@model IEnumerable<web_db.TblSalMali>
+
+@{
+    ViewData["Title"] = "لیست دوره های مالی";
+}
+
+<h1>لیست دوره های مالی</h1>
+
+<p>
+    <a asp-action="Create" asp-controller="Year" class="btn btn-success fa fa-plus">دوره مالی جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                عنوان
+            </th>
+
+            <th>
+                زمان شروع
+            </th>
+            <th>
+                زمان پایان
+            </th>
+            <th>
+                باز
+            </th>
+            <th>
+                اصلی
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Sal)
+            </td>
+
+            <td>
+                @item.SalAz.ToPersianDate()
+            </td>
+            <td>
+                @item.SalTa.ToPersianDate()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsOpen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsOrginal)
+            </td>
+            <td>
+                <a asp-action="Create" asp-controller="Year" asp-route-id="@item.Id" isModal="true" class="btn btn-success fa fa-edit"></a>
+
+
+                <a asp-action="listCusSend" asp-controller="Year" asp-route-id="@item.Id" class="btn btn-success fa fa-coffee">ارسال اطلاعات</a>
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

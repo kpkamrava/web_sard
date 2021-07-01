@@ -1,0 +1,44 @@
+﻿@model IEnumerable<web_db.TblGroup>
+
+@{
+    ViewData["Title"] = "لیست گروه ها";
+}
+
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-success fa fa-plus">گروه جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td> 
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+
+            <td>
+                <a asp-action="Create" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"> </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

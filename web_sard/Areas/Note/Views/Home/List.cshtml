@@ -1,0 +1,58 @@
+﻿@model IEnumerable<web_db._note.TblNoteRows>
+
+@{
+    ViewData["Title"] = "List";
+    
+  
+
+
+}
+
+<h1>List</h1>
+
+<p>
+    <a class="btn btn-sm btn-primary fa fa-plus float-left" asp-action="ADD" asp-route-date="@((DateTime.Now).ToPersianDate())" ismodal="true">جدید</a>
+    @if (User._getRolAny(_UserRol._Rolls.NoteAdmin)  )
+    { 
+        <a class="btn btn-sm btn-light @(ViewBag.All==true?" active":"") " asp-action="List" asp-route-all="@(!ViewBag.All)" >همه</a>
+
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+               
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+       
+        @foreach (var item in Model.GroupBy(a=>a.TblNote))
+        {
+
+        <tr>
+
+            <td>
+                @item.First().Date.ToPersianDateTime()
+            </td>
+
+            <td>
+                @item.Key.Caption
+                @Html.Raw(item.Key.Txt)
+            </td>
+             
+            <td>
+                <a class="btn btn-sm  @(item.Key.FkuserAdd == User._getuserid() ? "btn-outline-info" : "btn-outline-warning") fa fa-edit" asp-action="ADD" asp-route-id="@item.First().FkTblNote" ismodal="true">ویرایش</a>
+            </td>
+        </tr>
+       }
+       
+    </tbody>
+</table>

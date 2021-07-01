@@ -1,0 +1,380 @@
+﻿
+
+$(function () {
+   
+
+});
+
+
+$(document).ready(function () {
+
+     
+
+
+    $(".searchinput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $(".table tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $(".colSearch").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    $(".searchinputM").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $(".modal-body").find(".table tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $(".modal-body").find(".colSearch").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+
+    $(".zoom").each(function (index, e) {
+        $(e).replaceWith("<a href='" + $(e).attr("src") + "' target='blank'>" + $(e)[0].outerHTML + "</a>");
+
+    });
+
+
+
+    $(".datepicker").each(function (index, a) {
+        $(a).persianDatepicker({ theme: 'latoja' });
+
+    })
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
+    if ($(window).width() > 767) {
+        $(".menu-content").find("a.dropdown-item").each(function (index, e) {
+
+            var aa = $(e);
+            //     if (aa.attr("href").includes(window.location.pathname)) {
+            if (window.location.href.includes(aa.attr("href"))) {
+                $(e).addClass("active")
+                $(e).parent().parent("ul").click();
+            }
+        });
+    }
+
+
+    startBascul("#valuebaskul");
+    $("#azerobaskul").click(function () {
+
+        $.get("/Ajax/SetZeroBascul", function (data, status) {
+        })
+
+    });
+
+  
+
+    renderAjax(document); 
+
+});
+$(document).ready(function () {
+    
+     $(".loaderholder").hide();
+$(".loaderholder").remove();
+
+
+
+   
+});
+
+
+
+
+function printTable(item) {
+    var str = $(item).parents("table")[0];
+    
+    var pageTitle = 'چاپ جدول',
+        stylesheet = '/libs/bootstrap/scss/bootstrap.css',
+        win = window.open('', 'Print', 'width=700,height=600');
+    win.document.write('<html><head><title>' + pageTitle + '</title>' +
+        '<link rel="stylesheet" href="' + stylesheet + '">' +
+        '</head><body dir="rtl">' + str.outerHTML + '</body></html>');
+      win.document.close();
+      setTimeout(function () { win.print();win.close(); },1000)
+      
+}
+
+
+function ExcelTable(item) {
+    var htmls = "";
+    var uri = 'data:application/vnd.ms-excel;base64,';
+    var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+    };
+
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+        })
+    };
+
+    htmls = $(item).parents("table")[0].outerHTML
+
+    var ctx = {
+        worksheet: 'Worksheet',
+        table: htmls
+    }
+
+
+    var link = document.createElement("a");
+    link.download = "export.xls";
+    link.href = uri + base64(format(template, ctx));
+    link.click();
+}
+
+ 
+
+$('#examplesignModal').on('show.bs.modal', function (e) {
+    openFullscreen();
+});
+$('#examplesignModal').on('hide.bs.modal', function (e) {
+    if (fs == 'false') {
+        closeFullscreen();
+    }
+   
+});
+
+function openFullscreen() {
+    var elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
+}
+
+
+function closeFullscreen() {
+     if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+var fs =  false ;
+function FullscreenToggle() {
+    if (fs== true ) {
+        fs = false ;
+        localStorage['Fullscreen'] = fs;
+        closeFullscreen();
+    } else {
+        fs = true ; 
+        localStorage['Fullscreen'] = fs;
+        openFullscreen();
+    }
+    launchFullScreen(document.documentElement);
+}
+
+
+function renderAjax(doc) {
+
+    $(doc).find("tr.hide").each(function (index, ele) {
+        $(ele).hide();
+        $(ele).prev().click(function () {
+            $(ele).fadeToggle();
+        });
+        $(ele).prev().css('cursor', 'pointer');
+    }); 
+
+    $(doc).find(".table").addClass("table-striped");
+    $(doc).find(".table").parent().addClass("table-responsive");
+
+    $(doc).find(".table tbody").addClass("shadow");
+    $(doc).find(".table tfoot").addClass("shadow");
+    $(doc).find(".table").addClass("shadow");
+
+     
+
+
+    $(doc).find("a[isModal='true']").each(function (index, a) {
+
+        $(a).click(function (e) {
+
+            var bodymodal = $("#ajaxModal").find(".modal-body");
+            bodymodal.html("<div class='loader'></div>");
+            bodymodal.load($(a).attr("href") );
+
+            $("#ajaxModal").modal("show");
+
+
+
+
+            e.preventDefault();
+            return false;
+        });
+
+    });
+
+    $(doc).find("a[isAJ='true']").each(function (index, a) {
+
+        $(a).click(function (e) {
+
+            var tag = $($(a).attr("AJ")) ;
+            tag.html("<div class='loader'></div>");
+            tag.load($(a).attr("href"));
+              
+            e.preventDefault();
+            return false;
+        });
+
+    });
+
+    $(doc).find("select").each(function (index, a) {
+        $(a).attr("data-live-search", "true");
+        $(a).selectpicker();
+    })
+
+    $(doc).find(".table").each(function (index, el) {
+
+        var z = $(el).find("caption");
+        var str = "<a class='btn fa fa-print'onclick='printTable(this)'></a><a class='btn fa fa-file-excel'onclick='ExcelTable(this)'></a>";
+
+        if (z.length==0) {
+            $(el).append("<caption>" + str + "</caption>");
+        } else {
+            z.append(str);
+
+        }
+        });
+
+ 
+    $(doc).find("table").each(function (index, item) {
+        if ($(item).parent().parent().hasClass("hide") == false)
+        if ($(item).find("tr").length > 20) {
+            
+            var marginTop = 0; // Add margin if the page has a top nav-bar
+            var $thead = $(item).find('thead').first();
+            var offset = $thead .offset().top - marginTop;
+            var lastPos = 0;
+
+            $(doc).on('scroll', function () {
+                console.clear( );
+             console.log("offset- " + offset);
+                console.log("scrollTop- " + $(doc).scrollTop());
+
+                if ($(doc).scrollTop() > offset) {
+                    if (lastPos === 0) {
+                        // Add a class for styling
+                        $thead.addClass('floating-header');
+                    }
+
+                    lastPos = $(doc).scrollTop() - offset;
+                    $thead.css('transform', 'translateY(' + (lastPos) + 'px)');
+                }
+                else if (lastPos !== 0) {
+                    lastPos = 0;
+                    $thead.removeClass('floating-header');
+                    $thead.css('transform', 'translateY(' + 0 + 'px)');
+                }
+            });
+        }
+
+    });  
+
+
+     
+
+}
+function startBascul(idI, idButton, idInput) {
+    SetBasculagain();
+    if (idButton != null) {
+    $(idInput).addClass("active") 
+
+    }
+    function SetBasculagain() {
+        getBascul();
+        setTimeout(function () {
+
+            SetBasculagain();
+        }, 1000);
+
+    } ;
+    var i = 1;
+    function getBascul() {
+      
+        $.get("/Ajax/GetLastBascul", function (data, status) {
+            var model = $.parseJSON(data);
+            //debugger;
+            if (idButton != null) {
+                if ($(idInput).hasClass("active") && ($(idInput).prop('readonly') == true) && ($(idInput).hasClass("noactive")==false)) {
+                 
+                if (model.WeightBaculIsAllow) {
+                    $(idInput).val(model.WeightBacul);
+
+                } else {
+                    $(idInput).val("0");
+                }
+                $(idInput).change();
+            }
+     
+            }
+             $(idI).html((model.WeightBacul ?? "")/* + "" + (i++)*/);
+
+             
+
+        });
+        
+    }
+    /*if ($(idButton).is(":readonly") == false)*/
+    if (idButton != null) {
+        $(idButton).click(function () {
+
+            $(idInput).val($(idI).html());
+            $(idInput).removeClass("active");
+            $(idInput).change();
+        }
+        );
+    }
+
+}
+ 
+
+function Contractbutton(FkC, vc, fkportageAdd, kind) {
+    var fkcontractid = $(FkC).val(); 
+   
+    var ur = "/Contract/ViewContractAjax/" + fkcontractid;
+    if (kind != null) {
+        ur = ur + "?kind=" + kind;
+    }
+    if (fkportageAdd != null) {
+  //var fkportageidAdd = $(FkCadd).val();
+        ur += "?fkportageAdd=" + fkportageAdd;
+    }
+    $(vc).html("");
+    $.get(ur, function (data, status) {
+        $(vc).html(data);
+    });
+
+}
+
+
+
+
+function getCssSelector(el) {
+    names = [];
+    do {
+        index = 0;
+        var cursorElement = el;
+        while (cursorElement !== null) {
+            ++index;
+            cursorElement = cursorElement.previousElementSibling;
+        };
+        names.unshift(el.tagName + ":nth-child(" + index + ")");
+        el = el.parentElement;
+    } while (el !== null);
+
+    return names.join(" > ");
+}

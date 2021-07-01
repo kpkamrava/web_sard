@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace web_db
 {
     public partial class TblInjury
     {
         public TblInjury()
         {
-            TblPortageRowInjury = new HashSet<TblPortageRowInjury>();
+            TblPortageInjuries = new HashSet<TblPortageInjury>();
+            TblPortageRowInjuries = new HashSet<TblPortageRowInjury>();
         }
 
         public Guid Id { get; set; }
@@ -15,6 +18,7 @@ namespace web_db
         public bool IsActive { get; set; }
         public int Ord { get; set; }
 
-        public virtual ICollection<TblPortageRowInjury> TblPortageRowInjury { get; set; }
+        public virtual ICollection<TblPortageInjury> TblPortageInjuries { get; set; }
+        public virtual ICollection<TblPortageRowInjury> TblPortageRowInjuries { get; set; }
     }
 }

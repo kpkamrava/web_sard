@@ -1,0 +1,27 @@
+﻿@model List< web_sard.Models.tbls.contract.contract>
+@{
+    ViewData["Title"] = "وضعیت قرارداد";
+
+    var sals = (List<web_db.TblSalMali>)ViewBag.sals;
+}  
+    @foreach (var sal in Model.GroupBy(a => a.FkSalmali))
+    {
+        var s = sals.Single(a => a.Id == sal.Key);
+
+        <h3>دوره @s.Sal</h3>
+        <div class="row"> 
+
+            @foreach (var item in sal)
+            {
+            <div class="col-6 col-sm-6 col-md-4 col-xl-4">
+                <div class="card shadow bg-Aquamarine mb-3">
+                    <div class="card-header text-dark">@item.Code @item.ContractType.Title</div>
+                    <div class="card-body">
+                        <a class="btn btn-link" isAJ="true" asp-action="contract" asp-controller="AJ" asp-route-id="@item.Id">وضعیت قرارداد</a>
+                        <a class="btn btn-link" isAJ="true" asp-action="contractAc" asp-controller="AJ" asp-route-id="@item.Id">گردش قرارداد</a>
+                    </div>
+                </div>
+            </div>
+            } 
+        </div>
+   } 

@@ -1,5 +1,4 @@
 ﻿@model web_sard.Models.printclass
-@using Stimulsoft.Report.Mvc
     <div class="btn-group float-left">
 
         @foreach (var item in Model.files)
@@ -9,22 +8,4 @@
 
     </div>
 <br />
-<div style="direction:ltr">
-    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions()
-{
-   Actions =
 
-    {
-
-   GetReport = "GetReport",
-   ViewerEvent = "ViewerEvent",
-    },
-   Toolbar =
-
-{ 
-PrintDestination = Stimulsoft.Report.Web.StiPrintDestination.Direct,
-},
-
-
-})
-</div>

@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
 namespace web_sard
 {
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using web_lib;
+
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,11 +22,10 @@ namespace web_sard
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+
         public void ConfigureServices(IServiceCollection services)
         {
-            
-         
+
             services.ConfigureApplicationCookie(options => { options.LoginPath = "Account/login"; });
 
             services.AddAuthentication(sharedOptions =>
@@ -35,38 +34,68 @@ namespace web_sard
                 sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
-            services.AddAuthentication() .AddCookie();
+            services.AddAuthentication().AddCookie();
             services.AddControllersWithViews();
 
 
             services.AddDbContext<web_db.sardweb_Context>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("kpDatabase")));
-             
+            {
+
+                options.UseSqlServer(Configuration.GetConnectionString("kpDatabase"));
+            });
+
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "Sh.Session";
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.Cookie.IsEssential = true;
+            });
             // Resolve the services from the service provider
 
-            using (var db = services.BuildServiceProvider().GetService<web_db.sardweb_Context>())
+            //Stimulsoft.Base.StiLicense.Key = "6vJhGtLLLz2GNviWmUTrhSqnOItdDwjBylQzQcAOiHl2AD0gPVknKsaW0un+3PuM6TTcPMUAWEURKXNso0e5OFPaZYasFtsxNoDemsFOXbvf7SIcnyAkFX/4u37NTfx7g+0IqLXw6QIPolr1PvCSZz8Z5wjBNakeCVozGGOiuCOQDy60XNqfbgrOjxgQ5y/u54K4g7R/xuWmpdx5OMAbUbcy3WbhPCbJJYTI5Hg8C/gsbHSnC2EeOCuyA9ImrNyjsUHkLEh9y4WoRw7lRIc1x+dli8jSJxt9C+NYVUIqK7MEeCmmVyFEGN8mNnqZp4vTe98kxAr4dWSmhcQahHGuFBhKQLlVOdlJ/OT+WPX1zS2UmnkTrxun+FWpCC5bLDlwhlslxtyaN9pV3sRLO6KXM88ZkefRrH21DdR+4j79HA7VLTAsebI79t9nMgmXJ5hB1JKcJMUAgWpxT7C7JUGcWCPIG10NuCd9XQ7H4ykQ4Ve6J2LuNo9SbvP6jPwdfQJB6fJBnKg4mtNuLMlQ4pnXDc+wJmqgw25NfHpFmrZYACZOtLEJoPtMWxxwDzZEYYfT";
+
+        b1:
+            try
+            {  
+                using (var db = services.BuildServiceProvider().GetService<web_db.sardweb_Context>())
+                {
+                    db.Database.Migrate(); 
+
+                    Models.cl._listSmsForSend = new System.Collections.Generic.List<Models.cl.SmsForSend>();
+                 
+                    Models.cl._conf = db.TblConf.OrderBy(a=>a.Key).ToList();
+                    Models.cl._ListSalmali = db.TblSalMalis.OrderBy(a => a.Id).ToList();
+                    Models.cl.__ListContractType = db.TblContractTypes.OrderBy(a => a.Code).ToList();
+                    Models.cl._ListInjury = db.TblInjuries.OrderBy(a => a.Ord).ToList();
+                    Models.cl._ListPacking = db.TblPackings.OrderBy(a => a.Code).ToList();
+                    Models.cl._ListProduct = db.TblProducts.OrderBy(a => a.Code).ToList();
+                    Models.cl._ListLocation = db.TblLocations.OrderBy(a => a.Code).ToList();
+                    Models.cl._ListCar = db.TblCars.OrderBy(a => a.Title).ToList();
+                    Models.cl._ListGroup = db.TblGroups.OrderBy(a => a.Title).ToList();
+                    Models.cl._ListRoll = _UserRol._Rolls.AddEditCustomer.GetAllItems();
+
+
+                }
+            }
+            catch (Exception e)
             {
-                Models.cl._config = db.TblConfig.First();
-                Models.cl._ListSalmali = db.TblSalMali.OrderBy(a=>a.Id).ToList();
-                Models.cl._ListContractType = db.TblContractType.OrderBy(a => a.Code).ToList();
-                Models.cl._ListCustomer = db.TblCustomer.OrderBy(a=>a.Code).ToList(); 
-                Models.cl._ListProduct = db.TblProduct.OrderBy(a=>a.Code).ToList();
-                Models.cl._ListInjury = db.TblInjury.OrderBy(a=>a.Ord).ToList();
-                Models.cl._ListPacking = db.TblPacking.OrderBy(a => a.Code).ToList();
-                Models.cl._ListLocation = db.TblLocation.OrderBy(a => a.Code).ToList();
-                Models.cl._ListCar = db.TblCar.OrderBy(a => a.Title).ToList();
+                Thread.Sleep(3000);
+                goto b1;
 
             }
-            Stimulsoft.Base.StiLicense.Key = "6vJhGtLLLz2GNviWmUTrhSqnOItdDwjBylQzQcAOiHl2AD0gPVknKsaW0un+3PuM6TTcPMUAWEURKXNso0e5OFPaZYasFtsxNoDemsFOXbvf7SIcnyAkFX/4u37NTfx7g+0IqLXw6QIPolr1PvCSZz8Z5wjBNakeCVozGGOiuCOQDy60XNqfbgrOjxgQ5y/u54K4g7R/xuWmpdx5OMAbUbcy3WbhPCbJJYTI5Hg8C/gsbHSnC2EeOCuyA9ImrNyjsUHkLEh9y4WoRw7lRIc1x+dli8jSJxt9C+NYVUIqK7MEeCmmVyFEGN8mNnqZp4vTe98kxAr4dWSmhcQahHGuFBhKQLlVOdlJ/OT+WPX1zS2UmnkTrxun+FWpCC5bLDlwhlslxtyaN9pV3sRLO6KXM88ZkefRrH21DdR+4j79HA7VLTAsebI79t9nMgmXJ5hB1JKcJMUAgWpxT7C7JUGcWCPIG10NuCd9XQ7H4ykQ4Ve6J2LuNo9SbvP6jPwdfQJB6fJBnKg4mtNuLMlQ4pnXDc+wJmqgw25NfHpFmrZYACZOtLEJoPtMWxxwDzZEYYfT";
 
+
+            services.AddHostedService<Models.sms.GracePeriodManagerService>(ab => new Models.sms.GracePeriodManagerService(Configuration));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
@@ -76,13 +105,20 @@ namespace web_sard
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-         
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                  name: "Areas",
+                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

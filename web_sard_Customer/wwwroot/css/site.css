@@ -1,0 +1,73 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+
+@font-face {
+    font-family: vazir;
+    src: url('../fonts/font vazir/Vazir.eot');
+    src: url('../fonts/font vazir/Vazir.eot?#iefix') format('embedded-opentype'), url('../fonts/font vazir/Vazir.woff') format('woff'), url('../fonts/font vazir/Vazir.ttf') format('truetype');
+    font-weight: normal;
+}
+ 
+* {
+    font-family: vazir, 'Source Sans Pro', sans-serif,"Font Awesome 5 Free", FontAwesome, Nunito,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji !important;
+}
+
+.navbar-brand {
+      transform: translateX(-50%);
+    left: 50%;
+    top:-20px;
+    position: absolute;
+    width: 200px; /* no height needed ... image will resize automagically */
+}
+
+.ts {
+    text-shadow: -3px 3px 4px #282525;
+}
+
+
+.footer {
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+
+
+#AJ{min-height:200px;}
+.loader {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+    .loader:after {
+        content: " ";
+        display: block;
+        border-radius: 50%;
+        width: 0;
+        height: 0;
+        margin: 8px;
+        box-sizing: border-box;
+        border: 32px solid #fff;
+        border-color: #ea6161 transparent #5990d4 transparent;
+        animation: lds-hourglass 1.2s infinite;
+    }
+
+@keyframes lds-hourglass {
+    0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    50% {
+        transform: rotate(900deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    100% {
+        transform: rotate(1800deg);
+    }
+}

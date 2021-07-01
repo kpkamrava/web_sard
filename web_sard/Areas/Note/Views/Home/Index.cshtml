@@ -1,0 +1,90 @@
+﻿@model IEnumerable<web_db._note.TblNoteRows>
+@using web_lib
+@{
+    ViewData["Title"] = "تقویم کاری";
+    var dateM = (DateTime) ViewBag.date;
+
+    dateM = dateM.AddDays(-1);
+    var dateS = dateM.ToPersianDateint();
+
+
+    IEnumerable<web_db._note.TblNoteRows> xx = null;
+    if (User._getRolAny(_UserRol._Rolls.NoteAdmin) && ViewBag.xx!=null) {
+        xx= ViewBag.xx;
+        xx = xx.Where(a=>Model.Any(s=>s.TblNote.Id==a.TblNote.Id)==false);
+    }
+}
+
+<div class="row">
+    <div>
+        <a asp-action="index" asp-route-date="@dateM.ToPersianAddMonths(-1).AddDays(+1).ToPersianDate()" class="btn btn-sm btn-light shadow-sm">ماه قبل</a>
+        <a asp-action="index" asp-route-date="@dateM.AddDays(-6).ToPersianDate()" class="btn btn-sm btn-light shadow-sm">هفته قبل</a>
+
+        <label>
+            @dateS[1].ToPersianAiamMahha() ماه  @dateS[0]
+        </label>
+
+        <a asp-action="index" asp-route-date="@dateM.AddDays(8).ToPersianDate()" class="btn btn-sm btn-light shadow-sm ">هفته بعد</a>
+        <a asp-action="index" asp-route-date="@dateM.ToPersianAddMonths(1).AddDays(1).ToPersianDate()" class="btn btn-sm btn-light shadow-sm">ماه بعد</a>
+        <a asp-action="index" asp-route-date="" class="btn btn-sm btn-info shadow-sm float-left">@DateTime.Now.ToPersianDate() امروز</a>
+
+
+    </div>
+    <table class="table shadow">
+
+        <thead>
+            <tr>
+                <td>ایام هفته</td>
+                <td>کار</td>
+            </tr>
+        </thead>
+        @for (int i = 0; i < 7; i++)
+        {
+
+            var d = dateM.AddDays(i);
+            var isEmroz = DateTime.Now.Date == d;
+            @if (d.ToPersianDateint()[2] == 1)
+            {
+                @*<div class="bg-dark bg-gradient table-sm">
+
+                             ابتدای ماه
+
+
+
+                    </div>*@
+
+
+            }
+            <tr>
+                <td>
+                    @d.ToPersianAiamHafte() <br />
+                    <span class="badge text-dark @(isEmroz ? "bg-info" : "bg-light")"> @(isEmroz ? "امروز" : "") @(d.ToPersianDate())</span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary fa fa-plus float-left" asp-action="ADD" asp-route-date="@d.ToPersianDate()" ismodal="true"></a>
+                    @foreach (var item in Model.Where(a => a.Date == d).GroupBy(a => a.TblNote))
+                    {
+                        <a class="btn btn-sm  @(item.Key.FkuserAdd == User._getuserid() ? "btn-outline-info" : "btn-outline-warning") fa fa-edit" asp-action="ADD" asp-route-id="@item.Key.Id" ismodal="true">@item.Key.Caption</a>
+                    }
+
+                    @{
+                        if (xx != null)
+                        {
+
+                            foreach (var item in xx.Where(a => a.Date == d).GroupBy(a => a.TblNote))
+                            {
+                                <a class="btn btn-sm   btn-outline-light text-dark  fa fa-info" asp-action="ADD" asp-route-id="@item.Key.Id" ismodal="true">@item.Key.Caption</a>
+
+                            }
+                        }
+                    }
+
+
+                </td>
+            </tr>
+
+        }
+
+    </table>
+
+</div>

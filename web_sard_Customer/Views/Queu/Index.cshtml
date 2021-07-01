@@ -1,0 +1,47 @@
+﻿@model web_db._queu.TblQueu
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+<h4>سیستم سفارش سردخانه</h4>
+
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+
+        <form asp-action="Index" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input name="p" type="hidden" value="1" />
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label asp-for="mob" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="mob" type="tel" class="form-control" />
+                    <input type="submit" value="ادامه" class="btn btn-primary" />
+                </div>
+                <span asp-validation-for="mob" class="text-danger"></span>
+            </div>
+
+        </form>
+
+        <p>
+            سیستم ثبت سفارش و نوبت گیری سردخانه
+        </p>
+        @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+        {
+            <div class="alert alert-danger text-right">
+                <strong>خطا!</strong> @ViewBag.error
+            </div>
+
+        }
+        <div>
+            <a asp-action="Index" asp-controller="Account"> بازگشت</a>
+        </div>
+    </div>
+</div>
+
+
+

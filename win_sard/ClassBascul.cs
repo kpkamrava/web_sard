@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace win_sard
@@ -22,6 +20,8 @@ namespace win_sard
 
                 public int kindBaskul { get; set; }
                 public string urlServer { get; set; }
+                public string urlUser { get; set; }
+                public string urlPass { get; set; }
 
             }
             public static System.IO.Ports.SerialPort mp_GetSerilPortFromTbl(portrow row)
@@ -110,7 +110,7 @@ namespace win_sard
                 MicroTowzin = 13,
             }
 
-       
+
 
             public static string[] NohBaskolNames = new string[]
                {

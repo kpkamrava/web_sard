@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>@ViewData["Title"] - کنترل سردخانه</title>
+    <meta name="theme-color" content="rgba(216,204,204,0)">
+    <meta name="description" content=" نرم افزار مدیریت Sror">
+    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
+    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
+    <link rel="manifest" href="~/manifest.json">
+    <link href="~/libs/bootstrap/scss/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/fonts/fontawesome-all.min.css">
+    <link href="~/libs/bootstrap-select/1.13.17/content/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/assets/persianDatePicker/PersianDatePicker.css"  asp-append-version="true" rel="stylesheet" />
+    <link href="~/assets/rtl.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/assets/site.css" rel="stylesheet" asp-append-version="true" />
+    @RenderSection("cs", required: false)
+
+
+</head>
+
+@{
+
+    var permis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<web_db.TblUserPermi>>(User._getuserPermis());
+}
+
+<body id="page-top" lang="fa" dir="rtl">
+    <div class="nav-side-menu ">
+        <div class="brand ">
+            <a href="/">
+                <img src="~/assets/img/sror Logo.png" />
+
+            </a>
+
+        </div>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+        <div class="menu-list">
+
+
+            @RenderSection("Menu")
+
+
+
+
+        </div>
+    </div>
+    <div class="content  ">
+        <nav class="navbar navbar-expand navbar-toggleable-sm  bg-dark border-bottom box-shadow   navbar-dark ccNav">
+            <div class="container">
+
+                <div class="navbar-collapse " style="display:contents!important;">
+                    <div class="form-inline float-right">
+                        <div class="input-group">
+                            <input class="bg-light form-control border-0 small searchinput" type="text" placeholder="جستجو در جدول..">
+                            @*<div class="input-group-append"><button class="btn btn-primary py-0 " type="button"><i class="fas fa-search"></i></button></div>*@
+                        </div>
+                    </div>
+                    <ul class="navbar-nav float-left">
+
+                        <li class="nav-item dropdown no-arrow " role="presentation">
+                            <div class="nav-item dropdown no-arrow">
+                                <a class="btn btn-warning btn-sm " style="display:none;" isModal="true" asp-action="Notes" asp-controller="Home" asp-area="Note">
+                                    <i class="fa fa-bell fa-sm fa-fw mr-2 shake"></i> <span id="Notecount"> </span>
+                                </a>
+                            </div>
+                        </li>
+                        @*<li class="nav-item dropdown no-arrow " role="presentation">
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="btn btn-light btn-sm  " onclick="FullscreenToggle()">
+                                        <i class="fa fa-object-group fa-sm fa-fw mr-2 "></i>
+                                    </a>
+                                </div>
+                            </li>*@
+
+                        <li class="nav-item dropdown no-arrow " role="presentation">
+                            <div class="nav-item dropdown no-arrow">
+                                <button class="btn btn-outline-secondary btn-sm text-white-50  dropdown-toggle " data-toggle="dropdown" aria-expanded="false" type="button">
+                                    <i class="fa fa-history fa-sm fa-fw mr-2 text-white-50"></i>
+                                    @{
+                                        var listmm = User._getuserYears();
+                                        var d = web_sard.Models.cl._ListSalmali.SingleOrDefault(a => User._getuserSalMaliDef() == a.Id);
+                                    }
+
+                                    @d.Sal
+                                </button>
+                                <div class="dropdown-menu shadow dropdown-menu-left animated--grow-in" role="menu">
+
+                                    @foreach (var item in web_sard.Models.cl._ListSalmali.Where(a => listmm.Any(s => s == a.Id)))
+                                    {
+
+                                        <a class="dropdown-item" role="presentation" asp-area="@null" asp-action="DefYear" asp-controller="Account" asp-route-id="@item.Id"><i class="fa fa-history fa-sm fa-fw mr-2 text-gray-400"></i> @item.Sal</a>
+
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown no-arrow " role="presentation">
+                            <div class="nav-item dropdown no-arrow">
+                                <button class="btn btn-primary btn-sm dropdown-toggle " data-toggle="dropdown" aria-expanded="false" type="button"><span class="d-none d-lg-inline mr-2 text-gray-100 small">@User._getuserGiveName()</span> <span class="fa fa-user-circle"></span> @*<img class="border rounded-circle img-profile" style="height:100%"  src="~/assets/img/avatars/avatar1.jpeg">*@</button>
+                                <div class="dropdown-menu shadow dropdown-menu-left animated--grow-in" role="menu">
+                                    <a class="dropdown-item" role="presentation" asp-area="@null" asp-action="RePassword" asp-controller="account" isModal="true"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;پروفایل</a>
+                                    @*<a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;تنظیمات</a>*@
+
+                                    @if (User._getRolAny(_UserRol._Rolls.Bascul))
+                                    {
+                                        <a class="dropdown-item" id="azerobaskul" role="presentation" href="#">&nbsp;صفر کردن باسکول (<span id="valuebaskul"></span>)  </a>
+                                    }
+                                    @if (User._getRolAny(_UserRol._Rolls.MainSuperVisor))
+                                    {
+                                        <a class="dropdown-item" role="presentation" asp-action="Backup" asp-area="@null" asp-controller="Admin">بکاپ از سیستم</a>
+
+                                    }
+
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" asp-controller="Account" asp-area="@null" asp-action="Logout"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;خروج</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="container p-0 m-0 op9" style="max-width:100%!important;">
+
+            <main role="main" class="pb-3">
+                @*<div class="loaderholder"><div class="loader"></div></div>*@
+
+                <div class="card bg-light text-dark">
+                    <div class="card-header">
+                        @ViewData["Title"]
+                    </div>
+                    <div class="card-body ">
+
+
+                        @if (string.IsNullOrWhiteSpace(ViewBag.txt) == false)
+                        {
+                            <div class="alert alert-info">
+                                <strong>پیغام!</strong> @ViewBag.txt
+                            </div>
+                        }
+
+                        @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+                        {
+                            <div class="alert alert-danger">
+                                <strong>خطا!</strong> @ViewBag.error
+                            </div>
+                        }
+
+
+                        @RenderBody()
+
+                    </div>
+                </div>
+
+
+
+
+            </main>
+        </div>
+    </div>
+    <div id="ajaxModal" class="modal  fade p-0 m-0" role="dialog">
+        <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="input-group">
+                        <input class="bg-light form-control border-0 small searchinputM" type="text" placeholder="جستجو در جدول..">
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="~/libs/bootstrap-select/1.13.17/content/Scripts/bootstrap-select.js"></script>
+    <script src="~/assets/persianDatePicker/persianDatePicker.js" asp-append-version="true"></script>
+    <script src="~/assets/js/theme.js"></script>
+    <script src="~/assets/site.js" asp-append-version="true"></script>
+
+
+
+    <div class="modal p-0 fade" id="signP" tabindex="-1" role="dialog" aria-labelledby="signPLabel" aria-hidden="true">
+        <div class="modal-dialog p-0" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signPLabel"><span id="signtxt"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pr-0 pl-0  bg-gradient bg-info text-center">
+                    <canvas id="canvassign" width=350 height=350></canvas>
+                </div>
+                <div class="modal-footer  ">
+                    <div class="btn-group w-100">
+
+                        <button type="button" class="btn btn-secondary w-25 shadow" data-dismiss="modal">لغو</button>
+                        <button type="submit" class="btn btn-primary w-75 shadow " onclick="submitsign(this);">ثبت <span id="signtxt"></span> </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //var img = new Image;
+        //img.onload = setup;
+        //img.src = "http://i.stack.imgur.com/xL8it.pnggss";
+        var canvas = document.getElementById("canvassign");
+        var signurl = "";
+        function setupsign(signurll, txt) {
+
+            openFullscreen();
+            signurl = signurll;
+
+            $("#signtxt").html(txt);
+
+            var ctx = canvas.getContext("2d"),
+                lastPos, isDown = false;
+
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var w = canvas.width;
+            ctx.width = 1;
+            ctx.width = w;
+
+
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.lineCap = "round";                                   // make lines prettier
+            ctx.lineWidth = 4;
+            ctx.globalCompositeOperation = "multiply";               // KEY MODE HERE
+
+
+
+            canvas.ontouchstart = function (e) {
+                isDown = true;
+                lastPos = getPost(e);
+                ctx.strokeStyle = "hsl(0, 0%, 0%)";
+            };
+            canvas.ontouchmove = function (e) {
+                if (!isDown) return;
+                var pos = getPost(e);
+                ctx.beginPath();
+                ctx.moveTo(lastPos.x, lastPos.y);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                lastPos = pos;
+            };
+
+            canvas.ontouchend = function (e) { isDown = false; };
+
+
+
+
+
+
+
+
+
+
+
+            canvas.onmousedown = function (e) {
+                isDown = true;
+                lastPos = getPos(e);
+                ctx.strokeStyle = "hsl(0, 0%, 0%)";
+            };
+            window.onmousemove = function (e) {
+                if (!isDown) return;
+                var pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(lastPos.x, lastPos.y);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                lastPos = pos;
+            };
+            window.onmouseup = function (e) { isDown = false; };
+
+
+
+
+
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+            }
+
+            function getPost(e) {
+                var rect = canvas.getBoundingClientRect();
+                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top }
+            }
+
+        }
+
+        function dataURItoBlob(dataURI) {
+            // convert base64/URLEncoded data component to raw binary data held in a string
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([ia], { type: mimeString });
+        }
+        function submitsign(t) {
+            var dataURL = dataURItoBlob(canvas.toDataURL('image/jpeg'));
+            $(t).append("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span>");
+            $(t).addClass("disabled");
+
+            var formData = new FormData();
+            formData.append("image", dataURL);
+            var request = new XMLHttpRequest();
+            request.open("POST", signurl, true);
+            request.onload = function (oEvent) {
+                if (request.status == 200) {
+                    document.location.reload();
+                } else {
+                    $(t).remove($(t).find("span"));
+                    $(t).removeClass("disabled");
+                    alert("ثبت انجام نشد");
+                }
+            };
+            request.send(formData);
+
+
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $.get("/Note/Home/CountNote", function (data, status) {
+                var model = Number.parseInt(data);
+
+                if (model > 0) {
+                    $("#Notecount").parent().show();
+                    $("#Notecount").html(data);
+
+                }
+
+            });
+        });
+
+
+
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+
+        });
+
+        window.onbeforeunload = function (e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+    </script>
+    @RenderSection("js", required: false)
+
+
+
+
+
+
+</body>
+
+</html>

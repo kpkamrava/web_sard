@@ -1,0 +1,145 @@
+﻿@model web_db.TblContractType.ABaskul
+
+@{
+    ViewData["Title"] = "contracttype";
+    web_db.TblContractType contype = ViewBag.contype;
+}
+
+<h1>contracttype</h1>
+
+<h4>TblContractType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="contracttypeAbaskul" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input name="Id" value="@contype.Id" type="hidden" />
+
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.Title)</label>
+                <input name="Title" value="@contype.Title" class="form-control" />
+            </div>
+
+
+
+            <hr />
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.Code)</label>
+                @contype.Code
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.KindCotractType)</label>
+                @contype.KindCotractType
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.IsMahvate)</label>
+                @contype.IsMahvate
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.IsJabeJaii)</label>
+                @contype.IsJabeJaii
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.IsContractRequred)</label>
+                @contype.IsContractRequred
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.OtSanadPortageKind)</label>
+                @contype.OtSanadPortageKind
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.OtSanadByGroup)</label>
+                @contype.OtSanadByGroup
+            </div>
+            <div class="form-group">
+                <label class="control-label">@contype.GetAttributeName(a => a.ConfigJson)</label>
+                @contype.ConfigJson
+            </div>
+            <hr />
+
+            @*
+            <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="IsEntry" /> @Html.DisplayNameFor(model => model.IsEntry)
+            </label>
+        </div>
+
+
+
+        <div class="form-group">
+            <label asp-for="OtSanadPortageKind" class="control-label"></label>
+            <select asp-for="OtSanadPortageKind" class="form-control">
+                @foreach (var item in web_db.TblContractType.SanadPortageEnum.ByCustomer.GetAllItems())
+                {
+                    <option value="@item">@item.ToKPvalusAttr().Description</option>
+                }
+
+            </select>
+
+            <span asp-validation-for="OtSanadPortageKind" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="OtcodHesabKargar" class="control-label"></label>
+            <input asp-for="OtcodHesabKargar" class="form-control" />
+            <span asp-validation-for="OtcodHesabKargar" class="text-danger"></span>
+        </div>
+            *@
+
+
+
+            <div class="form-group">
+                <label asp-for="OttypeFaktor" class="control-label"></label>
+                <input asp-for="OttypeFaktor" class="form-control" />
+                <span asp-validation-for="OttypeFaktor" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="basculeMali" /> @Html.DisplayNameFor(model => model.basculeMali)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="basculeNaghdi" /> @Html.DisplayNameFor(model => model.basculeNaghdi)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsMali" /> @Html.DisplayNameFor(model => model.IsMali)
+                </label>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="OtcodHesabFactor" class="control-label"></label>
+                <input asp-for="OtcodHesabFactor" class="form-control" />
+                <span asp-validation-for="OtcodHesabFactor" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="OtcodeMarkaz" class="control-label"></label>
+                <input asp-for="OtcodeMarkaz" class="form-control" />
+                <span asp-validation-for="OtcodeMarkaz" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="CustomerPishfarz" class="control-label"></label>
+                <input asp-for="CustomerPishfarz" class="form-control" />
+                <span asp-validation-for="CustomerPishfarz" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

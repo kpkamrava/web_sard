@@ -1,0 +1,137 @@
+﻿@model IEnumerable<web_sard.Areas.Acc.Models.customerAcc>
+
+@{
+    ViewData["Title"] = "وضعیت مالی مشتریان";
+    var ctype = (web_db.TblContractType)ViewBag.ctype;
+}
+
+<h1>وضعیت مالی مشتریان</h1>
+
+<p>
+    <a  asp-action="Acc" asp-route-fktype="@ctype.Id" asp-route-refresh="@true" class="btn btn-info float-left fa fa-receipt"  >بروزرسانی همه </a>
+</p>
+
+<table class="table table-bordered table-fixed-head">
+    <thead>
+        <tr>
+
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.IdOtherSystem)
+            </th>
+          
+
+            <th colspan="5" class="text-center  ">
+                مبلغ
+            </th>
+            <th rowspan="2"> </th>
+
+        </tr>
+        <tr>
+
+
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.packing)
+
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.product)
+
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.kargar)
+
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.bascul)
+
+            </th>
+            <th class="text-center">
+               جمع
+
+            </th>
+        </tr>
+        </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+
+            <td>
+                @if (!item.IdOtherSystem.IsEmpty())
+                {
+                    @Html.DisplayFor(modelItem => item.IdOtherSystem)
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Code)
+
+                }
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td style="border-right:3px; border-color:black;">
+                @Html.DisplayFor(modelItem => item.IdOtherSystem)
+            </td>
+
+
+
+            <td>
+                @item.packing.ToMoney()
+            </td>
+            <td>
+                @item.product.ToMoney()
+            </td>
+           
+            <td>
+                @item.kargar.ToMoney()
+            </td>
+            <td>
+                @item.bascul.ToMoney()
+            </td>
+            <td>
+                @((item.bascul+ item.kargar+ item.packing+item.product ).ToMoney())
+            </td>
+            <td>
+                @*<a asp-action="customercontract" asp-route-fktype="@ctype.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-list"></a>
+                <a asp-action="customerportage" asp-route-fktype="@ctype.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-car"></a>*@
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3" class="text-left">
+                جمع:
+            </th>
+             
+            <th>
+                @Model.Sum(a => a.packing).ToMoney()
+            </th>
+            <th>
+                @Model.Sum(a => a.product).ToMoney()
+            </th>
+            <th>
+                @Model.Sum(a => a.kargar).ToMoney()
+            </th>
+            <th>
+                @Model.Sum(a => a.bascul).ToMoney()
+            </th>
+            <th>
+                @Model.Sum(a => a.packing + a.bascul+ a.kargar+ a.product).ToMoney()
+            </th>
+            
+            <th>
+
+            </th>
+        </tr>
+    </tfoot>
+</table>

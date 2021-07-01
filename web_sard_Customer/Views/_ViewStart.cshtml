@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@if (Context.Request.IsAjaxRequest())
+{
+    Layout = null;
+ 
+}

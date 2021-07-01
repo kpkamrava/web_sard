@@ -11,16 +11,16 @@
             <div class="col-md-6">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h3 class="card-title"> <a asp-action="Create" asp-route-id="@item1.id">@item1.title</a><span class="float-left"> @item1.CodeFull</span></h3>
+                        <h3 class="card-title"> <a asp-action="Create" asp-route-id="@item1.id" isModal="true">@item1.title</a><span class="float-left"> @item1.CodeFull</span></h3>
 
                         <div class="row">
                             @foreach (var item2 in item1.childs)
                             {
 
                                 <div class="col-md-6">
-                                    <div class="card shadow bg-gradient-light">
+                                    <div class="card shadow bg-gradient bg-light">
                                         <div class="card-body">
-                                            <h4 class="card-title"><a asp-action="Create" asp-route-id="@item2.id">@item2.title</a> <span class="float-left">@item2.CodeFull</span></h4>
+                                            <h4 class="card-title"><a asp-action="Create" asp-route-id="@item2.id" isModal="true">@item2.title</a> <span class="float-left">@item2.CodeFull</span></h4>
                                              
                                             <div class="row">
                                                 @foreach (var item3 in item2.childs)
@@ -29,7 +29,7 @@
 
                                                         <div class="card shadow  bg-gray-300">
                                                             <div class="card-body">
-                                                                <h4 class="card-title"><a asp-action="Create" asp-route-id="@item3.id">@item3.title</a> <span class="float-left">@item3.CodeFull</span></h4>
+                                                                <h4 class="card-title"><a asp-action="Create" asp-route-id="@item3.id" isModal="true">@item3.title</a> <span class="float-left">@item3.CodeFull</span></h4>
 
 
 
@@ -45,7 +45,7 @@
 
 
                                                 <div class="col-md-6">
-                                                    <a asp-action="Create" class="btn btn-outline-success fa fa-plus" asp-route-idp="@item2.id"> طبقه جدید</a>
+                                                    <a asp-action="Create" class="btn btn-outline-success fa fa-plus" isModal="true" asp-route-idp="@item2.id"> طبقه جدید</a>
                                                 </div>
 
 
@@ -57,7 +57,7 @@
 
                             }
                         <div class="col-md-6">
-                            <a asp-action="Create" class="btn btn-outline-success fa fa-plus" asp-route-idp="@item1.id"> سالن جدید</a>
+                            <a asp-action="Create" class="btn btn-outline-success fa fa-plus" isModal="true" asp-route-idp="@item1.id"> سالن جدید</a>
                         </div>
                             </div>
 
@@ -71,7 +71,7 @@
         }
 
     <div class="col-md-6">
-        <a asp-action="Create" class="btn btn-outline-success fa fa-plus"> فاز جدید</a>
+        <a asp-action="Create" class="btn btn-outline-success fa fa-plus" isModal="true"> فاز جدید</a>
 
 
     </div>

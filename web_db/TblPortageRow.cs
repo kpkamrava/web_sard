@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace web_db
 {
     public partial class TblPortageRow
     {
         public TblPortageRow()
         {
-            TblPortageRowInjury = new HashSet<TblPortageRowInjury>();
-            TblPortageRowLocation = new HashSet<TblPortageRowLocation>();
+            TblPortageRowInjuries = new HashSet<TblPortageRowInjury>();
         }
 
         public Guid Id { get; set; }
@@ -16,6 +17,7 @@ namespace web_db
         public Guid? FkPortage { get; set; }
         public DateTime Date { get; set; }
         public long Count { get; set; }
+        public double? WeightOne { get; set; }
         public Guid? FkPacking { get; set; }
         public Guid? FkProduct { get; set; }
         public string CodeLocation { get; set; }
@@ -24,11 +26,12 @@ namespace web_db
         public Guid? FkLocation2 { get; set; }
         public Guid? FkLocation3 { get; set; }
         public Guid FkUser { get; set; }
-        public Guid FkContract { get; set; }
+        public Guid? FkContract { get; set; }
+        public Guid? FkContractType { get; set; }
+        public bool IsNimPalet { get; set; }
 
         public virtual TblContract FkContractNavigation { get; set; }
         public virtual TblPortage FkPortageNavigation { get; set; }
-        public virtual ICollection<TblPortageRowInjury> TblPortageRowInjury { get; set; }
-        public virtual ICollection<TblPortageRowLocation> TblPortageRowLocation { get; set; }
+        public virtual ICollection<TblPortageRowInjury> TblPortageRowInjuries { get; set; }
     }
 }

@@ -1,8 +1,135 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model web_sard.Models.tbls.home.mainclass
+
+@{
+    ViewData["Title"] = "داشبورد";
+
+    web_db.TblSalMali sal= ViewBag.fromyear;
+
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">خوش آمدید</h1>
+
 </div>
+
+@{
+
+           var now = DateTime.Now.Date;
+    var dd = new Dictionary<string, IEnumerable<web_sard.Models.tbls.home.countport>> {
+         {"امروز",Model.countports.Where(a => a.date==now)  },
+         {"دیروز",Model.countports.Where(a => a.date==now.AddDays(-1)) },
+         {"هفته اخیر",Model.countports.Where(a => a.date>=now.AddDays(-7)) },
+         {"ماه اخیر",Model.countports.Where(a => a.date>=now.AddMonths(-1)) },
+         {"امسال",Model.countports },
+     };
+
+
+
+}
+
+<div class="row">
+
+
+    @foreach (var f in Model.countports.Select(a => a.location).Distinct())
+    {
+        var loc = cl._ListLocation.SingleOrDefault(a => a.Id == f);
+        if (loc==null)
+        {
+            break;
+        }
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@loc.Title</h4>
+                    <ul class="list-group">
+                        @foreach (var itemm in dd)
+                        {
+
+
+                            var counts = itemm.Value.Where(a => a.location == f);
+
+                            <li class="list-group-item disabled">@itemm.Key</li>
+                            @foreach (var item in counts.GroupBy(a => new { a.KindTitle, a.Kindcode }))
+                            {
+                                <li class="list-group-item">
+                                    @item.Count() <i class="fa fa-car"></i>
+                                    @item.Sum(a => a.PackingCount).ToKilo() <i class="fa fa-boxes"></i>
+                                    @item.Sum(a => a.WeightNet).ToKilo() <i class="fa fa-box-open"></i>
+                                    <span class="badge bg-@(web_sard.Models.tbls.portage.kindPortage.listkindcontract.Single(a=>a.code==item.Key.Kindcode).classcolor) float-left">@item.Key.KindTitle</span>
+
+                                </li>
+
+                            }
+
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+
+</div>
+
+
+
+
+
+
+
+
+@*@foreach (var itemm in dd)
+{
+
+
+
+    var counts = itemm.Value.Where(a => a.contracttypecode == 1);
+    var countj = itemm.Value.Where(a => a.contracttypecode == 10);
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">@itemm.Key</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item active">سردخانه</li>
+                        @foreach (var item in counts.GroupBy(a => new { a.KindTitle, a.Kindcode }))
+                        {
+                            <li class="list-group-item">
+                                @item.Count() <i class="fa fa-car"></i>
+                                @item.Sum(a => a.PackingCount).ToKilo() <i class="fa fa-boxes"></i>
+                                @item.Sum(a => a.WeightNet).ToKilo() <i class="fa fa-box-open"></i>
+                                <span class="badge bg-@(web_sard.Models.tbls.portage.kindPortage.listkindcontract.Single(a=>a.code==item.Key.Kindcode).classcolor) float-left">@item.Key.KindTitle</span>
+
+                            </li>
+
+                        }
+                    </ul>
+
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item active">جعبه سازی</li>
+                        @foreach (var item in countj.GroupBy(a => new { a.KindTitle, a.Kindcode }))
+                        {
+                            <li class="list-group-item">
+                                @item.Count() <i class="fa fa-car"></i>
+                                @item.Sum(a => a.PackingCount).ToKilo() <i class="fa fa-boxes"></i>
+                                <span class="badge bg-@(web_sard.Models.tbls.portage.kindPortage.listkindcontract.Single(a=>a.code==item.Key.Kindcode).classcolor) float-left">@item.Key.KindTitle</span>
+
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}*@
+

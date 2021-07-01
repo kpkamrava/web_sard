@@ -1,0 +1,166 @@
+﻿.bg-BlueCola {
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+}
+.bg-LightSkyBlue {
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+}
+.bg-Aquamarine {
+    background-color: #85FFBD;
+    background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+}
+.bg-VeryLightTangelo {
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+}
+.bg-SkyBlue {
+    background-color: #8BC6EC;
+    background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+}
+.bg-VividCerulean {
+    background-color: #08AEEA;
+    background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+}
+.bg-PiggyPink {
+    background-color: #FFDEE9;
+    background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 33%);
+}
+
+
+
+
+
+ 
+ 
+.btn {
+  
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+  
+  /*  box-shadow: 0 0 20px #eee;
+   
+    display: block;*/
+}
+
+ 
+
+
+
+
+.btn-blue1 {
+    background-image: linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)
+}
+
+ 
+    .btn-blue1:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.btn-blue2 {
+    background-image: linear-gradient(to right, #314755 0%, #26a0da 51%, #314755 100%)
+}
+
+ 
+
+    .btn-blue2:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.btn-blue3 {
+    background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%)
+}
+
+
+
+    .btn-blue3:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.btn-red1 {
+    background-image: linear-gradient(to right, #e52d27 0%, #b31217 51%, #e52d27 100%)
+}
+
+
+
+    .btn-red2:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.btn-yellow1 {
+    background-image: linear-gradient(to right, #EDE574 0%, #E1F5C4 51%, #EDE574 100%)
+}
+
+ 
+    .btn-yellow1:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.btn-yellow2 {
+    background-image: linear-gradient(to right, #FF8008 0%, #FFC837 51%, #FF8008 100%)
+}
+
+
+.btn-yellow2:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.btn-reddark {
+    background-image: linear-gradient(to right, #870000 0%, #190A05 51%, #870000 100%)
+}
+
+ 
+
+.btn-reddark:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.btn-redyellow {
+    background-image: linear-gradient(to right, #FF4E50 0%, #F9D423 51%, #FF4E50 100%)
+}
+
+
+    .btn-redyellow:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+
+
+
+.btn-darkgreen {
+    background-image: linear-gradient(to right, #000000 0%, #0f9b0f 51%, #000000 100%)
+}
+
+
+    .btn-darkgreen:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+

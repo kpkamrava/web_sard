@@ -1,0 +1,143 @@
+﻿@model web_db._temp.TblTempRow
+
+@{
+    ViewData["Title"] = "ثبت دمای روزانه";
+
+    var x = (IEnumerable<web_db._temp.TblTempRow>)ViewBag.rows;
+}
+
+@if (Model.Id == Guid.Empty)
+{
+    <h1>جدید</h1>
+   
+}
+else
+{
+    <h1>ویرایش <span class="badge badge-pill bg-primary">@Model.DateAdd.ToShortTimeString()</span></h1>
+}
+<h4>مکان : @Model.Location</h4>
+<hr />
+<p>
+    @foreach (var item in x)
+    {
+        <a asp-action="addtemprow" asp-route-id="@item.Id" ismodal="true" class="btn btn-light  @(item.Id==Model.Id?"active":"") ">@item.DateAdd.ToShortTimeString()</a>
+    }
+    @if (Model.FktempNavigation.FkuserTaiid.HasValue == false)
+    {
+        <a asp-action="addtemprow" asp-route-id="@null" asp-route-idTemp="@Model.Fktemp" asp-route-location="@Model.Location" ismodal="true" class="btn btn-light @(Guid.Empty==Model.Id?"active":"")">جدید</a>
+
+    }
+
+</p>
+<hr />
+
+<form asp-action="addTempRow">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Fktemp" type="hidden" />
+    <input asp-for="FkUserAdd" type="hidden" />
+    <input asp-for="DateAdd" type="hidden" />
+    <input asp-for="FkLocation1" type="hidden" />
+    <input asp-for="FkLocation2" type="hidden" />
+    <input asp-for="FkLocation3" type="hidden" />
+    <input asp-for="Location" type="hidden" />
+
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="form-group">
+                <label asp-for="MinDama" class="control-label"></label>
+                <input asp-for="MinDama" type="number" step="0.01" value="@Model.MinDama.ToDama()" class="form-control" />
+                <span asp-validation-for="MinDama" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxDama" class="control-label"></label>
+                <input asp-for="MaxDama" type="number" step="0.01" value="@Model.MaxDama.ToDama()" class="form-control" />
+                <span asp-validation-for="MaxDama" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MotorDama" class="control-label"></label>
+                <input asp-for="MotorDama" type="number" step="0.01" value="@Model.MotorDama.ToDama()" class="form-control" />
+                <span asp-validation-for="MotorDama" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="R" class="control-label"></label>
+                <input asp-for="R" type="number" step="0.01" value="@Model.R.ToDama()" class="form-control" />
+                <span asp-validation-for="R" class="text-danger"></span>
+            </div>
+
+            <hr />
+        </div>
+
+        <div class="col-md-6">
+            <div class="row">
+
+
+                <div class="col-md-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="M" /> @Html.DisplayNameFor(model => model.M)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="A" /> @Html.DisplayNameFor(model => model.A)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Nezafat" /> @Html.DisplayNameFor(model => model.Nezafat)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="SamPashi" /> @Html.DisplayNameFor(model => model.SamPashi)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="ColorZani" /> @Html.DisplayNameFor(model => model.ColorZani)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Tahvie" /> @Html.DisplayNameFor(model => model.Tahvie)
+                    </label>
+                </div>
+                <div class="col-sm-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Formalin" /> @Html.DisplayNameFor(model => model.Formalin)
+                    </label>
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-group">
+                <label asp-for="O" class="control-label"></label>
+                <input asp-for="O" class="form-control" />
+                <span asp-validation-for="O" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Txt" class="control-label"></label>
+                <textarea asp-for="Txt" class="form-control"></textarea>
+                <span asp-validation-for="Txt" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+
+    @if (Model.FktempNavigation.FkuserTaiid.HasValue == false)
+    {
+        <div class="form-group  float-left ">
+            <input type="submit" value="ثبت" class="btn btn-primary" />
+        </div>
+    }
+    <hr />
+</form>
+       
+
+<div>
+    <a asp-action="Index">برگشت به صفحه اصلی</a>
+</div>
+

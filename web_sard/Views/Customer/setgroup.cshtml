@@ -1,0 +1,32 @@
+﻿@model  web_sard.Models.tbls.customer.customer 
+
+@{
+    ViewData["Title"] = "ثبت گروه کاربران";
+}
+
+<h1>ثبت گروه کاربران</h1>
+
+<form method="post" asp-action="setgroup">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+
+
+    <select name="FkGroups" class="form-control form-control-sm" multiple>
+        @foreach (var item2 in web_sard.Models.cl._ListGroup.Where(a => a.IsActive))
+        {
+            @if (Model.listfkGroup.Any(a => a == item2.Id))
+            {
+                <option value="@item2.Id" selected> @item2.Title</option>
+
+            }
+            else
+            {
+                <option value="@item2.Id"> @item2.Title</option>
+
+            }
+        }
+    </select>
+
+    <button type="submit" class="btn  btn-primary float-left">ثبت</button>
+
+</form>

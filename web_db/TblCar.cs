@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace web_db
 {
     public partial class TblCar
     {
         public TblCar()
         {
-            TblPortage = new HashSet<TblPortage>();
+            TblPortages = new HashSet<TblPortage>();
         }
 
         public Guid Id { get; set; }
@@ -16,6 +18,6 @@ namespace web_db
         public decimal PriceTowBascol { get; set; }
         public bool IsDel { get; set; }
 
-        public virtual ICollection<TblPortage> TblPortage { get; set; }
+        public virtual ICollection<TblPortage> TblPortages { get; set; }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model KeyValuePair<web_db.TblConf.KeyEnum, string>
+@{
+
+    web_db.TblConf.KeyEnum key = Model.Key;
+    string type = Model.Value;
+}
+
+
+@{
+    <form action='/Admin/conf' method='post'>
+        <div asp-validation-summary='ModelOnly' class='text-danger'></div>
+
+
+        <input name='Key' type='hidden' value='@(key.ToString())' />
+
+        @if (type == "bool")
+        {
+
+        <div class='form-group form-check'>
+            <label class='form-check-label'>
+                <input name='value' value='@(true.ToString())' onChange='this.form.submit()' type='checkbox' @(((cl._conf.SingleOrDefault(a => a.Key == key) ?? new web_db.TblConf()).Value == true.ToString()) ? " checked" : "") class='form-check-input' />
+                @(key.ToKPvalusAttr().Description)
+            </label>
+
+        </div>
+
+
+        }
+        else @if (type == "string")
+        {
+
+            <div class='form-group d-inline '>
+
+                <label class='form-label'>
+                    @(key.ToKPvalusAttr().Description)
+                </label>
+
+                <input name='value' value='@((cl._conf.SingleOrDefault(a => a.Key == key) ?? new web_db.TblConf()).Value)' onChange='this.form.submit()' type='text' class='form-control' />
+
+
+            </div>
+
+
+        }
+        else @if (type == "int")
+        {
+
+            <div class='form-group d-inline '>
+
+                <label class='form-label'>
+                    @(key.ToKPvalusAttr().Description)
+                </label>
+
+                <input name='value' value='@((cl._conf.SingleOrDefault(a => a.Key == key) ?? new web_db.TblConf()).Value)' onChange='this.form.submit()' type='number' class='form-control' />
+
+
+            </div>
+
+
+        }
+
+    </form>
+}
+

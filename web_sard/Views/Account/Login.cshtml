@@ -13,15 +13,22 @@
     <meta name="theme-color" content="rgba(216,204,204,0)">
     <meta name="description" content=" نرم افزار مدیریت و کنترل سردخانه SP">
     <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
-    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
     <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
     <link rel="manifest" href="~/manifest.json">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="~/assets/fonts/fontawesome-all.min.css">
     <link href="~/assets/rtl.css" rel="stylesheet" />
-</head>
-
-<body class="bg-gradient-primary" dir="rtl">
+    <style>
+        body {
+            background-color: #fafafa !important;
+            background-image: url('/assets/img/bg/b1.jpg');
+            background-repeat: space;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+</head> 
+<body dir="rtl">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-9 col-lg-12 col-xl-10">
@@ -29,8 +36,8 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-flex">
-                                <div class="flex-grow-1 bg-login-image" style="background-image: url('../assets/img/5491974.png');"></div>
-                                 
+                                <div class="flex-grow-1 bg-login-image" style="        background-image: url('../assets/img/sror-Logo2.png');"></div>
+
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
@@ -38,6 +45,7 @@
                                         <h4 class="text-dark mb-4">خوش آمدید! </h4>
                                     </div>
                                     <form class="user" method="post">
+                                        @Html.AntiForgeryToken()
                                         <div class="form-group"><input class="form-control form-control-user" type="text" placeholder="نام کاربری" asp-for="username"></div>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" placeholder="رمز عبور" asp-for="password"></div>
                                         <div class="form-group">
@@ -52,14 +60,15 @@
                                     @*<div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
                                         <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>*@
 
-                                    @if (string.IsNullOrWhiteSpace(ViewBag.error)==false) {
-                                <div class="alert alert-danger">
-                                    <strong>خطا!</strong> @ViewBag.error
-                                </div>
-                                    
+                                    @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+                                    {
+                                        <div class="alert alert-danger">
+                                            <strong>خطا!</strong> @ViewBag.error
+                                        </div>
+
                                     }
                                     <h5>
-                                        نرم افزار مدیریت و کنترل سردخانه SP
+                                        نرم افزار مدیریت و کنترل سردخانه SROR
                                     </h5>
                                 </div>
                             </div>
@@ -71,8 +80,10 @@
     </div>
     <script src="~/assets/js/jquery.min.js"></script>
     <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+
+    <script src="~/assets/js/jquery.easing.js"></script>
     <script src="~/assets/js/theme.js"></script>
+
 </body>
 
 </html>

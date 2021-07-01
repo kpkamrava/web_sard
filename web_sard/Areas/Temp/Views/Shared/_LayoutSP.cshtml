@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutSPMain.cshtml";
+}
+@{
+
+    var permis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<web_db.TblUserPermi>>(User._getuserPermis());
+}
+@section Menu{
+
+
+    <ul id="menu-content" class="menu-content collapse out">
+        <li>
+
+            <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fa fa-dashboard"></i><span>داشبورد</span></a>
+        </li>
+
+        <li>
+
+            <a class="nav-link" asp-action="Temp" asp-controller="operation" asp-route-id="@null"><i class="fa fa-temperature-low"></i><span>ثبت دما</span></a>
+        </li>
+        <li data-toggle="collapse" data-target="#pppmahvate" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i> عملیات دما<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppmahvate">
+
+                <li>
+                    <a class="dropdown-item  " asp-action="index" asp-controller="operation"><i class="fa fa-list-alt"></i><span>لیست روزها</span></a>
+                </li>
+                <li>
+                    <a class="dropdown-item  " asp-action="Create" asp-controller="operation"><i class="fas fa-plus"></i><span>روز جدید</span></a>
+                </li>
+
+            </ul>
+        </li>
+
+
+
+
+        @Html._menuSys(sys._SystemEnum.Temp)
+    </ul>
+
+}
+@section js{  @RenderSection("js", required: false)
+@RenderSection("Scripts", required: false)
+}
+@section cs{ 
+ @RenderSection("cs", required: false)
+ 
+}
+
+
+@RenderBody()

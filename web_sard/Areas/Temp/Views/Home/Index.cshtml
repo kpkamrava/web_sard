@@ -1,0 +1,167 @@
+﻿@model List< web_db._temp.TblTempRow>
+@{
+    ViewData["Title"] = "داشبورد";
+
+    var z = Model.GroupBy(a => a.DateAdd.Date);
+
+    string lo = "";
+
+
+
+}
+
+<h1>مدیریت و کنترل دمای سردخانه</h1>
+
+<div>
+    @foreach (var item in cl._ListLocation.Where(a => a.FkP == null&&a.ForProduct))
+    {
+        <a class="btn btn-info @(ViewBag.location==item.Id?"active":"") " asp-action="index" asp-route-kind="@ViewBag.kind" asp-route-location="@item.Id">@item.Title</a>
+        if (ViewBag.location == item.Id)
+        {
+            lo = item.Title;
+        }
+    }
+     
+    @if (ViewBag.kind == "MaxDama")
+    {
+        lo += " بیشترین دما";
+    }
+    else if (ViewBag.kind == "MinDama")
+    { lo += " کمترین دما"; }
+    else if (ViewBag.kind == "MotorDama")
+    { lo += " دمای موتورخانه"; }
+    else if (ViewBag.kind == "R")
+    { lo += " رطوبت"; }
+</div>
+<div>
+
+    <a class="btn btn-light @(ViewBag.kind=="MaxDama"?"active":"") " asp-action="index" asp-route-kind="MaxDama" asp-route-location="@ViewBag.location">بیشترین دما</a>
+    <a class="btn btn-light @(ViewBag.kind=="MinDama"?"active":"")" asp-action="index" asp-route-kind="MinDama" asp-route-location="@ViewBag.location">کمترین دما</a>
+    <a class="btn btn-light @(ViewBag.kind=="MotorDama"?"active":"")" asp-action="index" asp-route-kind="MotorDama" asp-route-location="@ViewBag.location"> دمای موتورخانه</a>
+    <a class="btn btn-light @(ViewBag.kind=="R"?"active":"")" asp-action="index" asp-route-kind="R">رطوبت</a>
+
+</div>
+<div class="table-responsive">
+    <canvas id="myChart" style="height:60vh; width:100vh;min-height:400px; min-width:600px;"></canvas>
+
+
+
+</div>
+
+
+@section js{
+    <script src="~/libs/ChartJs/Scripts/Chart.min.js"></script>
+
+
+    <script>
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+             var data = {
+            labels: [@Html.Raw(string.Join(",",z.Select(a=>"'"+a.Key.ToPersianDate()+"'").ToArray()))],
+            datasets: [
+
+                @foreach (var item in Model.GroupBy(a=>a.Location).OrderBy(a=>a.Key))
+                {
+
+                    var t = item.GroupBy(a => a.DateAdd.Date);
+                    if (ViewBag.kind== "MaxDama")
+                    {
+                  @Html.Raw( $" {{data:[{string.Join(",", t.Where(a=>a.Any(s=>s.MaxDama.HasValue)).Select(a => $"{{x: '{a.Key.ToPersianDate()}',y:{a.Max(s => s.MaxDama)} }}").ToArray())}],label: '{item.Key}',borderColor: '{web_lib.AllHelper.RandomColorCss()}', fill: false}}, ")
+                    }
+                    else if (ViewBag.kind == "MinDama")
+                    {
+                     @Html.Raw(   $" {{data:[{string.Join(",", t.Where(a=>a.Any(s=>s.MinDama.HasValue)).Select(a => $"{{x: '{a.Key.ToPersianDate()}',y:{a.Min(s => s.MinDama)} }}").ToArray())}],label: '{item.Key}',borderColor: '{web_lib.AllHelper.RandomColorCss()}', fill: false}}, "  )
+                    }
+                    else if (ViewBag.kind == "MotorDama")
+                    {
+                     @Html.Raw( $" {{data:[{string.Join(",", t.Where(a=>a.Any(s=>s.MotorDama.HasValue)).Select(a => $"{{x: '{a.Key.ToPersianDate()}',y:{(a.Average(s => s.MotorDama)??0).ToString("##.##")} }}").ToArray())}],label: '{item.Key}',borderColor: '{web_lib.AllHelper.RandomColorCss()}', fill: false}}, "  )
+
+                    }
+                    else if (ViewBag.kind == "R")
+                    {
+                     @Html.Raw(   $" {{data:[{string.Join(",", t.Where(a=>a.Any(s=>s.R.HasValue)).Select(a => $"{{x: '{a.Key.ToPersianDate()}',y:{(a.Average(s => s.R) ?? 0).ToString("##.##")} }}").ToArray())}],label: '{item.Key}',borderColor: '{web_lib.AllHelper.RandomColorCss()}', fill: false}}, "  )
+
+                    }
+
+              }
+
+
+
+            //}, {
+            //    data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
+            //    label: "Latin America",
+            //    borderColor: "#e8c3b9",
+            //    fill: false
+            //}, {
+            //    data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
+            //    label: "North America",
+            //    borderColor: "#c45850",
+            //    fill: false
+            //}
+            ]
+        };
+
+
+
+
+
+
+        @*var data = {
+            labels: [@Html.Raw(string.Join(",",z.Select(a=>"'"+a.Key.ToPersianDate()+"'").ToArray()))],
+            datasets: [
+                {
+                data: [@Html.Raw(string.Join(",",z.Select(a=>a.Max(s=>s.MaxDama)).ToArray()))],
+                label: "بیشترین دما",
+                borderColor: "#3e95cd",
+                fill: false
+                },
+                {
+                data: [@Html.Raw(string.Join(",",z.Select(a=>a.Min(s=>s.MinDama)).ToArray()))],
+                label: "کمترین دما",
+                borderColor: "#8e5ea2",
+                fill: false
+                },
+                {
+                data: [@Html.Raw(string.Join(",",z.Select(a=>a.Average(s=>(s.MotorDama))).ToArray()))],
+                label: "موتورخانه",
+                borderColor: "#3cba9f",
+                    fill: false
+                }
+            //}, {
+            //    data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
+            //    label: "Latin America",
+            //    borderColor: "#e8c3b9",
+            //    fill: false
+            //}, {
+            //    data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
+            //    label: "North America",
+            //    borderColor: "#c45850",
+            //    fill: false
+            //}
+            ]
+        };*@
+
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                title: {
+                    display: true,
+                    text: '@Html.Raw(lo)'
+                } 
+            }
+        });
+
+
+    </script>
+
+
+}
+
+@section cs{
+
+    <link href="~/libs/ChartJs/Content/Chart.min.css" rel="stylesheet" />
+
+
+}

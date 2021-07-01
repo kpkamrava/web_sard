@@ -13,7 +13,7 @@
 }
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-4">
             <input asp-for="Id" type="hidden" />
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" placeholder="رمز عبور" class="form-control" />
+                <input asp-for="Password" type="password" placeholder="رمز عبور" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -43,26 +43,77 @@
                     <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" asp-for="isActive"><label class="form-check-label custom-control-label" asp-for="isActive"> </label></div>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="ثبت" class="btn btn-primary" />
-            </div>
+
 
         </div>
         <div class="col-md-8">
 
             <label asp-for="Roles" class="control-label"></label>
             <div class="row">
-                @foreach (var item in _UserRol.RolList)
+                @foreach (var item in _UserRol._Rolls.AddEditCustomer.GetAllItems())
                 {
 
                     <div class=" col-sm-4">
 
-                        <label><input class="form-check-input" value="@item.getName()" type="checkbox" name="Roles" @(Model.Roles.Any(a => a == item.getName()) ? "checked" : "")>    @item.getText()</label>
+                        <label><input class="form-check-input" value="@item.ToString()" type="checkbox" name="Roles" @(Model.Roles.Any(a => a == item.ToString()) ? "checked" : "")>    @item.ToKPvalusAttr().Description</label>
                     </div>
                 }
             </div>
+            <div>
+                <h5> مجوزها</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>شرح</td>
+                            <td>ثبت ورود</td>
+                            <td>ثبت برگشت از ورود</td>
+                            <td>ثبت خروج</td>
+                            <td>ثبت برگشت از خروج</td>
+                            <td>گزارشات</td>
+
+                        </tr>
+                    </thead>
+                    @{ int i = 0;}
+                    @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()))
+                    {
+                        var row = (Model.Permis ?? new web_db.TblUserPermi[0]).SingleOrDefault(a => a.FkPortageType == item.Id) ?? new web_db.TblUserPermi();
+                        <tr>
+
+                            <td>
+                                @item.Title
+
+                                <input type="hidden" name="Permis[@i].FkPortageType" value="@item.Id" />
+                            </td>
+
+                            <td>
+                                <input type="checkbox" name="Permis[@i].IsIn" value="true" @(row.IsIn ? "checked" : "") />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="Permis[@i].IsInBack" value="true" @(row.IsInBack ? "checked" : "") />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="Permis[@i].IsOut" value="true" @(row.IsOut ? "checked" : "") />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="Permis[@i].IsOutBack" value="true" @(row.IsOutBack ? "checked" : "") />
+                            </td>
+
+                            <td>
+                                <input type="checkbox" name="Permis[@i].IsReport" value="true" @(row.IsReport ? "checked" : "") />
+                            </td>
+                        </tr>
+
+
+                        i++;
+                    }
+
+                </table>
+            </div>
 
         </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="ثبت" class="btn btn-primary" />
     </div>
 </form>
 

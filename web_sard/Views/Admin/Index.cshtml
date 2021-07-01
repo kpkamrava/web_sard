@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "تنظیمات";
+}
+
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="row">
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_ActiceSms, "bool")
+            @if (((cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.Main_ActiceSms) ?? new web_db.TblConf()).Value == true.ToString()))
+            {
+                @Html._Conf(web_db.TblConf.KeyEnum.Main_UserSms, "string")
+                @Html._Conf(web_db.TblConf.KeyEnum.Main_PassSms, "string")
+                @Html._Conf(web_db.TblConf.KeyEnum.Main_NumSms, "string")
+            }
+
+
+            <hr />
+
+
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_DegateBaskul, "int")
+
+
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_HadeagalOft, "int")
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_HadeaxareOft, "int")
+
+
+
+            <hr />
+
+
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_NavhDorbinBaskul, "string")
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_URLDorbinBaskul, "string")
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_UserDorbinBaskul, "string")
+            @Html._Conf(web_db.TblConf.KeyEnum.Main_PassDorbinBaskul, "string")
+
+        </div>
+    </div>
+</div>   
+
+@foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()))
+{
+    <a class="btn btn-info" asp-action="contracttype" asp-route-id="@item.Id"> ویرایش @item.Title</a>
+
+}

@@ -1,206 +1,131 @@
-﻿<!DOCTYPE html>
-<html>
+﻿
+@{
+    Layout = "_LayoutSPMain";
+}
+@{
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>@ViewData["Title"] - کنترل سردخانه</title>
-    <meta name="theme-color" content="rgba(216,204,204,0)">
-    <meta name="description" content=" نرم افزار مدیریت و کنترل سردخانه SP">
-    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
-    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
-    <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="manifest" href="~/manifest.json">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="~/assets/fonts/fontawesome-all.min.css">
-    <link href="~/libs/bootstrap-select/1.13.17/content/Content/bootstrap-select.css" rel="stylesheet" />
-    <link href="~/assets/persianDatePicker/PersianDatePicker.css" rel="stylesheet" /> 
-    <link href="~/assets/site.css" rel="stylesheet" />
-    <link href="~/assets/rtl.css" rel="stylesheet" />
-  
-</head> 
+    var permis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<web_db.TblUserPermi>>(User._getuserPermis());
+}
+@section Menu{
 
+    
+    <ul id="menu-content" class="menu-content collapse out">
+        <li>
 
+            <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fa fa-dashboard"></i><span>داشبورد</span></a>
+        </li>
+        <li data-toggle="collapse" data-target="#pppPortage" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i> عملیات اصلی<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppPortage">
 
-<body id="page-top" dir="rtl" class="bg-secondary">
-    <div class="nav-side-menu">
-        <div class="brand">مدیریت سردخانه</div>
-        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-
-        <div class="menu-list">
-
-            <ul id="menu-content" class="menu-content collapse out">
-                <li>
-
-                    <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fa fa-dashboard"></i><span>داشبورد</span></a>
-                </li>
-                <li data-toggle="collapse" data-target="#pppmahvate" class="collapsed">
-                    <a href="#"><i class="fa fa-globe fa-lg"></i> عملیات محوطه<span class="arrow"></span></a>
-                    <ul class="sub-menu collapse" id="pppmahvate">
-
-                        @foreach (var item in web_sard.Models.cl._ListContractType)
-                        {
-                            <li>
-                                <a class="dropdown-item  " asp-action="index" asp-controller="Yard" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
-                            </li>
-
-                        }
+                @foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()))
+                {
+                    if (permis.Any(a => a.FkPortageType == item.Id && a.IsType))
+                    {
                         <li>
-                            <a class="dropdown-item  " asp-action="Movement" asp-controller="Yard"><i class="fas fa-tachometer-alt"></i><span>جابجایی محصولات</span></a>
+                            <a class="dropdown-item  " asp-action="index" asp-controller="Portage" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
                         </li>
-
-                    </ul>
-                </li>
-
-                <li data-toggle="collapse" data-target="#pppPortage" class="collapsed">
-                    <a href="#"><i class="fa fa-globe fa-lg"></i> عملیات باسکول<span class="arrow"></span></a>
-                    <ul class="sub-menu collapse" id="pppPortage">
-
-                        @foreach (var item in web_sard.Models.cl._ListContractType)
-                        {
-                            <li>
-                                <a class="dropdown-item  " asp-action="index" asp-controller="Portage" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
-                            </li>
-
-                        }
-                    </ul>
-                </li>
-
-
-                <li data-toggle="collapse" data-target="#pppservice" class="collapsed">
-                    <a href="#"><i class="fa fa-globe fa-lg"></i> قراردادها <span class="arrow"></span></a>
-                    <ul class="sub-menu collapse" id="pppservice">
-
-                        @foreach (var item in web_sard.Models.cl._ListContractType)
-                        {
-                            <li>
-                                <a class="dropdown-item  " asp-action="index" asp-controller="contract" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
-                            </li>
-
-                        }
-                    </ul>
-                </li>
-
-
-
-                <li data-toggle="collapse" data-target="#ppppaie" class="collapsed">
-                    <a href="#"><i class="fa fa-car fa-lg"></i>اطلاعات پایه<span class="arrow"></span></a>
-                    <ul class="sub-menu collapse" id="ppppaie">
-                        <li> <a class="dropdown-item " asp-action="index" asp-controller="Customer"><i class="fa fa-user"></i><span>لیست مشتریان</span></a> </li>
-                        <li> <a class="dropdown-item " asp-action="ListUser" asp-controller="Account"><i class="fa fa-user"></i><span>لیست کاربران</span></a> </li>
-                        <li> <a class="dropdown-item " asp-action="index" asp-controller="Product"><i class="fa fa-tachometer-alt"></i><span>لیست محصولات</span></a></li>
-                        <li> <a class="dropdown-item " asp-action="index" asp-controller="Injury"><i class="fa fa-tachometer-alt"></i><span>صدمات محصولات</span></a></li>
-                        <li> <a class="dropdown-item " asp-action="index" asp-controller="packing"><i class="fa fa-tachometer-alt"></i><span>انواع بسته بندی</span></a></li>
-                        <li> <a class="dropdown-item " asp-action="index" asp-controller="Location"><i class="fa fa-tachometer-alt"></i><span>موقعیت سالنها</span></a> </li>
-
-
-                    </ul>
-                <li data-toggle="collapse" data-target="#ppprep1" class="collapsed">
-                    <a href="#"><i class="fa fa-car fa-lg"></i>گزارشات<span class="arrow"></span></a>
-                    <ul class="sub-menu collapse" id="ppprep1">
-                        <li> <a class="dropdown-item" asp-action="printGardeshLocation" asp-controller="ReportLocation"><i class="fa fa-user"></i><span>گزارش ورود و خروج انبار</span></a> </li>
-                    </ul>
-                </li>
+                    }
+                }
             </ul>
-        </div>
-    </div>
-    <div class="content  ">
-        <nav class="navbar navbar-expand navbar-toggleable-sm  bg-dark border-bottom box-shadow mb-3 navbar-dark">
-            <div class="container">
+        </li>
 
-                <div class="navbar-collapse " style="display:contents!important;">
-                    <div class="form-inline float-right">
-                        <div class="input-group">
-                            <input class="bg-light form-control border-0 small searchinput" type="text" placeholder="جستجو در جدول..">
-                            @*<div class="input-group-append"><button class="btn btn-primary py-0 " type="button"><i class="fas fa-search"></i></button></div>*@
-                        </div>
-                    </div>
-                    <ul class="navbar-nav float-left">
+        <li data-toggle="collapse" data-target="#pppmahvate" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i> عملیات بارگیری و تخلیه<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppmahvate">
 
-
-                        <li class="nav-item dropdown no-arrow " role="presentation">
-                            <div class="nav-item dropdown no-arrow">
-                                <button class="btn btn-outline-secondary btn-sm text-gray-400  dropdown-toggle " data-toggle="dropdown" aria-expanded="false" type="button">
-                                    <i class="fa fa-history fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    @User._getuserSalMaliDef().ToString()
-                                </button>
-                                <div class="dropdown-menu shadow dropdown-menu-left animated--grow-in" role="menu">
-                                    @foreach (var item in web_sard.Models.cl._ListSalmali)
-                                    {
-                                        <a class="dropdown-item" role="presentation" asp-action="DefYear" asp-controller="Account" asp-route-id="@item.Id"><i class="fa fa-history fa-sm fa-fw mr-2 text-gray-400"></i> @item.Sal</a>
-
-
-                                    }
-                                </div>
-                            </div>
+                @foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()).Where(a=>a.IsMahvate))
+                {
+                    if (permis.Any(a => a.FkPortageType == item.Id && a.IsType))
+                    {
+                        <li>
+                            <a class="dropdown-item  " asp-action="index" asp-controller="Yard" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
                         </li>
-                        <li class="nav-item dropdown no-arrow " role="presentation">
-                            <div class="nav-item dropdown no-arrow">
-                                <button class="btn btn-primary btn-sm dropdown-toggle " data-toggle="dropdown" aria-expanded="false" type="button"><span class="d-none d-lg-inline mr-2 text-gray-100 small">@User._getuserGiveName()</span> <span class="fa fa-user-circle"></span> @*<img class="border rounded-circle img-profile" style="height:100%"  src="~/assets/img/avatars/avatar1.jpeg">*@</button>
-                                <div class="dropdown-menu shadow dropdown-menu-left animated--grow-in" role="menu">
-                                    <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;پروفایل</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;تنظیمات</a>
-                                    <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;خروج</a>
-                                </div>
-                            </div>
+
+                    }
+
+
+                }
+                <li>
+                    <a class="dropdown-item  " asp-action="Movement" asp-controller="Yard"><i class="fas fa-tachometer-alt"></i><span>جابجایی محصولات</span></a>
+                </li>
+
+            </ul>
+        </li>
+
+
+
+        <li data-toggle="collapse" data-target="#pppservice" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i> قراردادها <span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppservice">
+
+                @foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()).Where(a=>a.IsContract))
+                {
+                    if (permis.Any(a => a.FkPortageType == item.Id && a.IsType))
+                    {
+                        <li>
+                            <a class="dropdown-item  " asp-action="index" asp-controller="contract" asp-route-idtype="@item.Id"><i class="fa fa-tachometer-alt"></i><span>@item.Title</span></a>
                         </li>
-                    </ul>
-
-
-                </div>
-            </div>
-        </nav>
-
-        <div class="container" style="max-width:100%!important;">
-
-            <main role="main" class="pb-3 animated--fade-in">
-                <div class="card bg-light text-dark">
-                    <div class="card-header">
-                        @ViewData["Title"]
-                    </div>
-                    <div class="card-body ">
-
-
-           
-
-                        @RenderBody()
-
-                        @if (string.IsNullOrWhiteSpace(ViewBag.txt) == false)
-                        {
-                            <div class="alert alert-info">
-                                <strong>پیغام!</strong> @ViewBag.txt
-                            </div>
-                        }
-
-                        @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
-                        {
-                            <div class="alert alert-danger">
-                                <strong>خطا!</strong> @ViewBag.error
-                            </div>
-                        }
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
+                    }
+                }
+            </ul>
+        </li>
 
 
 
-    <script src="~/assets/js/jquery.min.js"></script>
+        <li data-toggle="collapse" data-target="#ppppaie" class="collapsed">
+            <a href="#"><i class="fa fa-car fa-lg"></i>اطلاعات پایه<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="ppppaie">
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="Customer"><i class="fa fa-user"></i><span>لیست مشتریان</span></a> </li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="Product"><i class="fa fa-tachometer-alt"></i><span>لیست محصولات</span></a></li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="packing"><i class="fa fa-tachometer-alt"></i><span>لیست سبد</span></a></li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="Injury"><i class="fa fa-tachometer-alt"></i><span>صدمات محصولات</span></a></li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="group"><i class="fa fa-tachometer-alt"></i><span>لیست گروه ها</span></a></li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="car"><i class="fa fa-car"></i><span>انواع خودروها</span></a></li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="Location"><i class="fa fa-tachometer-alt"></i><span>موقعیت سالنها</span></a> </li>
+                <li> <a class="dropdown-item " asp-action="ListUser" asp-controller="Account"><i class="fa fa-user"></i><span>لیست کاربران</span></a> </li>
+                <li> <a class="dropdown-item " asp-action="index" asp-controller="Year"><i class="fa fa-user"></i><span>لیست دوره های مالی</span></a> </li>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/libs/bootstrap-select/1.13.17/content/Scripts/bootstrap-select.js"></script>
-    <script src="~/assets/persianDatePicker/persianDatePicker.js"></script>
-    <script src="~/assets/js/theme.js"></script>
-    <script src="~/assets/site.js"></script>
-   
-    @RenderSection("Scripts", required: false)
+                @if (User._getRolAny(_UserRol._Rolls.MainSuperVisor))
+                {
+                    <li> <a class="dropdown-item " asp-action="index" asp-controller="Admin"><i class="fa fa-contao"></i><span>تنظیمات اصلی</span></a> </li>
+
+                }
+
+
+            </ul>
+        </li>
+        <li data-toggle="collapse" data-target="#ppprep1" class="collapsed">
+            <a href="#"><i class="fa fa-car fa-lg"></i>گزارشات<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="ppprep1">
+                <li> <a class="dropdown-item" asp-action="printGardeshLocation" asp-controller="Report"><i class="fa fa-user"></i><span>گزارش ورود و خروج انبار</span></a> </li>
+                <li> <a class="dropdown-item" asp-action="printJameGarardad" asp-controller="Report"><i class="fa fa-user"></i><span>گزارش جامع قرارداد</span></a> </li>
+                <li> <a class="dropdown-item" asp-action="printGarardadProductPackings" asp-route-kind="product" asp-controller="Report"><i class="fa fa-user"></i><span>گزارش جامع   محصولات </span></a> </li>
+
+                <li> <a class="dropdown-item" asp-action="printGarardadProductPackings" asp-route-kind="packing" asp-controller="Report"><i class="fa fa-user"></i><span>گزارش جامع   سبد </span></a> </li>
+                <li> <a class="dropdown-item" asp-action="printGarardadProductPackings" asp-route-kind="location" asp-controller="Report"><i class="fa fa-user"></i><span>گزارش جامع   موقعیت </span></a> </li>
+
+
+
+                @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()).Where(a => a.IsContract))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-action="customer" asp-route-fktype="@item.Id" asp-controller="Report"><i class="fa fa-cube"> </i><span>وضعیت قرارداد @item.Title</span></a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-action="printMavjudiCustomer" asp-route-fktype="@item.Id" asp-controller="Report"><i class="fa fa-cube"></i><span>وضعیت موجودی @item.Title</span></a> 
+                    </li> 
+                } 
+            </ul>
+        </li> 
+        @Html._menuSys(sys._SystemEnum.Main)
+    </ul> 
+} 
+
+@section js{
     @RenderSection("js", required: false)
-</body>
+    @RenderSection("Scripts", required: false)
+ }
 
 
-
-
-
-</html>
+@RenderBody()

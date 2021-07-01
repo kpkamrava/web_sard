@@ -1,0 +1,12 @@
+D:\source\repos\web_sard\win_sard\bin\Release\win_sard.exe
+D:\source\repos\web_sard\win_sard\bin\Release\win_sard.pdb
+D:\source\repos\web_sard\win_sard\bin\Release\Newtonsoft.Json.dll
+D:\source\repos\web_sard\win_sard\bin\Release\Newtonsoft.Json.xml
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.csprojAssemblyReference.cache
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.FormSetting.resources
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.Properties.Resources.resources
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.csproj.GenerateResource.cache
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.csproj.CoreCompileInputs.cache
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.csproj.CopyComplete
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.exe
+D:\source\repos\web_sard\win_sard\obj\Release\win_sard.pdb

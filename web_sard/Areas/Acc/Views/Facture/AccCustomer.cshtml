@@ -1,0 +1,163 @@
+﻿@model IEnumerable<web_db.TblPortageMoney>
+@using web_lib
+@{
+
+    ViewData["Title"] = "";
+
+} 
+<div class="btn-group">
+    @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()))
+    {
+        @if (Context.Request.IsAjaxRequest())
+        {<a class="btn btn-light fa fa-outdent @(item.Id==ViewBag.idcontracttype?"active":"")" asp-action="AccCustomer" asp-controller="Facture" asp-route-id="@ViewBag.id" asp-route-idcontracttype="@item.Id" isModal="true">@item.Title </a>
+
+        }
+        else
+        {
+        <a class="btn btn-light fa fa-outdent @(item.Id==ViewBag.idcontracttype?"active":"")" asp-action="AccCustomer" asp-controller="Facture" asp-route-id="@ViewBag.id" asp-route-idcontracttype="@item.Id">@item.Title </a>
+
+        }
+    }
+</div> 
+<br />
+<div class="btn-group">
+    @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract)
+    {
+        @if (Context.Request.IsAjaxRequest())
+        {
+            <a class="btn btn-light fa fa-outdent @(item.code==ViewBag.kind?"active":"")" asp-action="AccCustomer" asp-controller="Facture" asp-route-id="@ViewBag.id" asp-route-idcontracttype="@ViewBag.idcontracttype" asp-route-kind="@item.code" isModal="true">@item.txt </a>
+
+        }
+        else
+        {
+            <a class="btn btn-light fa fa-outdent @(item.code==ViewBag.kind?"active":"")" asp-action="AccCustomer" asp-controller="Facture" asp-route-id="@ViewBag.id" asp-route-idcontracttype="@ViewBag.idcontracttype" asp-route-kind="@item.code">@item.txt </a>
+
+        }
+    }
+</div>
+  
+@if (ViewBag.idcontracttype == null) { return; }
+ 
+<form asp-action="CreateFacktorCustomer" asp-controller="Facture" method="post">
+    <div class="card">
+
+        <div class="card-body">
+
+            <table class="table table-striped table-responsive table-responsive-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Txt)
+                        </th>
+
+                        <th>
+                            محل
+                        </th>
+                        <th>
+                            جعبه و محصول
+                        </th>
+
+                        <th>
+                            ماشین
+                        </th>
+                        <th>
+                            نوع
+                        </th>
+                        <th>
+                            مقدار
+                        </th>
+
+                        <th>
+                            نرخ
+                        </th>
+                        <th>
+                            حساب
+                        </th>
+                        <th>
+                            زمان
+                        </th>
+                        <th>
+                            فاکتور
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderBy(a => a.FkPortageNavigation.KindTitle))
+                    {
+                        <tr>
+
+                            <td>
+                                <label> <input type="checkbox" name="ids" value="@item.Id" checked />  @item.FkPortageNavigation.KindTitle</label>
+
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Txt)
+                            </td>
+
+
+                            <td>
+                                @((cl._ListLocation.SingleOrDefault(a=>a.Id== item.Fklocation)??new web_db.TblLocation()).Title)
+                            </td>
+                            <td>
+
+                                @((cl._ListPacking.SingleOrDefault(a => item.FkPacking == a.Id)??new web_db.TblPacking()).Title)
+                                @((cl._ListProduct.SingleOrDefault(a=>item.FkProduct==a.Id)??new web_db.TblProduct()).Title)
+                            </td>
+                            <td>
+                                @cl._ListCar.Single(a => item.FkCar == a.Id).Title
+                            </td>
+                            <td>
+                                @item.Kind
+                            </td>
+                            <td>
+                                @item.Weight.gadrmotlagh().ToMoney()
+                            </td>
+
+                            <td>
+                                @item.PriceOneWeight.gadrmotlagh().ToMoney()
+                            </td>
+                            <td>
+                                @item.PriceSum.gadrmotlagh().ToMoney()
+                            </td>
+
+                            <td>
+                                @item.Date.ToPersianDate()
+                            </td>
+                            <th>
+                                @item.FkPortageNavigation.OtcodeResid
+
+                            </th>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                         
+                        <td colspan="8">
+                        </td>
+                        <td>
+                            @Model.Sum(a => a.PriceSum.gadrmotlagh()).ToMoney()
+                        </td>
+
+
+                        <td>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+        <div class="card-header">
+            <button type="submit" class="btn btn-success fa fa-outdent">ارسال به برنامه حسابداری </button>
+        </div>
+    </div>
+
+
+
+</form>
+

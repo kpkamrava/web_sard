@@ -1,31 +1,165 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>707fd584-705c-40a6-b752-774c478a9810</UserSecretsId>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Temp\Models\**" />
     <Compile Remove="Models\api\**" />
+    <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="Views\Server\**" />
+    <Compile Remove="Views\Shared\pr\**" />
+    <Compile Remove="wwwroot\Reports\**" />
+    <Content Remove="Areas\Temp\Models\**" />
     <Content Remove="Models\api\**" />
+    <Content Remove="Models\NewFolder\**" />
+    <Content Remove="Views\Server\**" />
+    <Content Remove="Views\Shared\pr\**" />
+    <Content Remove="wwwroot\Reports\**" />
+    <EmbeddedResource Remove="Areas\Temp\Models\**" />
     <EmbeddedResource Remove="Models\api\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Server\**" />
+    <EmbeddedResource Remove="Views\Shared\pr\**" />
+    <EmbeddedResource Remove="wwwroot\Reports\**" />
+    <None Remove="Areas\Temp\Models\**" />
     <None Remove="Models\api\**" />
+    <None Remove="Models\NewFolder\**" />
+    <None Remove="Views\Server\**" />
+    <None Remove="Views\Shared\pr\**" />
+    <None Remove="wwwroot\Reports\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="bootstrap-select" Version="1.13.17" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.23.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.CodeDom" Version="5.0.0-preview.5.20278.1" />
-    <PackageReference Include="System.Data.Odbc" Version="4.7.0" />
+    <Compile Remove="Controllers\ServerController.cs" />
+    <Compile Remove="Models\tbls\contract\ContractType.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.bundle.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.bundle.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.bundle.min.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.bundle.min.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.esm.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.esm.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.esm.min.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.esm.min.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.min.js" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\js\bootstrap.min.js.map" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\bootstrap-grid.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\bootstrap-reboot.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\bootstrap-utilities.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\bootstrap.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-check.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-control.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-file.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-range.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-select.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_form-text.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_input-group.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_labels.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\forms\_validation.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_clearfix.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_colored-links.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_embed.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_position.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_screenreaders.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_stretched-link.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\helpers\_text-truncation.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_alert.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_border-radius.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_box-shadow.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_breakpoints.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_buttons.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_caret.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_clearfix.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_container.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_deprecate.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_forms.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_gradients.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_grid.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_image.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_list-group.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_lists.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_pagination.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_reset-text.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_resize.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_screen-reader.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_table-variants.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_text-truncate.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_transition.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\mixins\_utilities.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\utilities\_api.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\vendor\_rfs.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_alert.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_badge.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_breadcrumb.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_button-group.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_buttons.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_card.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_carousel.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_close.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_containers.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_dropdown.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_forms.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_functions.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_grid.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_helpers.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_images.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_list-group.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_mixins.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_modal.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_nav.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_navbar.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_pagination.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_popover.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_progress.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_reboot.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_root.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_spinners.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_tables.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_toasts.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_tooltip.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_transitions.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_type.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_utilities.scss" />
+    <Content Remove="C:\Users\Paria\.nuget\packages\bootstrap.sass\5.0.0-alpha1\contentFiles\any\any\wwwroot\scss\_variables.scss" />
+    <Content Remove="Views\Home\config.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Areas\Note\Controllers\HomeController.cs~RF1fd191.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\Reports\portage\rpt_10_A.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\Reports\portage\rpt_5_A.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\Reports\portage\rpt_1_A.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="bootstrap.sass" Version="5.0.0-alpha1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0-preview.4.21274.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0-preview.4.21253.7" />
+    <PackageReference Include="System.Data.Odbc" Version="6.0.0-preview.4.21253.7" />
     <PackageReference Include="System.Data.OleDb" Version="4.7.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.4.*" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.4.*" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.*" />
-    <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,38 +168,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Reports\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Stimulsoft.Base">
-      <HintPath>..\dll\Stimulsoft.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.Data">
-      <HintPath>..\dll\Stimulsoft.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.Report">
-      <HintPath>..\dll\Stimulsoft.Report.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.Report.Mvc.NetCore">
-      <HintPath>..\dll\Stimulsoft.Report.Mvc.NetCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.Report.Web">
-      <HintPath>..\dll\Stimulsoft.Report.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.Report.WebDesign">
-      <HintPath>..\dll\Stimulsoft.Report.WebDesign.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.System">
-      <HintPath>..\dll\Stimulsoft.System.dll</HintPath>
-    </Reference>
-    <Reference Include="Stimulsoft.System.Web">
-      <HintPath>..\dll\Stimulsoft.System.Web.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Note\Models\" />
+    <Folder Include="Areas\Us\Data\" />
+    <Folder Include="Areas\Us\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\libs\ChartJs\Scripts\Chart.js" />
+    <None Include="wwwroot\libs\ChartJs\Scripts\Chart.min.js" />
   </ItemGroup>
 
 </Project>

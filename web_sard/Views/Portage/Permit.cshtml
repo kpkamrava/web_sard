@@ -1,9 +1,10 @@
 ﻿@model web_sard.Models.tbls.portage.portage
-<div class="card bg-gradient-warning shadow">
+<div class="card  bg-gradient bg-warning shadow">
     <div class="card-body">
         <h4 class="fa fa-certificate"> کنترل قرارداد - مجوز ثبت</h4>
          
         <form asp-action="Permit" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="control-label">توضیحات</label>
 

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>materialize</id>
+    <version>0.97.6</version>
+    <title>materialize</title>
+    <authors>The Materialize Authors</authors>
+    <owners>ziyasal,Alvin Wang @Dogfalo</owners>
+    <licenseUrl>https://github.com/Dogfalo/materialize/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://materializecss.com/</projectUrl>
+    <iconUrl>https://avatars3.githubusercontent.com/u/27781358?v=3&amp;s=400</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Materialize, a CSS Framework based on Material Design 
+http://materializecss.com</description>
+    <summary>Materialize, a CSS Framework based on Material Design</summary>
+    <releaseNotes>v0.97.6 (April 1st)
+- Removed deprecated material icons from project
+- Changed /font directory to /fonts
+- Datepicker and ScrollSpy now compatible with jQuery 2.2.x
+- Responsive tables now work with empty cells
+- Added focus states to checkboxes, switches, and radio buttons
+- Sidenav and Modals no longer cause flicker with scrollbar
+- Materialbox overflow and z-index issues fixed
+- Added new option for Card actions within a Card reveal</releaseNotes>
+    <language>en-US</language>
+    <tags>materialize css design material-design</tags>
+    <dependencies>
+      <dependency id="jQuery" version="2.1.1" />
+    </dependencies>
+  </metadata>
+</package>

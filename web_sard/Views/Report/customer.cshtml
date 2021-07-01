@@ -1,0 +1,411 @@
+﻿@model IEnumerable<web_sard.Models.tbls.customer.customer>
+
+@{
+    ViewData["Title"] = "وضعیت مشتریان";
+    var ContractType = (web_db.TblContractType)ViewBag.ctype;
+}
+
+<h1>وضعیت مشتریان</h1>
+
+@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
+
+
+
+
+    <table class="table table-bordered table-fixed-head">
+        <thead>
+            <tr>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Mob)
+                </th>
+               
+                    <th colspan="6" class="text-center ">
+                        وزن
+                    </th>
+                
+
+                <th colspan="6" class="text-center  ">
+                    تعداد
+                </th>
+                <th rowspan="3"> </th>
+
+            </tr>
+            <tr>
+               
+                    <th colspan="3" class="text-center">
+                        وارده
+                    </th>
+                    <th colspan="3" class="text-center">
+                        صادره
+                    </th>
+               
+
+                <th colspan="3" class="text-center">
+                    وارده
+                </th>
+                <th colspan="3" class="text-center">
+                    صادره
+                </th>
+            </tr>
+            <tr>
+               
+                    <th>قرارداد</th>
+                    <th>ورود</th>
+                    <th>مانده</th>
+
+                    <th>قرارداد</th>
+                    <th>خروج</th>
+                    <th>مانده</th>
+               
+
+
+                <th>قرارداد</th>
+                <th>ورود</th>
+                <th>مانده</th>
+
+                <th>قرارداد</th>
+                <th>خروج</th>
+                <th>مانده</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @if (!item.IdOtherSystem.IsEmpty())
+                        {
+                            @Html.DisplayFor(modelItem => item.IdOtherSystem)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Code)
+
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td style="border-right:3px; border-color:black;">
+                        @Html.DisplayFor(modelItem => item.Mob)
+                    </td>
+
+                    
+                        <td>
+                            @item.WInMaxContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WInSum.ToKilo()
+                        </td>
+                        <td>
+                            @item.WInMandeContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WOutMaxContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WOutSum.ToKilo()
+                        </td>
+                        <td style="border-right:3px; border-color:black;">
+                            @item.WOutMandeContract.ToKilo()
+                        </td>
+                    
+
+
+                    <td>
+                        @item.CInMaxContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.CInSum.ToKilo()
+                    </td>
+                    <td>
+                        @item.CInMandeContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.COutMaxContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.COutSum.ToKilo()
+                    </td>
+                    <td style="border-right:3px; border-color:black;">
+                        @item.COutMandeContract.ToKilo()
+                    </td>
+                    <td>
+                        <a asp-action="customercontract" asp-route-fktype="@ContractType.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-list"></a>
+                        <a asp-action="customerportage" asp-route-fktype="@ContractType.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-car"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-left">
+                    جمع:
+                </th>
+
+                
+                    <th>
+                        @Model.Sum(a => a.WInMaxContract).ToKilo()
+                    </th>
+                    <th>
+                        @Model.Sum(a => a.WInSum).ToKilo()
+                    </th>
+                    <th>
+                        @Model.Sum(a => a.WInMandeContract).ToKilo()
+                    </th>
+                    <th class="">
+                        @Model.Sum(a => a.WOutMaxContract).ToKilo()
+                    </th>
+                    <th class="">
+                        @Model.Sum(a => a.WOutSum).ToKilo()
+                    </th>
+                    <th style="border-right:3px; border-color:black;">
+                        @Model.Sum(a => a.WOutMandeContract).ToKilo()
+                    </th>
+               
+
+
+                <th>
+                    @Model.Sum(a => a.CInMaxContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.CInSum).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.CInMandeContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.COutMaxContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.COutSum).ToKilo()
+                </th>
+                <th style="border-right:3px; border-color:black;">
+                    @Model.Sum(a => a.COutMandeContract).ToKilo()
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+}
+else if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+    var conf = ContractType.ConfigASabad();
+
+    <table class="table table-bordered table-fixed-head">
+        <thead>
+            <tr>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Mob)
+                </th>
+                @if (conf.Needbascule)
+                {
+                    <th colspan="6" class="text-center ">
+                        وزن
+                    </th>
+                }
+
+                <th colspan="6" class="text-center  ">
+                    تعداد
+                </th>
+                <th rowspan="3"> </th>
+
+            </tr>
+            <tr>
+                @if (conf.Needbascule)
+                {
+                    <th colspan="3" class="text-center">
+                        وارده
+                    </th>
+                    <th colspan="3" class="text-center">
+                        صادره
+                    </th>
+                }
+
+                <th colspan="3" class="text-center">
+                    وارده
+                </th>
+                <th colspan="3" class="text-center">
+                    صادره
+                </th>
+            </tr>
+            <tr>
+                @if (conf.Needbascule)
+                {
+                    <th>قرارداد</th>
+                    <th>ورود</th>
+                    <th>مانده</th>
+
+                    <th>قرارداد</th>
+                    <th>خروج</th>
+                    <th>مانده</th>
+                }
+
+
+                <th>قرارداد</th>
+                <th>ورود</th>
+                <th>مانده</th>
+
+                <th>قرارداد</th>
+                <th>خروج</th>
+                <th>مانده</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @if (!item.IdOtherSystem.IsEmpty())
+                        {
+                            @Html.DisplayFor(modelItem => item.IdOtherSystem)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Code)
+
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td style="border-right:3px; border-color:black;">
+                        @Html.DisplayFor(modelItem => item.Mob)
+                    </td>
+
+                    @if (conf.Needbascule)
+                    {
+                        <td>
+                            @item.WInMaxContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WInSum.ToKilo()
+                        </td>
+                        <td>
+                            @item.WInMandeContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WOutMaxContract.ToKilo()
+                        </td>
+                        <td>
+                            @item.WOutSum.ToKilo()
+                        </td>
+                        <td style="border-right:3px; border-color:black;">
+                            @item.WOutMandeContract.ToKilo()
+                        </td>
+                    }
+
+
+                    <td>
+                        @item.CInMaxContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.CInSum.ToKilo()
+                    </td>
+                    <td>
+                        @item.CInMandeContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.COutMaxContract.ToKilo()
+                    </td>
+                    <td>
+                        @item.COutSum.ToKilo()
+                    </td>
+                    <td style="border-right:3px; border-color:black;">
+                        @item.COutMandeContract.ToKilo()
+                    </td>
+                    <td>
+                        <a asp-action="customercontract" asp-route-fktype="@ContractType.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-list"></a>
+                        <a asp-action="customerportage" asp-route-fktype="@ContractType.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-car"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-left">
+                    جمع:
+                </th>
+
+                @if (conf.Needbascule)
+                {
+                    <th>
+                        @Model.Sum(a => a.WInMaxContract).ToKilo()
+                    </th>
+                    <th>
+                        @Model.Sum(a => a.WInSum).ToKilo()
+                    </th>
+                    <th>
+                        @Model.Sum(a => a.WInMandeContract).ToKilo()
+                    </th>
+                    <th class="">
+                        @Model.Sum(a => a.WOutMaxContract).ToKilo()
+                    </th>
+                    <th class="">
+                        @Model.Sum(a => a.WOutSum).ToKilo()
+                    </th>
+                    <th style="border-right:3px; border-color:black;">
+                        @Model.Sum(a => a.WOutMandeContract).ToKilo()
+                    </th>
+                }
+
+
+                <th>
+                    @Model.Sum(a => a.CInMaxContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.CInSum).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.CInMandeContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.COutMaxContract).ToKilo()
+                </th>
+                <th>
+                    @Model.Sum(a => a.COutSum).ToKilo()
+                </th>
+                <th style="border-right:3px; border-color:black;">
+                    @Model.Sum(a => a.COutMandeContract).ToKilo()
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+}
+

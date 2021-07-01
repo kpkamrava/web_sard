@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
+using System.Linq;
+using System.Net;
 
 namespace web_lib
 {
@@ -22,7 +24,7 @@ namespace web_lib
                 mail.To.Add(mailresive);
                 mail.Subject = subject;
                 mail.Body = body;
-                SmtpServer.Port = port??587;
+                SmtpServer.Port = port ?? 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(user, pass);
                 SmtpServer.EnableSsl = true;
                 SmtpServer.Send(mail);
@@ -57,7 +59,7 @@ namespace web_lib
                 var base64 = Convert.ToBase64String(t);
                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                 ImageAsBaseSrc = imgSrc;
-               //new SessionContext<string>("CK").SetAuthenticationToken(Text);
+                //new SessionContext<string>("CK").SetAuthenticationToken(Text);
             }
 
             private static string GetRandomText()
@@ -123,6 +125,95 @@ namespace web_lib
             }
 
         }
+
+        public delegate bool onexitProcessGetCurrentProcess();
+
+        public static void check_for_existing_instance(Process ProcessGetCurrentProcess, onexitProcessGetCurrentProcess onn)
+        {
+            if (System.Diagnostics.Process.GetProcessesByName(ProcessGetCurrentProcess.ProcessName).Length > 1)
+            {
+
+                if (onn.Invoke())
+                {
+                    int idThis = Process.GetCurrentProcess().Id;
+                    string nameThis = Process.GetCurrentProcess().ProcessName;
+
+                    foreach (var r in Process.GetProcessesByName(nameThis).Where(a => a.Id != idThis))
+                    {
+
+                        r.Kill();
+
+                    }
+                }
+
+
+            }
+        }
+
+        public static void RegisterInStartup(bool isChecked, string ApplicationExecutablePath)
+        {
+            RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
+                    ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (isChecked)
+            {
+                registryKey.SetValue("ApplicationName", ApplicationExecutablePath);
+            }
+            else
+            {
+                registryKey.DeleteValue("ApplicationName");
+            }
+        }
+
+
+
+
+
+        public enum CaptureCameraKind
+        {
+            HikvisionISAPI
+
+        }
+        public static MemoryStream CaptureCamera(CaptureCameraKind kind, string IP, String User, String Pass)
+        {
+            try
+            {
+                if (kind == CaptureCameraKind.HikvisionISAPI)
+                {
+                    int read, total = 0;
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"http://{IP}/ISAPI/Streaming/channels/1/picture");
+                    req.Method = "GET";
+                    //req.Timeout = 500;
+                    NetworkCredential cred = new NetworkCredential(User, Pass/*"admin", "13666631keyvan"*/);
+                    req.Credentials = cred;
+                    WebResponse resp = req.GetResponse();
+                    // get response stream
+
+                    Stream stream = resp.GetResponseStream();
+                    // read data from stream
+                    byte[] buffer = new byte[10000000];
+
+                    while ((read = stream.Read(buffer, total, 1000)) != 0)
+                    {
+                        total += read;
+                    }
+
+
+                    var f = new MemoryStream(buffer, 0, total);
+                    // return File(f.ToArray(), "Image/jpeg");
+
+                    return f;
+                }
+            }
+            catch (Exception e)
+            {
+
+
+            } 
+
+            return null;
+
+        }
+
 
     }
 

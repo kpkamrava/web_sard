@@ -1,0 +1,465 @@
+﻿@model List<web_sard.Models.tbls.contract.contract>
+
+@{
+    Layout = null;
+    decimal? weightForIn = ViewBag.weightForIn;
+    decimal? weightForOut = ViewBag.weightForOut;
+
+
+
+    long? countForIn = ViewBag.countForIn;
+    long? countForOut = ViewBag.countForOut;
+    var forr = countForOut.HasValue || countForIn.HasValue || weightForOut.HasValue || weightForIn.HasValue;
+}
+
+
+
+
+
+@if (forr)
+{
+    <div class="alert bg-secondary text-light  @((  countForIn)<0||( weightForIn<0)?"bg-danger ":"")">
+
+        <strong class="alert-heading">مانده ورود</strong>
+        @if (countForIn.HasValue)
+        {
+            <label>  تعداد مجاز جهت ورود : @(countForIn.ToKilo())</label>
+        }
+        @if (weightForIn.HasValue)
+        {
+            <label> مقدار مجاز جهت ورود :@( weightForIn.ToKilo())</label>
+        }
+
+    </div>
+
+    <div class="alert bg-secondary text-light @(( countForOut)<0||(weightForOut<0)?"bg-danger  ":"")">
+
+        <strong class="alert-heading">مانده خروج</strong>
+        @if (countForOut.HasValue)
+        {
+            <label>   تعداد مجاز جهت خروج : @( countForOut.ToKilo()) </label>
+        }
+        @if (weightForOut.HasValue)
+        {
+            <label>  مقدار مجاز جهت خروج :@( weightForOut.ToKilo())</label>
+        }
+    </div>
+
+}
+
+
+<div class="card-body">
+
+    @foreach (var item in Model)
+    {
+
+        @if (item.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+        {
+            var conf = item.ContractType.ConfigASardKhane();
+
+
+
+            <div class="card bg-gray-200  ">
+                <div class="card-header">
+                    <a onclick="$(this).parent().parent().children('.card-body').slideToggle()">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="badge bg-light text-dark">@item.ContractType.Title</span> کد: @item.Code
+
+                            </div>
+                            <div class="col-md-9">
+                                <div class=" row">
+                                    @{
+                                        var t = item.mandeHesab.FirstOrDefault();
+
+
+                                        <label class="col">
+                                            <small>
+                                                @t.txt
+                                            </small> <br />
+                                            @foreach (var l in t.mandelocations.GroupBy(a => a.location))
+                                            {
+                                                var c = l.Sum(a => a.count);
+                                                <span class="badge bg-light text-dark   @(((conf.OutControlByLocation)&& (c<0))?"bg-danger text-light":"")">
+                                                    @l.Key
+                                                    <span class="badge bg-dark badge-pill badge-counter"> @c</span>
+                                                </span>
+                                            }
+                                        </label>
+                                        <label class="col">
+
+                                           <span class="badge bg-info ">@t.Weight.InSum.ToKilo() - @t.Weight.OutSum.ToKilo()</span> <br />
+                                       
+                                            <span class="badge bg-warning text-dark">  @t.Count.InSum - @t.Count.OutSum</span>
+
+
+                                        </label>
+                                        
+                                            <label class="col">
+                                                <span class="badge bg-info @((t.Weight.InSum - t.Weight.OutSum)<0?"bg-danger":"")">@((t.Weight.InSum - t.Weight.OutSum).ToKilo())</span>
+                                                <span class="badge bg-warning text-dark @((t.Count.InSum - t.Count.OutSum)<0?"bg-danger":"")">@(t.Count.InSum - t.Count.OutSum)</span>
+                                            </label>
+                                    
+
+                                        <label class="col">
+                                            <span class="badge bg-info  @(t.Weight.InMandeContract.HasValue?"":"invisible ") @(t.Weight.InMandeContract<0?"bg-danger":"")">@t.Weight.InMandeContract.ToKilo() از <small>@t.Weight.InMaxContract.ToKilo()</small></span>
+                                            <span class="badge bg-warning text-dark @(t.Count.InMandeContract.HasValue?"":"invisible ") @(t.Count.InMandeContract<0?"bg-danger":"")">@t.Count.InMandeContract از <small>@t.Count.InMaxContract</small></span>
+                                        </label>
+                                        <label class="col">
+                                            <span class="badge bg-info @(t.Weight.OutMandeContract.HasValue?"":"invisible ")  @(t.Weight.OutMandeContract<0?"bg-danger":"")">@t.Weight.OutMandeContract.ToKilo() از <small>@t.Weight.OutMaxContract.ToKilo()</small></span>
+                                            <span class="badge bg-warning text-dark @(t.Count.OutMandeContract.HasValue?"":"invisible ") @(t.Count.OutMandeContract<0?"bg-danger":"")">@t.Count.OutMandeContract از <small>@t.Count.OutMaxContract</small></span>
+                                        </label>
+
+
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </a>
+                </div>
+                <div class="card-body " style="display:none">
+
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <div class="table-responsive">
+                                <table class="table table-secondary table-sm table-striped  ">
+                                    <thead class="table-dark">
+                                        <tr>
+                                        <tr>
+                                            <td>
+
+                                                <span class="badge bg-info">
+                                                    وزن
+                                                </span>
+                                                <span class="badge bg-warning text-dark">
+                                                    تعداد
+
+                                                </span>
+                                            </td>
+
+
+                                            <td class="small">ورود - خروج</td>
+                                            
+                                                <td class="small">موجودی</td>
+                                            
+                                            <td class="small"> مانده جهت ورود</td>
+                                            <td class="small"> مانده جهت خروج</td>
+
+
+                                        </tr>
+                                    </thead>
+                                    @foreach (var row in item.mandeHesab)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <small>
+                                                    @row.txt
+                                                </small> <br />
+                                                @foreach (var l in row.mandelocations.GroupBy(a => a.location))
+                                                {
+                                                    var c = l.Sum(a => a.count);
+                                                    <span class="badge bg-light text-dark  @(((conf.OutControlByLocation)&& (c<0))?"bg-danger text-light":"")">
+                                                        @l.Key
+                                                        <span class="badge bg-dark badge-pill badge-counter"> @c</span>
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+
+                                             <span class="badge bg-info ">@row.Weight.InSum.ToKilo() - @row.Weight.OutSum.ToKilo()</span> <br />
+                                           
+                                                <span class="badge bg-warning text-dark">  @row.Count.InSum - @row.Count.OutSum</span>
+
+
+                                            </td>
+                                            
+                                                <td>
+                                                    <span class="badge bg-info @((row.Weight.InSum - row.Weight.OutSum)<0?"bg-danger":"")">@((row.Weight.InSum - row.Weight.OutSum).ToKilo())</span>
+                                                    <span class="badge bg-warning text-dark @((row.Count.InSum - row.Count.OutSum)<0?"bg-danger":"")">@(row.Count.InSum - row.Count.OutSum)</span>
+                                                </td>
+                                           
+
+                                            <td>
+                                                <span class="badge bg-info  @(row.Weight.InMandeContract.HasValue?"":"invisible ") @(row.Weight.InMandeContract<0?"bg-danger":"")">@row.Weight.InMandeContract.ToKilo() از <small>@row.Weight.InMaxContract.ToKilo()</small></span>
+                                                <span class="badge bg-warning text-dark @(row.Count.InMandeContract.HasValue?"":"invisible ") @(row.Count.InMandeContract<0?"bg-danger":"")">@row.Count.InMandeContract از <small>@row.Count.InMaxContract</small></span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info @(row.Weight.OutMandeContract.HasValue?"":"invisible ")  @(row.Weight.OutMandeContract<0?"bg-danger":"")">@row.Weight.OutMandeContract.ToKilo() از <small>@row.Weight.OutMaxContract.ToKilo()</small></span>
+                                                <span class="badge bg-warning text-dark @(row.Count.OutMandeContract.HasValue?"":"invisible ") @(row.Count.OutMandeContract<0?"bg-danger":"")">@row.Count.OutMandeContract از <small>@row.Count.OutMaxContract</small></span>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-2">
+                            @if (item.Txt.IsEmpty() == false)
+                            {
+                                <span class="badge bg-info"> توضیحات قرارداد</span>
+                                <span class="badge bg-light text-dark">  @item.Txt</span>
+
+                                <br />
+                            }
+                            <span class="badge bg-info" data-toggle="tooltip" title="@item.Date.ToPersianDate()"> زمان قرارداد</span>
+
+                            <br />
+                            <span class="badge bg-info" data-toggle="tooltip" title="از @item.Azdate   تا @item.Tadate "> زمان تحویل</span>
+
+                            <br />
+                            <span class="badge bg-info  fa fa-plus" data-toggle="tooltip" title="@item.useradd @item.dateadd"> </span>
+
+                            @if (string.IsNullOrWhiteSpace(item.useredit) == false)
+                            {
+                                <span class="badge bg-info fa fa-edit" data-toggle="tooltip" title="@item.useredit @item.dateedit"> </span>
+
+                            } <br />
+
+                            <span class="badge bg-info"> نرخ هر جعبه  </span>
+
+                            <span class="badge bg-light text-dark">
+                             
+                                    <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxIn??0).ToString("###,###,##0.##"))">In</span>
+                               
+                                    <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxOut??0).ToString("###,###,##0.##"))">Out</span>
+                                
+                            </span>
+                            <br />
+                           
+                                <span class="badge bg-info"> نرخ هر کیلو  </span><span class="badge bg-light text-dark">
+                                  
+                                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfKiloIn??0).ToString("###,###,##0.##"))">In</span>
+                                   
+                                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfKiloOut??0).ToString("###,###,##0.##"))">Out</span>
+                                 
+                                </span>
+                            }
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+        }
+        else
+  if (item.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+        {
+            var conf = item.ContractType.ConfigASabad();
+
+
+
+
+            <div class="card bg-gray-200  ">
+                <div class="card-header">
+                    <a onclick="$(this).parent().parent().children('.card-body').slideToggle()">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="badge bg-light text-dark">@item.ContractType.Title</span> کد: @item.Code
+
+                            </div>
+                            <div class="col-md-9">
+                                <div class=" row">
+                                    @{
+                                        var t = item.mandeHesab.FirstOrDefault();
+
+
+                                        <label class="col">
+                                            <small>
+                                                @t.txt
+                                            </small> <br />
+                                            @foreach (var l in t.mandelocations.GroupBy(a => a.location))
+                                            {
+                                                var c = l.Sum(a => a.count);
+                                                <span class="badge bg-light text-dark   @(((conf.OutControlByLocation) )?"bg-danger text-light":"")">
+                                                    @l.Key
+                                                    <span class="badge bg-dark badge-pill badge-counter"> @c</span>
+                                                </span>
+                                            }
+                                        </label>
+                                        <label class="col">
+
+                                           
+                                            <span class="badge bg-warning text-dark">  @t.Count.InSum - @t.Count.OutSum</span>
+
+
+                                        </label>
+                                        
+
+                                        <label class="col">
+                                            <span class="badge bg-info  @(t.Weight.InMandeContract.HasValue?"":"invisible ") @(t.Weight.InMandeContract<0?"bg-danger":"")">@t.Weight.InMandeContract.ToKilo() از <small>@t.Weight.InMaxContract.ToKilo()</small></span>
+                                            <span class="badge bg-warning text-dark @(t.Count.InMandeContract.HasValue?"":"invisible ") @(t.Count.InMandeContract<0?"bg-danger":"")">@t.Count.InMandeContract از <small>@t.Count.InMaxContract</small></span>
+                                        </label>
+                                        <label class="col">
+                                            <span class="badge bg-info @(t.Weight.OutMandeContract.HasValue?"":"invisible ")  @(t.Weight.OutMandeContract<0?"bg-danger":"")">@t.Weight.OutMandeContract.ToKilo() از <small>@t.Weight.OutMaxContract.ToKilo()</small></span>
+                                            <span class="badge bg-warning text-dark @(t.Count.OutMandeContract.HasValue?"":"invisible ") @(t.Count.OutMandeContract<0?"bg-danger":"")">@t.Count.OutMandeContract از <small>@t.Count.OutMaxContract</small></span>
+                                        </label>
+
+
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </a>
+                </div>
+                <div class="card-body " style="display:none">
+
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <div class="table-responsive">
+                                <table class="table table-secondary table-sm table-striped  ">
+                                    <thead class="table-dark">
+                                        <tr>
+                                        <tr>
+                                            <td>
+
+                                                <span class="badge bg-info">
+                                                    وزن
+                                                </span>
+                                                <span class="badge bg-warning text-dark">
+                                                    تعداد
+
+                                                </span>
+                                            </td>
+
+
+                                            <td class="small">ورود - خروج</td>
+                                           
+                                            <td class="small"> مانده جهت ورود</td>
+                                            <td class="small"> مانده جهت خروج</td>
+
+
+                                        </tr>
+                                    </thead>
+                                    @foreach (var row in item.mandeHesab)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <small>
+                                                    @row.txt
+                                                </small> <br />
+                                                @foreach (var l in row.mandelocations.GroupBy(a => a.location))
+                                                {
+                                                    var c = l.Sum(a => a.count);
+                                                    <span class="badge bg-light text-dark  @(((conf.OutControlByLocation) )?"bg-danger text-light":"")">
+                                                        @l.Key
+                                                        <span class="badge bg-dark badge-pill badge-counter"> @c</span>
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+
+                                               
+                                                <span class="badge bg-warning text-dark">  @row.Count.InSum - @row.Count.OutSum</span>
+
+
+                                            </td>
+                                           
+
+                                            <td>
+                                                <span class="badge bg-info  @(row.Weight.InMandeContract.HasValue?"":"invisible ") @(row.Weight.InMandeContract<0?"bg-danger":"")">@row.Weight.InMandeContract.ToKilo() از <small>@row.Weight.InMaxContract.ToKilo()</small></span>
+                                                <span class="badge bg-warning text-dark @(row.Count.InMandeContract.HasValue?"":"invisible ") @(row.Count.InMandeContract<0?"bg-danger":"")">@row.Count.InMandeContract از <small>@row.Count.InMaxContract</small></span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info @(row.Weight.OutMandeContract.HasValue?"":"invisible ")  @(row.Weight.OutMandeContract<0?"bg-danger":"")">@row.Weight.OutMandeContract.ToKilo() از <small>@row.Weight.OutMaxContract.ToKilo()</small></span>
+                                                <span class="badge bg-warning text-dark @(row.Count.OutMandeContract.HasValue?"":"invisible ") @(row.Count.OutMandeContract<0?"bg-danger":"")">@row.Count.OutMandeContract از <small>@row.Count.OutMaxContract</small></span>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-2">
+                            @if (item.Txt.IsEmpty() == false)
+                            {
+                                <span class="badge bg-info"> توضیحات قرارداد</span>
+                                <span class="badge bg-light text-dark">  @item.Txt</span>
+
+                                <br />
+                            }
+                            <span class="badge bg-info" data-toggle="tooltip" title="@item.Date.ToPersianDate()"> زمان قرارداد</span>
+
+                            <br />
+                            <span class="badge bg-info" data-toggle="tooltip" title="از @item.Azdate   تا @item.Tadate "> زمان تحویل</span>
+
+                            <br />
+                            <span class="badge bg-info  fa fa-plus" data-toggle="tooltip" title="@item.useradd @item.dateadd"> </span>
+
+                            @if (string.IsNullOrWhiteSpace(item.useredit) == false)
+                            {
+                                <span class="badge bg-info fa fa-edit" data-toggle="tooltip" title="@item.useredit @item.dateedit"> </span>
+
+                            } <br />
+
+                            <span class="badge bg-info"> نرخ هر جعبه  </span>
+
+                            <span class="badge bg-light text-dark">
+                                @if (conf.IsEntry)
+                                {
+                                    <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxIn??0).ToString("###,###,##0.##"))">In</span>
+                                }
+                                @if (conf.IsExit)
+                                {
+                                    <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxOut??0).ToString("###,###,##0.##"))">Out</span>
+                                }
+                            </span>
+                            <br />
+                         
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+    }
+
+
+
+</div>

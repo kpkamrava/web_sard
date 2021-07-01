@@ -1,0 +1,12 @@
+D:\source\repos\web_sard\web_db\bin\Release\netcoreapp3.1\web_db.deps.json
+D:\source\repos\web_sard\web_db\bin\Release\netcoreapp3.1\web_db.runtimeconfig.json
+D:\source\repos\web_sard\web_db\bin\Release\netcoreapp3.1\web_db.runtimeconfig.dev.json
+D:\source\repos\web_sard\web_db\bin\Release\netcoreapp3.1\web_db.dll
+D:\source\repos\web_sard\web_db\bin\Release\netcoreapp3.1\web_db.pdb
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.csprojAssemblyReference.cache
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.AssemblyInfoInputs.cache
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.AssemblyInfo.cs
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.csproj.CoreCompileInputs.cache
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.dll
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.pdb
+D:\source\repos\web_sard\web_db\obj\Release\netcoreapp3.1\web_db.genruntimeconfig.cache

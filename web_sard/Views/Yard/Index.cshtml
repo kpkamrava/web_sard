@@ -2,21 +2,38 @@
 
 @{
     ViewData["Title"] = "لیست خودرو های داخل محوطه";
-        web_db.TblContractType ContractType=(web_db.TblContractType)ViewData["type"];
-           int? kindPortage=(int?)ViewData["kindPortage"];
-        
+    web_db.TblContractType ContractType = (web_db.TblContractType)ViewData["type"];
+    List<web_db.TblGroup> groups = (List<web_db.TblGroup>)ViewData["ListGroup"];
+    int? kindPortage = (int?)ViewData["kindPortage"];
+    Guid? fkgroup = (Guid?)ViewData["fkgroup"];
+
 }
- 
+
+@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
+
 
     <p>
 
-        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@null" class="btn  btn-outline-dark fa fa-th @(kindPortage==null?" active":"") shadow"> همه</a>
-        @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract.Where(a => (ContractType.IsEntry ? a.isEntry : false) || (ContractType.IsExit ? (a.isEntry == false) : false)))
+        <a asp-route-idtype="@ContractType.Id" asp-route-fkgroup="@fkgroup" asp-route-kindPortage="@null" class="btn  btn-outline-dark fa fa-th @(kindPortage==null?" active":"") shadow"> همه</a>
+        @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract)
         {
-            <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@item.code" class="btn  btn-outline-@(item.classcolor) fa fa-list @(kindPortage==item.code?" active":"") shadow"> @item.txt</a>
+            <a asp-route-idtype="@ContractType.Id" asp-route-fkgroup="@fkgroup" asp-route-kindPortage="@item.code" class="btn  btn-outline-@(item.classcolor) fa fa-list @(kindPortage==item.code?" active":"") shadow"> @item.txt</a>
 
         }
 
+    </p>
+    <hr />
+    <p>
+
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@kindPortage"
+           asp-route-fkgroup="@Guid.Empty" class="btn  btn-outline-dark fa fa-th @(fkgroup==Guid.Empty?" active":"") shadow"> بدون گروه</a>
+        @foreach (var item in groups)
+        {
+            <a asp-route-idtype="@ContractType.Id"
+               asp-route-kindPortage="@kindPortage"
+               asp-route-fkgroup="@item.Id" class="btn  btn-outline-@(item.Class) fa fa-list @(fkgroup==item.Id?" active":"") shadow"> @item.Title</a>
+        }
     </p>
 
     <div class="row">
@@ -24,49 +41,132 @@
         @foreach (var item in Model)
         {
             var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == item.KindCode);
-           
-        <div class=" col-lg-4 colSearch">
-            <div class="card mb-4 shadow">
-                <div class="card-header">
-                    @item.Code - @item.Customer.Title <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+
+            <div class=" col-lg-4 colSearch">
+                <div class="card mb-4 shadow">
+                    <div class="card-header">
+                        @item.Code - @item.Customer.Title
+                        <span class="badge bg-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt <i class="badge bg-secondary bg-pill ">@item.Date1time</i></span>
+                    </div>
+                    <div class="card-body">
+
+                        <ul class="list-group list-group-flush m-0 p-0">
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-truck"> </span>@item.CarMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-user-cog"> </span> @item.CarRanande
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-car-battery"> </span>@item.CarShMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-mobile"> </span>@item.CarTell
+                            </li>
+                            <li class="list-group-item">
+                                
+                               <span class="badge bg-@(kindcontract.classcolor) fa fa-hdd"> </span>@item.Weight1.GetValueOrDefault().ToString("###0.##")
+
+                                
+                                @if (item.Txt.IsEmpty() == false)
+                                {
+                                    <span class="badge bg-@(kindcontract.classcolor) fa fa-paperclip"> </span>
+                                    @item.Txt
+                                }
+                            </li>
+                        </ul>
+
+
+
+
+                        <a asp-action="View" asp-route-id="@item.Id" class="btn btn-@(kindcontract.classcolor) w-100 shadow-sm">
+                            انتخاب
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body">
 
-                    <ul class="list-group list-group-flush m-0 p-0">
-                        <li class="list-group-item">
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-truck"> </span>@item.CarMashin
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-user-cog"> </span> @item.CarRanande
-                        </li>
-                        <li class="list-group-item">
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-car-battery"> </span>@item.CarShMashin
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-mobile"> </span>@item.CarTell
-                        </li>
-                        <li class="list-group-item">
-                            @if (ContractType.IsProduct1Packing0)
-                            {
-                                <span class="badge badge-@(kindcontract.classcolor) fa fa-hdd"> </span>@item.Weight1.GetValueOrDefault().ToString("###0.##")
-
-                            }
-                            @if (item.Txt.IsEmpty() == false)
-                            {
-                                <span class="badge badge-@(kindcontract.classcolor) fa fa-paperclip"> </span>
-                                @item.Txt
-                            }
-                        </li>
-                    </ul>
-
-
-                    <a asp-action="View" asp-route-id="@item.Id" class="btn btn-@(kindcontract.classcolor) w-100 shadow-sm">
-                        انتخاب
-                    </a>
-                </div>
             </div>
-
-        </div>
         }
 
+    </div>
 
 
+
+}
+else if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+    var conf = ContractType.ConfigASabad();
+
+
+
+    <p>
+
+        <a asp-route-idtype="@ContractType.Id" asp-route-fkgroup="@fkgroup" asp-route-kindPortage="@null" class="btn  btn-outline-dark fa fa-th @(kindPortage==null?" active":"") shadow"> همه</a>
+        @foreach (var item in web_sard.Models.tbls.portage.kindPortage.listkindcontract.Where(a => (conf.IsEntry ? a.isEntry : false) || (conf.IsExit ? (a.isEntry == false) : false)))
+        {
+            <a asp-route-idtype="@ContractType.Id" asp-route-fkgroup="@fkgroup" asp-route-kindPortage="@item.code" class="btn  btn-outline-@(item.classcolor) fa fa-list @(kindPortage==item.code?" active":"") shadow"> @item.txt</a>
+
+        }
+
+    </p>
+    <hr />
+    <p>
+
+        <a asp-route-idtype="@ContractType.Id" asp-route-kindPortage="@kindPortage"
+           asp-route-fkgroup="@Guid.Empty" class="btn  btn-outline-dark fa fa-th @(fkgroup==Guid.Empty?" active":"") shadow"> بدون گروه</a>
+        @foreach (var item in groups)
+        {
+            <a asp-route-idtype="@ContractType.Id"
+               asp-route-kindPortage="@kindPortage"
+               asp-route-fkgroup="@item.Id" class="btn  btn-outline-@(item.Class) fa fa-list @(fkgroup==item.Id?" active":"") shadow"> @item.Title</a>
+        }
+    </p>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == item.KindCode);
+
+            <div class=" col-lg-4 colSearch">
+                <div class="card mb-4 shadow">
+                    <div class="card-header">
+                        @item.Code - @item.Customer.Title
+                        <span class="badge bg-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt <i class="badge bg-secondary bg-pill ">@item.Date1time</i></span>
+                    </div>
+                    <div class="card-body">
+
+                        <ul class="list-group list-group-flush m-0 p-0">
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-truck"> </span>@item.CarMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-user-cog"> </span> @item.CarRanande
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-car-battery"> </span>@item.CarShMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-mobile"> </span>@item.CarTell
+                            </li>
+                            <li class="list-group-item">
+                               
+                                @if (item.Txt.IsEmpty() == false)
+                                {
+                                    <span class="badge bg-@(kindcontract.classcolor) fa fa-paperclip"> </span>
+                                    @item.Txt
+                                }
+                            </li>
+                        </ul>
+                         
+                        <a asp-action="View" asp-route-id="@item.Id" class="btn btn-@(kindcontract.classcolor) w-100 shadow-sm">
+                            انتخاب
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        }
 
     </div>
- 
+
+
+
+
+
+}
+
+
+

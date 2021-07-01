@@ -1,1 +1,0 @@
-The packages were signed with BOARD4ALL.crt (issued with B4AALL_RootCA.crt) certificate

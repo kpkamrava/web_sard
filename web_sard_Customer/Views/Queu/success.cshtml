@@ -1,0 +1,89 @@
+﻿@model web_db._queu.TblQueu
+
+@{
+    ViewData["Title"] = "success";
+}
+
+ 
+<div>
+    <h4>مشاهده درخواست</h4>
+    <hr />
+
+    @if (Model.KindQueu == web_db._queu.TblQueu.QueuEnum.Save)
+    {
+        <div class="alert alert-info text-right">
+            <strong>ثبت!</strong>
+            درخواست شما به شماره پیگیری <b>@Model.Code</b>  با موفقیت ثبت گردید
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-right">
+            <strong>وضعیت !</strong> @Model.KindQueu.ToKPvalusAttr().Description  | <b>@Model.TxtReq</b>
+        </div>
+    }
+
+
+    <dl class="row">
+
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.mob)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.mob)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.codemeli)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.codemeli)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.date.ToPersianDate()
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Mahsuls)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Mahsuls)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Addras)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Addras)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+        <dd class="col-sm-10">
+            <b>@Html.DisplayFor(model => model.Weight) تن</b>  
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Txt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Txt)
+        </dd>
+
+    </dl>
+</div> 

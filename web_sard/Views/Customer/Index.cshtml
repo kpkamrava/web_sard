@@ -1,28 +1,48 @@
-﻿@model IEnumerable<web_db.TblCustomer>
+﻿@model IEnumerable<web_sard.Models.tbls.customer.customer>
 
 @{
     ViewData["Title"] = "لیست اشخاص";
+    var Mali_KindOT = ( cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.Mali_KindOT) ?? new web_db.TblConf()).Value;
+
 }
  
+<div>
 
-    <form asp-action="CustomerPaivast" asp-controller="Customer"  method="post">
-        <div class="form-inline">
-            <div class="form-group form-inline">
-                <label class="control-label">شماره موبایل</label>
-                <input name="CellPhone" required  class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success fa fa-save">جستجو و ثبت شخص</button>
-        </div>
+   
+    <a asp-action="Create" class="btn btn-outline-primary fa fa-plus"></a> 
+   
 
-       </form>
+    @if (Mali_KindOT.IsEmpty()==false)
+    {
+        <form asp-action="CustomerPaivast" asp-controller="Customer" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+
+            <label class="control-label">شماره موبایل</label>
+            <input name="CellPhone" required class="form-control">
+
+            <button type="submit" class="btn btn-success fa fa-save" onclick="$(this).hide();">جستجو و ثبت شخص</button>
+
+
+        </form>
+
+    }
+
+</div>
+   
+
+
 <table class="table">
     <thead>
         <tr>
-     
+            <th>
+                <i class="	fa fa-sort-numeric-down"></i>
+
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Code)
             </th>
             <th>
+              
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
@@ -32,23 +52,35 @@
                 @Html.DisplayNameFor(model => model.Addras)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.NationalCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IsEnable)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdOtherSystem)
             </th>
-         
+          
+            
             <th></th>
         </tr>
     </thead>
     <tbody>
+        @{ int i = 1;}
 @foreach (var item in Model) {
         <tr>
-          
             <td>
+                @i @{ i++;}
+            </td>
+            <td>
+
                 @Html.DisplayFor(modelItem => item.Code)
             </td>
             <td>
+                @if (item.datelastlogin.HasValue)
+                {
+                    <span class="fa fa-user text-success" data-toggle="tooltip" title="@item.datelastlogin.ToPersianDateMini()"></span>
+                }
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
@@ -58,12 +90,34 @@
                 @Html.DisplayFor(modelItem => item.Addras)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.NationalCode)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.IsEnable)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdOtherSystem)
-            </td> 
+            </td>
+
+
+            <th>
+                
+                 <a asp-action="Create" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
+                 
+                <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا مطمئن هستید؟')" class="btn btn-outline-warning fa fa-recycle"></a>
+                <a asp-action="setgroup" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-layer-group" isModal="true"> </a>
+
+
+
+                @if (User._getRolAny(_UserRol._Rolls.MainSuperVisor))
+                {
+                    <a asp-action="deleteFull" asp-route-id="@item.Id" onclick="return confirm('آیا مطمئن هستید؟')" class="btn btn-outline-danger fa fa-recycle">حذف کامل با گردش</a>
+                }
+
+            </th>
+
         </tr>
 }
     </tbody>
 </table>
+ 

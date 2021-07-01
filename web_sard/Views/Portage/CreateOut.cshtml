@@ -1,21 +1,30 @@
 ﻿@model web_sard.Models.tbls.portage.portage
-@{
-
-    ViewData["Title"] = "ثبت باسکول خروجی - " + Model.KindTitle + " - " + Model.ContractType.Title + (Model.Date2.HasValue ? (" - ویرایش " + Model.Customer.Title) : "");
-
-}
 
 
-<form asp-action="CreateOut" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="Customer.Title" />
-    <input type="hidden" asp-for="Weight1" />
-    <input type="hidden" asp-for="FkCustomer" />
-    <input type="hidden" asp-for="Weight2IsBascul" />
-    <input type="hidden" asp-for="FkContractType" />
-    <input type="hidden" asp-for="KindTitle" />
+
+
+@if (Model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
   
+
+        ViewData["Title"] = "ثبت باسکول خروجی - " + Model.KindTitle + " - " + Model.ContractType.Title + (Model.Date2.HasValue ? (" - ویرایش " + Model.Customer.Title) : "");
+
+    
+
+    <form asp-action="CreateOut" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Customer.Title" />
+        <input type="hidden" asp-for="Customer.Code" />
+        <input type="hidden" asp-for="Customer.NationalCode" />
+        <input type="hidden" asp-for="Customer.Mob" />
+        <input type="hidden" asp-for="Weight1" />
+        <input type="hidden" asp-for="FkCustomer" />
+        <input type="hidden" asp-for="Weight2IsBascul" />
+        <input type="hidden" asp-for="FkContractType" />
+        <input type="hidden" asp-for="KindTitle" />
+
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -60,9 +69,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="CarRanande" class="control-label"></label>
-                                    <input asp-for="CarRanande" class="form-control" />
-                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
+                                    <label asp-for="CarShMashin" class="control-label"></label>
+                                    <input asp-for="CarShMashin" class="form-control" />
+                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="FkCar" class="control-label"></label>
@@ -78,10 +87,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="CarShMashin" class="control-label"></label>
-                                    <input asp-for="CarShMashin" class="form-control" />
-                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                    <label asp-for="CarRanande" class="control-label"></label>
+                                    <input asp-for="CarRanande" class="form-control" />
+                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
                                 </div>
+
                                 <div class="form-group">
                                     <label asp-for="CarTell" class="control-label"></label>
                                     <input asp-for="CarTell" class="form-control" />
@@ -99,37 +109,648 @@
 
                     </div>
                 </div>
-               
+
             </div>
         </div>
-    
-    <div class="card">
-        <div class="card-body">
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="Txt" class="control-label"></label>
+                                    <textarea asp-for="Txt" class="form-control"></textarea>
+                                    <span asp-validation-for="Txt" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-xl-3 col-md-auto">
+                        <div class="card  bg-gradient bg-success">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group ">
+                                        <label class="control-label text-white">وزن</label>
+                                        <span class="badge bg-info fa fa-hdd"> اول : @Model.Weight1.ToKilo()</span>
+                                        <span class="badge bg-light text-dark h5 fa fa-hdd" id="WeightNet"> خالص : @Model.WeightNet.gadrmotlagh().ToKilo()</span>
+                                        <div class="input-group">
+                                            <input asp-for="Weight2" value="@Model.Weight2.ToKilo()"
+                                                   class="form-control w-50 @(Model.Weight2.HasValue ? "noactive" : "") " readonly
+                                                   ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');" />
+                                            <div class="input-group-btn  w-50">
+                                                <button class="btn btn-light w-100" id="Weight2B" type="button">
+                                                    <i class="fa fa-hdd" id="Weight2I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Weight2" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group float-left">
+            @if (Model.ListRows.Any())
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="resendSms" value="true" @(Model.SmsOk == null ? "checked" : "") id="resendSms">
+                    <label class="form-check-label" for="resendSms">ارسال پیامک</label>
+                </div>
+                <button type="submit" class="btn btn-primary fa fa-save"> ثبت خروج خودرو</button>
+                <button type="submit" name="print" class="btn btn-info fa fa-print" value="ثبت و چاپ"> ثبت و چاپ</button>
+
+            }
+
+        </div>
+        <br />
+    </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="Txt" class="control-label"></label>
-                                <textarea asp-for="Txt" class="form-control"></textarea>
-                                <span asp-validation-for="Txt" class="text-danger"></span>
+
+                @foreach (var item in Model.Documents)
+                {
+                    <div class="col-sm-2">
+                        <div class="card ">
+                            <img src="@Url.Action("Doc", "Ajax", new { id = item.Id })" class="card-img zoom" />
+                            @if (item.Kind == "Portage")
+                            {
+                                <div class="card-footer">
+                                    <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <td>زمان</td>
+                        <td>تعداد</td>
+                        <td>محصول و سبد </td>
+                        <td>مکان</td>
+                        <td>صدمات</td>
+                        <td>شرح</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ListRows)
+                    {
+
+                        <tr>
+                            <td>@item.Date.ToPersianDateTime()</td>
+                            <td>@item.Count</td>
+                            <td>
+                                @item.Product  @item.Packing
+                            </td>
+                            <td>@item.CodeLocation</td>
+                            <td>@string.Join(",", item.ListInjurysTbl.Select(a => a.title).ToList())</td>
+                            <td>@item.Txt</td>
+
+                        </tr>
+
+
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="1">جمع</td>
+                        <td>@Model.ListRows.Sum(a => a.Count)</td>
+                        <td colspan="4"> </td>
+
+                    </tr>
+                </tfoot>
+
+            </table>
+
+
+        </div>
+        <div class="col-md-3">
+
+            @if (Model.IsPermitOk == false)
+            {
+
+                @Html.Partial("Permit", Model)
+
+            }
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div id="vaziatContract">
+
+    </div>
+
+
+    <div>
+        <a asp-action="Index" asp-route-idtype="@Model.ContractType.Id">بازگشت به لیست</a>
+    </div>
+
+    @section js{
+        <script>
+    $(document).ready(function () {
+        $("#Weight2").change(function () {
+
+            var w1 = "@Model.Weight1.GetValueOrDefault(0).ToString("#######0")";
+            var w2 = $("#Weight2").val();
+            var w = Number(w1) - Number(w2);
+            w = w < 0 ? (-w) : w;
+            console.log(w1+" "+w2+" "+w)
+
+        $("#WeightNet").html("خالص :"+ w);
+        });
+       // $("#Weight2").change();
+    }
+
+    );
+
+        </script>
+
+        <script>
+
+            startBascul("#Weight2I", "#Weight2B", "#Weight2");
+
+        </script>
+
+        @if (Model.FkCustomer != Guid.Empty)
+        {
+            <script>
+
+            Contractbutton('#Id', '#vaziatContract','@Model.Id')
+
+            </script>
+
+        }
+
+    }
+
+
+
+
+}
+else
+if (Model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+    ViewData["Title"] = "ثبت باسکول خروجی - " + Model.KindTitle + " - " + Model.ContractType.Title + (Model.Date2.HasValue ? (" - ویرایش " + Model.Customer.Title) : "");
+
+    var conf = Model.ContractType.ConfigASabad();
+
+    <form asp-action="CreateOut" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Customer.Title" />
+        <input type="hidden" asp-for="Customer.Code" />
+        <input type="hidden" asp-for="Customer.NationalCode" />
+        <input type="hidden" asp-for="Customer.Mob" />
+        <input type="hidden" asp-for="Weight1" />
+        <input type="hidden" asp-for="FkCustomer" />
+        <input type="hidden" asp-for="Weight2IsBascul" />
+        <input type="hidden" asp-for="FkContractType" />
+        <input type="hidden" asp-for="KindTitle" />
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-gray-200">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="Code" class="control-label"></label>
+                                        <input asp-for="Code" class="form-control" readonly />
+                                        <span asp-validation-for="Code" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <label class="control-label">زمان ورود</label>
+                                        <div class="input-group">
+                                            <input asp-for="Date1date" class="form-control " readonly />
+                                            <input asp-for="Date1time" class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label asp-for="FkCustomer" class="control-label"></label>
+
+                                        <input asp-for="Customer.Title" class="form-control" readonly>
+
+                                        <span asp-validation-for="FkCustomer" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CarShMashin" class="control-label"></label>
+                                    <input asp-for="CarShMashin" class="form-control" />
+                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FkCar" class="control-label"></label>
+                                    <select asp-for="FkCar" class="form-control">
+                                        <option> </option>
+                                        @foreach (var item in cl._ListCar)
+                                        {
+                                            <option value="@item.Id">  @item.Title</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="FkCar" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CarRanande" class="control-label"></label>
+                                    <input asp-for="CarRanande" class="form-control" />
+                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CarTell" class="control-label"></label>
+                                    <input asp-for="CarTell" class="form-control" />
+                                    <span asp-validation-for="CarTell" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">زمان خروج</label>
+                                <div class="input-group">
+                                    <input asp-for="Date2date" class="form-control datepicker" />
+                                    <input asp-for="Date2time" class="form-control" type="time" />
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                @if (Model.ContractType.IsProduct1Packing0 == true)
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="Txt" class="control-label"></label>
+                                    <textarea asp-for="Txt" class="form-control"></textarea>
+                                    <span asp-validation-for="Txt" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    @if (conf.Needbascule == true)
+                    {
+                        <div class="col-lg-3 col-xl-3 col-md-auto">
+                            <div class="card  bg-gradient bg-success">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="form-group ">
+                                            <label class="control-label text-white">وزن</label>
+                                            <span class="badge bg-info fa fa-hdd"> اول : @Model.Weight1.ToKilo()</span>
+                                            <span class="badge bg-light text-dark h5 fa fa-hdd" id="WeightNet"> خالص : @Model.WeightNet.gadrmotlagh().ToKilo()</span>
+                                            <div class="input-group">
+                                                <input asp-for="Weight2" value="@Model.Weight2.ToKilo()"
+                                                       class="form-control w-50 @(Model.Weight2.HasValue ? "noactive" : "") " readonly
+                                                       ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');" />
+                                                <div class="input-group-btn  w-50">
+                                                    <button class="btn btn-light w-100" id="Weight2B" type="button">
+                                                        <i class="fa fa-hdd" id="Weight2I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Weight2" class="text-danger"></span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group float-left">
+            @if (Model.ListRows.Any())
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="resendSms" value="true" @(Model.SmsOk == null ? "checked" : "") id="resendSms">
+                    <label class="form-check-label" for="resendSms">ارسال پیامک</label>
+                </div>
+                <button type="submit" class="btn btn-primary fa fa-save"> ثبت خروج خودرو</button>
+                <button type="submit" name="print" class="btn btn-info fa fa-print" value="ثبت و چاپ"> ثبت و چاپ</button>
+
+            }
+
+        </div>
+        <br />
+    </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+
+                @foreach (var item in Model.Documents)
                 {
-                    <div class="col-md-3">
-                        <div class="card bg-gradient-success">
+                    <div class="col-sm-2">
+                        <div class="card ">
+                            <img src="@Url.Action("Doc", "Ajax", new { id = item.Id })" class="card-img zoom" />
+                            @if (item.Kind == "Portage")
+                            {
+                                <div class="card-footer">
+                                    <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <td>زمان</td>
+                        <td>تعداد</td>
+                        <td>محصول و سبد </td>
+                        <td>مکان</td>
+                        <td>صدمات</td>
+                        <td>شرح</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ListRows)
+                    {
+
+                        <tr>
+                            <td>@item.Date.ToPersianDateTime()</td>
+                            <td>@item.Count</td>
+                            <td>
+                                @item.Packing
+                            </td>
+                            <td>@item.CodeLocation</td>
+                            <td>@string.Join(",", item.ListInjurysTbl.Select(a => a.title).ToList())</td>
+                            <td>@item.Txt</td>
+
+                        </tr>
+
+
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="1">جمع</td>
+                        <td>@Model.ListRows.Sum(a => a.Count)</td>
+                        <td colspan="4"> </td>
+
+                    </tr>
+                </tfoot>
+
+            </table>
+
+
+        </div>
+        <div class="col-md-3">
+
+            @if (Model.IsPermitOk == false)
+            {
+
+                @Html.Partial("Permit", Model)
+
+            }
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div id="vaziatContract">
+
+    </div>
+
+
+    <div>
+        <a asp-action="Index" asp-route-idtype="@Model.ContractType.Id">بازگشت به لیست</a>
+    </div>
+
+    @section js{
+        <script>
+    $(document).ready(function () {
+        $("#Weight2").change(function () {
+
+            var w1 = "@Model.Weight1.GetValueOrDefault(0).ToString("#######0")";
+            var w2 = $("#Weight2").val();
+            var w = Number(w1) - Number(w2);
+            w = w < 0 ? (-w) : w;
+            console.log(w1+" "+w2+" "+w)
+
+        $("#WeightNet").html("خالص :"+ w);
+        });
+       // $("#Weight2").change();
+    }
+
+    );
+
+        </script>
+        @if (conf.Needbascule == true)
+        {
+            <script>
+
+                startBascul("#Weight2I", "#Weight2B", "#Weight2");
+
+            </script>
+        }
+        @if (Model.FkCustomer != Guid.Empty)
+        {
+            <script>
+
+            Contractbutton('#Id', '#vaziatContract','@Model.Id')
+
+            </script>
+
+        }
+
+    }
+
+
+
+}
+else
+@if (Model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ABaskul)
+{
+    ViewData["Title"] = "ثبت توزین دوم - " + Model.KindTitle + " - " + Model.ContractType.Title + (Model.Date2.HasValue ? (" - ویرایش " + Model.Customer.Title) : "");
+
+
+    <form asp-action="CreateOut" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Customer.Title" />
+        <input type="hidden" asp-for="Customer.Code" />
+        <input type="hidden" asp-for="Customer.NationalCode" />
+        <input type="hidden" asp-for="Customer.Mob" />
+        <input type="hidden" asp-for="Weight1" />
+        <input type="hidden" asp-for="FkCustomer" />
+        <input type="hidden" asp-for="Weight2IsBascul" />
+        <input type="hidden" asp-for="FkContractType" />
+        <input type="hidden" asp-for="KindTitle" />
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-gray-200">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="Code" class="control-label"></label>
+                                        <input asp-for="Code" class="form-control" readonly />
+                                        <span asp-validation-for="Code" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <label class="control-label">زمان ورود</label>
+                                        <div class="input-group">
+                                            <input asp-for="Date1date" class="form-control " readonly />
+                                            <input asp-for="Date1time" class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label asp-for="FkCustomer" class="control-label"></label>
+
+                                        <input asp-for="Customer.Title" class="form-control" readonly>
+
+                                        <span asp-validation-for="FkCustomer" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CarShMashin" class="control-label"></label>
+                                    <input asp-for="CarShMashin" class="form-control" />
+                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FkCar" class="control-label"></label>
+                                    <select asp-for="FkCar" class="form-control">
+                                        <option> </option>
+                                        @foreach (var item in cl._ListCar)
+                                        {
+                                            <option value="@item.Id">  @item.Title</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="FkCar" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CarRanande" class="control-label"></label>
+                                    <input asp-for="CarRanande" class="form-control" />
+                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CarTell" class="control-label"></label>
+                                    <input asp-for="CarTell" class="form-control" />
+                                    <span asp-validation-for="CarTell" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">زمان خروج</label>
+                                <div class="input-group">
+                                    <input asp-for="Date2date" class="form-control datepicker" />
+                                    <input asp-for="Date2time" class="form-control" type="time" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="Txt" class="control-label"></label>
+                                    <textarea asp-for="Txt" class="form-control"></textarea>
+                                    <span asp-validation-for="Txt" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-xl-3 col-md-auto">
+                        <div class="card  bg-gradient bg-success">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="form-group ">
                                         <label class="control-label text-white">وزن</label>
-                                        <span class="badge badge-info fa fa-hdd"> اول : @Model.Weight1.GetValueOrDefault().ToString("#####0.##")</span>
-                                        <span class="badge badge-light h5 fa fa-hdd" id="WeightNet"> خالص : </span>
+                                        <span class="badge bg-info fa fa-hdd"> اول : @Model.Weight1.ToKilo()</span>
+                                        <span class="badge bg-light text-dark h5 fa fa-hdd" id="WeightNet"> خالص : @Model.WeightNet.gadrmotlagh().ToKilo()</span>
                                         <div class="input-group">
-                                            <input asp-for="Weight2" value="@Model.Weight2.GetValueOrDefault().ToString("#####0.##")"
+                                            <input asp-for="Weight2" value="@Model.Weight2.ToKilo()"
                                                    class="form-control w-50 @(Model.Weight2.HasValue?"noactive":"") " readonly
                                                    ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');" />
                                             <div class="input-group-btn  w-50">
@@ -149,141 +770,134 @@
 
                     </div>
 
-                }
 
+
+                </div>
             </div>
         </div>
-    </div>
-            <div class="form-group float-left">
+        <div class="form-group float-left">
+            @if (Model.ListRows.Any())
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="resendSms" value="true" @*@(Model.SmsOk == null ? "checked" : "")*@ id="resendSms">
+                    <label class="form-check-label" for="resendSms">ارسال پیامک</label>
+                </div>
                 <button type="submit" class="btn btn-primary fa fa-save"> ثبت خروج خودرو</button>
                 <button type="submit" name="print" class="btn btn-info fa fa-print" value="ثبت و چاپ"> ثبت و چاپ</button>
 
-            </div>
-            <br />
-</form>
-<hr />
-<div class="row">
-    <div class="col-md-9">
-        <div class="row">
+            }
 
-            @foreach (var item in Model.Documents)
-            {
-                <div class="col-sm-2">
-                    <div class="card ">
-                        <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
-                        @if (item.Kind == "Portage")
-                        {
-                            <div class="card-footer">
-                                <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+        </div>
+        <br />
+    </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
 
-                            </div>
-                        }
+                @foreach (var item in Model.Documents)
+                {
+                    <div class="col-sm-2">
+                        <div class="card ">
+                            <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
+                            @if (item.Kind == "Portage")
+                            {
+                                <div class="card-footer">
+                                    <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
+            </div>
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <td>زمان</td>
+                        <td>محصول و سبد </td>
+                        <td>شرح</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ListRows)
+                    {
+
+                        <tr>
+                            <td>@item.Date.ToPersianDateTime()</td>
+                             <td>
+                                @item.Product  @item.Packing
+                            </td>
+                            <td>@item.Txt</td>
+
+                        </tr>
+
+
+                    }
+                </tbody>
+               
+
+            </table>
+
+
+        </div>
+        <div class="col-md-3">
+
+            @if (Model.IsPermitOk == false)
+            {
+
+                @Html.Partial("Permit", Model)
+
             }
         </div>
 
-        <table class="table">
-
-            <thead>
-                <tr>
-                    <td>زمان</td>
-                    <td>تعداد</td>
-                    <td>محصول و بسته بندی </td>
-                    <td>مکان</td>
-                    <td>صدمات</td>
-                    <td>شرح</td>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in Model.ListRows)
-                {
-
-                    <tr>
-                        <td>@item.Date.ToPersianDateTime()</td>
-                        <td>@item.Count</td>
-                        <td>@if (Model.ContractType.IsProduct1Packing0)
-                        {@item.Product} @item.Packing</td>
-                        <td>@item.CodeLocation</td>
-                        <td>@string.Join(",", item.ListInjurysTbl.Select(a => a.title).ToList())</td>
-                        <td>@item.Txt</td>
-
-                    </tr>
-
-
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="1">جمع</td>
-                    <td>@Model.ListRows.Sum(a => a.Count)</td>
-                    <td colspan="4"> </td>
-
-                </tr>
-            </tfoot>
-
-        </table>
-
-
-    </div>
-    <div class="col-md-3">
-
-        @if (Model.IsPermitOk == false)
-        {
-
-            @Html.Partial("Permit", Model)
-
-        }
     </div>
 
-</div>
+    <hr />
 
-<hr />
+    <div id="vaziatContract">
 
-<div   id="vaziatContract">
-
-</div>
+    </div>
 
 
-<div>
-    <a asp-action="Index" asp-route-idtype="@Model.ContractType.Id">بازگشت به لیست</a>
-</div>
+    <div>
+        <a asp-action="Index" asp-route-idtype="@Model.ContractType.Id">بازگشت به لیست</a>
+    </div>
 
-@section js{
-    <script>
+    @section js{
+        <script>
     $(document).ready(function () {
         $("#Weight2").change(function () {
 
-            var w1 = "@Model.Weight1";
+            var w1 = "@Model.Weight1.GetValueOrDefault(0).ToString("#######0")";
             var w2 = $("#Weight2").val();
             var w = Number(w1) - Number(w2);
-
             w = w < 0 ? (-w) : w;
+            console.log(w1+" "+w2+" "+w)
+
         $("#WeightNet").html("خالص :"+ w);
         });
-        $("#Weight2").change();
+       // $("#Weight2").change();
     }
 
     );
 
-    </script>
-    @if (Model.ContractType.IsProduct1Packing0 == true)
-    {
+        </script>
+
         <script>
 
             startBascul("#Weight2I", "#Weight2B", "#Weight2");
 
         </script>
-    }
-    @if (Model.FkCustomer != Guid.Empty)
-    {
-        <script>
 
-            Contractbutton('#Id', '#vaziatContract','@Model.Id')
-
-        </script>
+        
 
     }
+
+
+
 
 }

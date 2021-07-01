@@ -1,0 +1,48 @@
+﻿@model IEnumerable<web_db._note.TblNote>
+
+@{
+    ViewData["Title"] = "Notes";
+}
+
+ 
+ 
+<table class="table">
+    <thead>
+        <tr>
+          
+            <th>
+            عنوان
+            </th>
+            <th>
+               توضیحات
+            </th>
+            <th>
+              زمان ثبت
+            </th>
+            <th>
+               ثبت کننده
+            </th>
+         
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Caption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Txt)
+            </td>
+            <td>
+                @item.DateAdd.ToPersianDateMini()
+            </td>
+            <td>
+              @item.UserAdd.Title
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>

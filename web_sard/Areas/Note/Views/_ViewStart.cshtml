@@ -1,0 +1,43 @@
+﻿
+
+
+
+ 
+
+
+
+
+@{
+
+    @if (Context.Request.IsAjaxRequest())
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "_LayoutSP";
+    }
+
+}
+@if (Context.Request.IsAjaxRequest())
+{
+    <script>
+        renderAjax("#ajaxModal");
+
+    </script>
+    @if (string.IsNullOrWhiteSpace(ViewBag.txt) == false)
+    {
+        <div class="alert alert-info">
+            <strong>پیغام!</strong> @ViewBag.txt
+        </div>
+    }
+
+    @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+    {
+        <div class="alert alert-danger">
+            <strong>خطا!</strong> @ViewBag.error
+        </div>
+    }
+
+
+}

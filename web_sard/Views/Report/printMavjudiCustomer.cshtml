@@ -1,0 +1,213 @@
+﻿@model IEnumerable<web_sard.Models.tbls.customer.customer>
+
+@{
+    ViewData["Title"] = "وضعیت موجودی مشتریان";
+    var ctype = (web_db.TblContractType)ViewBag.ctype;
+}
+
+<h1>وضعیت موجودی مشتریان</h1>
+
+
+<table class="table table-bordered table-fixed-head">
+    <thead>
+        <tr>
+
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Mob)
+            </th>
+
+            <th colspan="2" class="text-center">
+                وارده
+            </th>
+            <th colspan="2" class="text-center">
+                صادره
+            </th>
+            <th colspan="2" class="text-center">
+                موجودی
+            </th>
+            <th colspan="2" class="text-center"> افت</th>
+           
+            <th rowspan="3"> </th>
+
+        </tr>
+        <tr>
+
+
+            <th class="text-center">
+                تعداد
+            </th>
+            <th class="text-center">
+                وزن
+            </th>
+            <th class="text-center">
+                تعداد
+            </th>
+            <th class="text-center">
+                وزن
+            </th>
+            <th class="text-center">
+                تعداد
+            </th>
+            <th class="text-center">
+                وزن
+            </th>
+            <th> </th>
+            <th class="text-center">%</th>
+
+
+        </tr>
+       
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+
+            <td>
+                @if (!item.IdOtherSystem.IsEmpty())
+                {
+                    @Html.DisplayFor(modelItem => item.IdOtherSystem)
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Code)
+
+                }
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td style="border-right:3px; border-color:black;">
+                @Html.DisplayFor(modelItem => item.Mob)
+            </td>
+
+
+
+            <td>
+                @item.CInSum
+            </td>
+            <td>
+                @item.WInSum.ToKilo()
+            </td>
+
+            <td>
+                @item.COutSum
+            </td>
+            <td>
+                @item.WOutSum.ToKilo()
+            </td>
+
+            @{
+                var c = item.CInSum + item.COutSum;
+                var w = item.WInSum + item.WOutSum;
+
+            }
+            <td>
+                <span @(c < 0 ? "class=text-danger" : "")>@c</span>
+
+            </td>
+            <td>
+
+                <span @(w < 0 ? "class=text-danger" : "")>@w.ToKilo()</span>
+
+                @if (c == 0 && w != 0)
+                {
+                    <span class="badge bg-success float-left ">@w.ToKilo()</span>
+
+                }
+            </td>
+            <td>
+
+
+                @if (c == 0 && w != 0)
+                {
+                    <span @(w < 0 ? "class=text-danger" : "")>@w.ToKilo()</span>
+
+                }
+            </td>
+
+            <td>
+                @if (c == 0 && w != 0)
+                {
+                    var oft = w / item.WInSum * 100;
+                    var min = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.Main_HadeagalOft) ?? new web_db.TblConf());
+                    var max = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.Main_HadeaxareOft) ?? new web_db.TblConf());
+                    @if (min.Value.IsEmpty() == false && oft < (Convert.ToInt32(min.Value)))
+                    {
+                        <span class="text-danger">@((oft).ToString("##.##"))%</span>
+
+
+                    }
+                    else if (min.Value.IsEmpty() == false && oft > (Convert.ToInt32(max.Value)))
+                    {
+                        <span class="text-danger">@((oft).ToString("##0.##"))%</span>
+
+                    }
+                    else
+                    {
+                        <span>
+                            @((oft).ToString("##.##")) %
+                        </span>
+                    }
+                }
+            </td>
+            <td>
+                @*<a asp-action="customercontract" asp-route-fktype="@ctype.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-list"></a>
+            <a asp-action="customerportage" asp-route-fktype="@ctype.Id" asp-route-fkcustomer="@item.Id" isModal="true" class="btn btn-sm btn-light fa fa-car"></a>*@
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3" class="text-left">
+                جمع:
+            </th>
+
+
+
+            <td>
+                @Model.Sum(a => a.CInSum)
+            </td>
+            <td>
+                @Model.Sum(a => a.WInSum).ToKilo()
+            </td>
+
+            <td>
+                @Model.Sum(a => a.COutSum)
+            </td>
+            <td>
+                @Model.Sum(a => a.WOutSum).ToKilo()
+            </td>
+             
+            
+            <td>
+
+                @( Model.Sum(a => a.CInSum + a.COutSum))
+            </td>
+            <td>
+                @((Model.Sum(a => a.WInSum+ a.WOutSum)).ToKilo())
+            </td>
+
+
+            <td>
+
+           
+            </td>
+            <td>
+                
+            </td>
+            <th>
+
+            </th>
+        </tr>
+    </tfoot>
+</table>

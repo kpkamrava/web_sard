@@ -1,0 +1,139 @@
+﻿@model IEnumerable<web_sard.Models.tbls.portage.PortageRow>
+
+@{
+    ViewData["Title"] = "CustomerContractGardeshGr";
+     int i= 1;
+}
+
+<h1> گردش قرارداد @ViewBag.con</h1>
+
+ 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <i class="	fa fa-sort-numeric-down"></i>
+            </th>
+            <th>
+                باسکول
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                ماشین
+            </th>
+            <th>
+               سبد و محصول
+                 
+            </th>
+            <th>
+                تعداد
+            </th>
+            <th>
+                وزن
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.L1)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GroupBy(a => new { a.fkportage, a.FkPacking, a.FkProduct, a.L1 }))
+        {
+            <tr>
+                @{var fir = item.First(); }
+                <td>
+                    @i
+                    @{ i++;}
+                </td>
+
+                <td>
+                    @fir.tblportage.Code
+                </td>
+                <td>
+                    @fir.tblportage.Date2.ToPersianDate()
+                </td>
+                <td>
+                    @fir.CodeContract  @Html.DisplayFor(modelItem => fir.tblportage.Customer.Title)
+                    (@Html.DisplayFor(modelItem => fir.tblportage.CarRanande) | @Html.DisplayFor(modelItem => fir.tblportage.CarMashin)  @Html.DisplayFor(modelItem => fir.tblportage.CarShMashin))
+
+                    @{var kindPortagee = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == fir.tblportage.KindCode);
+                    }
+                    <span class="badge bg-@(kindPortagee.classcolor)">@fir.tblportage.KindTitle </span>
+
+                </td>
+                <td>
+                    @fir.Packing @fir.Product
+                </td>
+                <td>
+                    @item.Sum(a => a.Count)
+                </td>
+                <td>
+                    @(((decimal?)item.Sum(a => a.Count*a.WeightOne)).ToKilo())
+                </td>
+                <td>
+                    @fir.L1
+                </td>
+            </tr>
+
+            <tr class="hide">
+                <td colspan="8">
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <td>زمان</td>
+                                <td>تعداد</td>
+                                <td>مکان</td>
+                                <td>صدمات</td>
+                                <td>شرح</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var itemrow in item)
+                            {
+
+                                <tr>
+                                    <td>@itemrow.Date.ToPersianDateTime()</td>
+                                    <td>@itemrow.Count</td>
+
+                                    <td>@itemrow.CodeLocation</td>
+                                    <td>@string.Join(",", itemrow.ListInjurysTbl.Select(a => a.title).ToList())</td>
+                                    <td>@itemrow.Txt</td>
+
+                                </tr>
+
+
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="1">جمع</td>
+                                <td>@item.Sum(a => a.Count)</td>
+                                <td colspan="4"> </td>
+
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" class="text-left">جمع:</td>
+            <td>@Model.Sum(a => a.Count)</td>
+            <td>@(((decimal?)Model.Sum(a => a.Count * a.WeightOne)).ToKilo())</td>
+            <td > </td>
+
+        </tr>
+    </tfoot>
+</table>

@@ -5,16 +5,26 @@
     var kindPortage = (int)ViewData["kindPortage"];
 
 
-    ViewData["Title"] = "ثبت باسکول ورودی - " + web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == kindPortage).txt + " - " + ContractType.Title + (Model.Id == Guid.Empty ? "" : (" - ویرایش " + Model.Customer.Title));
+    ViewData["Title"] = "ثبت   - "  + ContractType.Title + (Model.FkCustomer == Guid.Empty ? "" : (" - ویرایش " + Model.Customer.Title))+" - "+"توزین اول";
 
     var listcustumer = (List<web_sard.Models.tbls.customer.customer>)ViewData["listcustumer"];
 }
+@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
+    var conf = ContractType.ConfigASardKhane();
+
+
+
 
 
     <form asp-action="CreateIn" method="post">
+        @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Customer.Title" />
+        <input type="hidden" asp-for="Customer.Id" />
+        <input type="hidden" asp-for="Customer.Code" />
+        <input type="hidden" asp-for="Customer.NationalCode" />
         <input type="hidden" asp-for="FkContractType" />
         <input type="hidden" asp-for="Weight1IsBascul" />
         <input type="hidden" name="idtype" value="@ContractType.Id" />
@@ -28,11 +38,20 @@
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-6">
+
                                 <div class="form-group">
-                                    <label asp-for="CarRanande" class="control-label"></label>
-                                    <input asp-for="CarRanande" class="form-control form-control-sm" />
-                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
+
+                                    <label asp-for="CarShMashin" class="control-label"></label>
+                                    <div class="input-group ">
+                                        <input asp-for="CarShMashin" class="form-control form-control-sm" />
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-sm btn-outline-secondary" type="button" onclick="searchcar()"><span class="fa fa-search"></span></button>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
                                 </div>
+
+
                                 <div class="form-group">
                                     <label asp-for="FkCar" class="control-label"></label>
                                     <select asp-for="FkCar" class="form-control form-control-sm">
@@ -47,11 +66,13 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+
                                 <div class="form-group">
-                                    <label asp-for="CarShMashin" class="control-label"></label>
-                                    <input asp-for="CarShMashin" class="form-control form-control-sm" />
-                                    <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                    <label asp-for="CarRanande" class="control-label"></label>
+                                    <input asp-for="CarRanande" class="form-control form-control-sm" />
+                                    <span asp-validation-for="CarRanande" class="text-danger"></span>
                                 </div>
+
                                 <div class="form-group">
                                     <label asp-for="CarTell" class="control-label"></label>
                                     <input asp-for="CarTell" class="form-control form-control-sm" />
@@ -93,13 +114,13 @@
                                                 <option> </option>
                                                 @foreach (var item in listcustumer)
                                                 {
-                                                    <option value="@item.Id">@item.Code @item.Title</option>
+                                                    <option value="@item.Id">@item.Code @item.Title ( @(string.Join(" , ",item.codesContract)) )</option>
                                                 }
                                             </select>
 
 
                                             <div class="input-group-btn">
-                                                <button class="btn btn-light btn-sm" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract')">
+                                                <button class="btn btn-light btn-sm" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract',null,'@ContractType.Id')">
                                                     <i class="fa fa-search-plus"></i>
                                                 </button>
                                             </div>
@@ -135,29 +156,26 @@
 
 
             </div>
-            @if (ContractType.IsProduct1Packing0 == true)
-            {
-                <div class="col-md-3">
-                    <div class="card bg-gradient-success">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="form-group ">
-                                    <label class="control-label text-white">وزن</label>
-                                    <div class="input-group">
-                                        <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")"
-                                               class="form-control form-control-sm w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
-                                               ondblclick="$('Weight1IsBascul').val(false), $(this).removeAttr('readonly');" />@*noactive*@
-                                            <div class="input-group-btn  w-50">
-                                                <button class="btn btn-light btn-sm w-100" id="Weight1B" type="button">
-                                                    <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
-                                                </button>
-                                            </div>
+
+            <div class="col-lg-3 col-xl-3 col-md-auto">
+                <div class="card  bg-gradient bg-success">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group ">
+                                <label class="control-label text-white">وزن</label>
+                                <div class="input-group">
+                                    <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")"
+                                           class="form-control form-control-sm w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
+                                           ondblclick="$('Weight1IsBascul').val(false); $(this).removeAttr('readonly');" />@*noactive*@
+                                        <div class="input-group-btn  w-50">
+                                            <button class="btn btn-light btn-sm w-100" id="Weight1B" type="button">
+                                                <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                            </button>
                                         </div>
-                                        <span asp-validation-for="Weight1" class="text-danger"></span>
                                     </div>
-
-
+                                    <span asp-validation-for="Weight1" class="text-danger"></span>
                                 </div>
+
 
                             </div>
 
@@ -165,43 +183,563 @@
 
                     </div>
 
-                }
+                </div>
 
 
-        </div>
-       
+
+
+            </div>
+
             <input type="submit" value="ثبت ورود خودرو" class="btn btn-primary float-left" />
 
-         
-        <br />
 
-    </form>
-<hr />
-<div id="vaziatContract">
+            <br />
 
-</div>
-<div>
+        </form>
+        <hr />
+        <div id="vaziatContract">
 
-    <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
-</div>
+        </div>
+        <div>
 
-@section js{
-    @if (ContractType.IsProduct1Packing0 == true)
-    {
-        <script>
+            <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+        </div>
 
-            startBascul("#Weight1I", "#Weight1B", "#Weight1");
+        @section js{
 
-        </script>
+            <script>
+
+                startBascul("#Weight1I", "#Weight1B", "#Weight1");
+
+            </script>
+
+            @if (Model.FkCustomer != Guid.Empty)
+            {
+                <script>
+
+            Contractbutton('#FkCustomer', '#vaziatContract',null,'@ContractType.Id')
+
+                </script>
+
+            }
+
+            <script>
+
+        function searchcar() {
+            var CarShMashinval = $("#CarShMashin").val();
+              $.get("@Url.Action("searchcar", "Ajax")/" + CarShMashinval, function (data) {
+                if (data != null) {
+                    var x = $.parseJSON(data);
+
+                    $("#FkCar").val(x.FkCar)
+                    $('#FkCar').selectpicker('refresh');
+                    $("#CarRanande").val(x.CarRanande)
+                    $("#CarTell").val(x.CarTell)
+                } else {
+                    alert("یافت نشد");
+                }
+            });
+        }
+            </script>
+        }
     }
-    @if (Model.FkCustomer != Guid.Empty)
+    else if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
     {
-        <script>
+        var conf = ContractType.ConfigASabad();
 
-            Contractbutton('#FkCustomer', '#vaziatContract')
 
-        </script>
 
-    }
+
+
+
+        <form asp-action="CreateIn" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Customer.Title" />
+            <input type="hidden" asp-for="Customer.Id" />
+            <input type="hidden" asp-for="Customer.Code" />
+            <input type="hidden" asp-for="Customer.NationalCode" />
+            <input type="hidden" asp-for="FkContractType" />
+            <input type="hidden" asp-for="Weight1IsBascul" />
+            <input type="hidden" name="idtype" value="@ContractType.Id" />
+            <input type="hidden" name="kindPortage" value="@kindPortage" />
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">مشخصات خودرو</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label asp-for="CarShMashin" class="control-label"></label>
+                                        <div class="input-group ">
+                                            <input asp-for="CarShMashin" class="form-control form-control-sm" />
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" onclick="searchcar()"><span class="fa fa-search"></span></button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="FkCar" class="control-label"></label>
+                                        <select asp-for="FkCar" class="form-control form-control-sm">
+                                            <option> </option>
+                                            @foreach (var item in cl._ListCar)
+                                            {
+                                                <option value="@item.Id">  @item.Title</option>
+                                            }
+                                        </select>
+
+                                        <span asp-validation-for="FkCar" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label asp-for="CarRanande" class="control-label"></label>
+                                        <input asp-for="CarRanande" class="form-control form-control-sm" />
+                                        <span asp-validation-for="CarRanande" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="CarTell" class="control-label"></label>
+                                        <input asp-for="CarTell" class="form-control form-control-sm" />
+                                        <span asp-validation-for="CarTell" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card bg-gray-200">
+                                <div class="card-body">
+                                    <div class="row">
+
+                                        <div class="form-group col-md-4">
+                                            <label asp-for="Code" class="control-label"></label>
+                                            <input asp-for="Code" class="form-control form-control-sm" readonly />
+                                            <span asp-validation-for="Code" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-8">
+                                            <label class="control-label">زمان</label>
+                                            <div class="input-group">
+                                                <input asp-for="Date1date" class="form-control form-control-sm datepicker" />
+                                                <input asp-for="Date1time" type="time" class="form-control form-control-sm" />
+                                            </div>
+
+                                            <span asp-validation-for="Date1date" class="text-danger "></span>
+                                            <span asp-validation-for="Date1time" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label asp-for="FkCustomer" class="control-label"></label>
+
+                                            <div class="input-group">
+
+                                                <select asp-for="FkCustomer" class="form-control form-control-sm" onchange="$('#CbContract').click()">
+                                                    <option> </option>
+                                                    @foreach (var item in listcustumer)
+                                                    {
+                                                        <option value="@item.Id">@item.Code @item.Title ( @(string.Join(" , ",item.codesContract)) )</option>
+                                                    }
+                                                </select>
+
+
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-light btn-sm" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract',null,'@ContractType.Id')">
+                                                        <i class="fa fa-search-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <span asp-validation-for="FkCustomer" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label asp-for="Txt" class="control-label"></label>
+                                <textarea asp-for="Txt" class="form-control form-control-sm"></textarea>
+                                <span asp-validation-for="Txt" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                @if (conf.Needbascule == true)
+                {
+                    <div class="col-lg-3 col-xl-3 col-md-auto">
+                        <div class="card  bg-gradient bg-success">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group ">
+                                        <label class="control-label text-white">وزن</label>
+                                        <div class="input-group">
+                                            <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")"
+                                                   class="form-control form-control-sm w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
+                                                   ondblclick="$('Weight1IsBascul').val(false); $(this).removeAttr('readonly');" />@*noactive*@
+                                                <div class="input-group-btn  w-50">
+                                                    <button class="btn btn-light btn-sm w-100" id="Weight1B" type="button">
+                                                        <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Weight1" class="text-danger"></span>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+
+            </div>
+
+            <input type="submit" value="ثبت ورود خودرو" class="btn btn-primary float-left" />
+
+
+            <br />
+
+        </form>
+        <hr />
+        <div id="vaziatContract">
+
+        </div>
+        <div>
+
+            <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+        </div>
+
+        @section js{
+            @if (conf.Needbascule == true)
+            {
+                <script>
+
+                    startBascul("#Weight1I", "#Weight1B", "#Weight1");
+
+                </script>
+            }
+            @if (Model.FkCustomer != Guid.Empty)
+            {
+                <script>
+
+            Contractbutton('#FkCustomer', '#vaziatContract',null,'@ContractType.Id')
+
+                </script>
+
+            }
+
+            <script>
+
+        function searchcar() {
+            var CarShMashinval = $("#CarShMashin").val();
+              $.get("@Url.Action("searchcar", "Ajax")/" + CarShMashinval, function (data) {
+                if (data != null) {
+                    var x = $.parseJSON(data);
+
+                    $("#FkCar").val(x.FkCar)
+                    $('#FkCar').selectpicker('refresh');
+                    $("#CarRanande").val(x.CarRanande)
+                    $("#CarTell").val(x.CarTell)
+                } else {
+                    alert("یافت نشد");
+                }
+            });
+        }
+            </script>
+        }
+
+
+
+
+
+
+
+
+
 
 }
+
+else if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ABaskul)
+{
+    var conf = ContractType.ConfigABaskul();
+
+ 
+
+
+        <form asp-action="CreateIn" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Customer.Title" />
+            <input type="hidden" asp-for="Customer.Id" />
+            <input type="hidden" asp-for="Customer.Code" />
+            <input type="hidden" asp-for="Customer.NationalCode" />
+            <input type="hidden" asp-for="FkContractType" />
+            <input type="hidden" asp-for="Weight1IsBascul" />
+            <input type="hidden" name="idtype" value="@ContractType.Id" />
+            <input type="hidden" name="kindPortage" value="@kindPortage" /> 
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">مشخصات خودرو</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label asp-for="CarShMashin" class="control-label"></label>
+                                        <div class="input-group ">
+                                            <input asp-for="CarShMashin" class="form-control form-control-sm" />
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" onclick="searchcar()"><span class="fa fa-search"></span></button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="CarShMashin" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="FkCar" class="control-label"></label>
+                                        <select asp-for="FkCar" class="form-control form-control-sm">
+                                            <option> </option>
+                                            @foreach (var item in cl._ListCar)
+                                            {
+                                                <option value="@item.Id">  @item.Title</option>
+                                            }
+                                        </select>
+
+                                        <span asp-validation-for="FkCar" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label asp-for="CarRanande" class="control-label"></label>
+                                        <input asp-for="CarRanande" class="form-control form-control-sm" />
+                                        <span asp-validation-for="CarRanande" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="CarTell" class="control-label"></label>
+                                        <input asp-for="CarTell" class="form-control form-control-sm" />
+                                        <span asp-validation-for="CarTell" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card bg-gray-200">
+                                <div class="card-body">
+                                    <div class="row">
+
+                                        <div class="form-group col-md-4">
+                                            <label asp-for="Code" class="control-label"></label>
+                                            <input asp-for="Code" class="form-control form-control-sm" readonly />
+                                            <span asp-validation-for="Code" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-8">
+                                            <label class="control-label">زمان</label>
+                                            <div class="input-group">
+                                                <input asp-for="Date1date" class="form-control form-control-sm datepicker" />
+                                                <input asp-for="Date1time" type="time" class="form-control form-control-sm" />
+                                            </div>
+
+                                            <span asp-validation-for="Date1date" class="text-danger "></span>
+                                            <span asp-validation-for="Date1time" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label asp-for="FkCustomer" class="control-label"></label>
+
+                                            <div class="input-group">
+
+                                                <select asp-for="FkCustomer" class="form-control form-control-sm" onchange="$('#CbContract').click()">
+                                                    <option> </option>
+                                                    @foreach (var item in listcustumer)
+                                                    {
+                                                        <option value="@item.Id">@item.Code @item.Title ( @(string.Join(" , ",item.codesContract)) )</option>
+                                                    }
+                                                </select>
+
+
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-light btn-sm" type="button" id="CbContract" onclick="Contractbutton('#FkCustomer','#vaziatContract',null,'@ContractType.Id')">
+                                                        <i class="fa fa-search-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <span asp-validation-for="FkCustomer" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card bg-gradient-info">
+                        <div class="card-body">
+                         
+                            <div class="form-group">
+                                <label   class="control-label">بسته</label>
+                                <select name="ListRows[0].FkPacking" class="form-control form-control-sm" required>
+                                    <option> </option>
+                                    @foreach (var item in cl._ListPacking.Where(a => (a.ForContractTypeJson ?? "").Contains(ContractType.Code.ToString())))
+                                    {
+                                        if ((Model.ListRows.FirstOrDefault() ?? new web_sard.Models.tbls.portage.PortageRow()).FkPacking == item.Id)
+                                        {
+                                            <option value="@item.Id" selected>@item.Code @item.Title</option>
+                                        }
+                                        else { <option value="@item.Id">@item.Code @item.Title</option>}
+                                    }
+                                </select>
+                              
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Txt" class="control-label"></label>
+                                <textarea asp-for="Txt" class="form-control form-control-sm"></textarea>
+                                <span asp-validation-for="Txt" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+               
+                    <div class="col-lg-3 col-xl-3 col-md-auto">
+                        <div class="card  bg-gradient bg-success">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group ">
+                                        <label class="control-label text-white">وزن</label>
+                                        <div class="input-group">
+                                            <input asp-for="Weight1" value="@Model.Weight1.GetValueOrDefault().ToString("#####0.##")"
+                                                   class="form-control form-control-sm w-50  @(Model.Weight1.HasValue?"noactive":"") " readonly
+                                                   ondblclick="$('Weight1IsBascul').val(false); $(this).removeAttr('readonly');" />@*noactive*@
+                                                <div class="input-group-btn  w-50">
+                                                    <button class="btn btn-light btn-sm w-100" id="Weight1B" type="button">
+                                                        <i class="fa fa-hdd" id="Weight1I"> @web_sard.Models.cl.bascul.WeightBacul </i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Weight1" class="text-danger"></span>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                  
+
+
+            </div>
+
+            <input type="submit" value="ثبت ورود خودرو" class="btn btn-primary float-left" />
+
+
+            <br />
+
+        </form>
+        <hr />
+        <div id="vaziatContract">
+
+        </div>
+        <div>
+
+            <a asp-action="Index" asp-route-idtype="@ContractType.Id">بازگشت به لیست</a>
+        </div>
+
+        @section js{
+            
+                <script>
+
+                    startBascul("#Weight1I", "#Weight1B", "#Weight1");
+
+                </script>
+            
+
+            <script>
+
+        function searchcar() {
+            var CarShMashinval = $("#CarShMashin").val();
+              $.get("@Url.Action("searchcar", "Ajax")/" + CarShMashinval, function (data) {
+                if (data != null) {
+                    var x = $.parseJSON(data);
+
+                    $("#FkCar").val(x.FkCar)
+                    $('#FkCar').selectpicker('refresh');
+                    $("#CarRanande").val(x.CarRanande)
+                    $("#CarTell").val(x.CarTell)
+                } else {
+                    alert("یافت نشد");
+                }
+            });
+        }
+            </script>
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+

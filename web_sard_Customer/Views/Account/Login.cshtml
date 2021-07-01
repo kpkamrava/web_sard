@@ -1,0 +1,152 @@
+﻿ 
+@{
+    Layout = null;
+
+
+    var p =   (int) ViewBag.p;
+
+
+
+    var sm = cl._conf.Any(a => a.Key == web_db.TblConf.KeyEnum.US_SefareshMoshtarianEnable && a.Value == true.ToString());
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Login - کنترل سردخانه</title>
+    <meta name="theme-color" content="rgba(216,204,204,0)">
+    <meta name="description" content=" سامانه مشتری سردخانه SP">
+    <link rel="icon" type="image/png" sizes="undefinedxundefined" href="~/assets/img/5491974.png">
+    <link href="~/lib/bootstrap/scss/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+
+    <link href="~/css/colors.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome/4.7.0/Content/Content/font-awesome.css" rel="stylesheet" />
+</head>
+
+<body dir="rtl">
+    <div class="container">
+        @if (p == 1)
+        {
+            <div class="row justify-content-center ">
+                <div class="col-md-8 col-lg-7 col-xl-6">
+                    <div class="card bg-BlueCola shadow-lg o-hidden border-0 my-5">
+                        <div class="card-body p-0">
+
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h3 class="text-white mb-4">خوش آمدید! </h3>
+                                </div>
+
+                                <form class="user" asp-action="Login" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="p" value="1" />
+                                    <div class="form-group text-right">
+                                        <label class="col-form-label text-white "> جهت ورود به سامانه کد ملی خود را وارد نمایید</label>
+                                        <input class="form-control form-control-user" required type="text" placeholder="کد ملی" name="username">
+                                    </div>
+                                    <div class="form-group">
+
+                                    </div>
+                                    <button class="btn btn-primary btn-block text-white btn-user" type="submit">ادامه</button>
+                                    <hr>
+                                </form>
+
+                                @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+                                {
+                                    <div class="alert alert-danger text-right">
+                                        <strong>خطا!</strong> @ViewBag.error
+                                    </div>
+
+                                }
+                                <h4 class="text-right text-white">
+                                    سامانه مشتریان سردخانه میوه طلایی
+                                </h4>
+                                @if (sm)
+                                {
+                                    <a asp-action="index" asp-controller="queu" class="btn btn-link text-white">
+                                        <h4 class="card-title text-right">سیستم نوبت دهی سردخانه</h4>
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+        else if (p == 2)
+        {
+            <div class="row justify-content-center  ">
+                <div class="col-md-8 col-lg-7 col-xl-6">
+                    <div class="card bg-VividCerulean shadow-lg o-hidden border-0 my-5">
+                        <div class="card-body p-0">
+
+                            <div class="p-5 ">
+                                <div class="text-center">
+                                    <h3 class="text-white mb-4">ورود به سامانه </h3>
+                                </div>
+                                <form class="text-right" asp-action="Login" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="username" value="@ViewBag.username" />
+                                    <input type="hidden" name="p" value="2" />
+                                    <div class="form-group text-right">
+                                        <label class="col-form-label text-white "> جهت ورود رمز عبوری که برای شما ارسال شده را بنویسید</label>
+                                        <input class="form-control form-control-user" required type="text" placeholder="رمز عبور" name="password">
+                                    </div>
+
+                                    <button class="btn btn-primary btn-block text-white btn-user" type="submit">ورود</button>
+                                    <a class="btn btn-warning btn-block text-dark btn-user" asp-action="login">بازگشت</a>
+                                    <hr>
+                                </form>
+                                <form class="text-right" asp-action="Login" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="username" value="@ViewBag.username" />
+                                    <input type="hidden" name="p" value="3" />
+                                    <button class="btn btn-link text-dark  " type="submit">ارسال مجدد رمز عبور</button>
+                                </form>
+                                @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+                                {
+                                    <div class="alert alert-danger text-right">
+                                        <strong>خطا!</strong> @ViewBag.error
+                                    </div>
+
+                                } @if (string.IsNullOrWhiteSpace(ViewBag.txt) == false)
+                                {
+                                    <div class="alert alert-info text-right">
+                                        <strong>پیغام!</strong> @ViewBag.txt
+                                    </div>
+
+                                }
+                                <h4 class="text-right text-white">
+                                    سامانه مشتریان سردخانه میوه طلایی
+                                </h4>
+                                @if (sm)
+                                {
+                                    <a asp-action="index" asp-controller="queu" class="btn btn-link text-white">
+                                        <h4 class="card-title text-right">سیستم نوبت دهی سردخانه</h4>
+                                    </a>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+
+</body>
+
+</html>

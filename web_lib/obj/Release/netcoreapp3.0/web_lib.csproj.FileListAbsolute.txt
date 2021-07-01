@@ -1,0 +1,9 @@
+D:\source\repos\web_sard\web_lib\bin\Release\netcoreapp3.0\web_lib.deps.json
+D:\source\repos\web_sard\web_lib\bin\Release\netcoreapp3.0\web_lib.dll
+D:\source\repos\web_sard\web_lib\bin\Release\netcoreapp3.0\web_lib.pdb
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.csprojAssemblyReference.cache
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.AssemblyInfoInputs.cache
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.AssemblyInfo.cs
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.dll
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.pdb
+D:\source\repos\web_sard\web_lib\obj\Release\netcoreapp3.0\web_lib.csproj.CoreCompileInputs.cache

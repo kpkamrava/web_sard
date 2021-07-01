@@ -1,0 +1,83 @@
+﻿@model web_db.TblGroup
+
+@{
+    ViewData["Title"] = "'گروه";
+    var sms = cl._conf.Any(a => a.Key == web_db.TblConf.KeyEnum.Main_ActiceSms && a.Value == true.ToString());
+
+}
+
+<h1>گروه</h1>
+ 
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="form-group">
+                <label class="control-label">عنوان</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> فعال @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Class" class="control-label"> کلاس رنگ</label>
+                <input asp-for="Class" class="form-control" />
+                <span asp-validation-for="Class" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fklocation" class="control-label"> موقعیت پیشفرض</label>
+                <select asp-for="Fklocation" class="form-control form-control-sm">
+                    @foreach (var item in web_sard.Models.cl._ListLocation.OrderBy(a => a.Kind).ThenBy(a => a.Ord))
+                    {
+                        <option value="@item.Id">@item.CodeFull @item.Title</option>
+                    }
+                </select>
+                <span asp-validation-for="Fklocation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    @if (Model.Id != Guid.Empty&& sms)
+    {
+        <div class="col-md-6">
+            <h3>
+                ارسال پیامک به مشتریهای این گروه
+            </h3>
+            <form asp-action="SendSMS">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="Id" type="hidden" />
+
+                <div class="form-group">
+                    <label class="control-label">شماره ها</label>
+                    <textarea name="nums" rows="5" class="form-control">@ViewBag.nums</textarea>
+                    <label class="control-label">متن پیامک</label>
+                    <textarea name="msg" rows="4" class="form-control"></textarea>
+
+                </div>
+
+                <div class="alert alert-warning"> در صورت ارسال پیامک تبلیغاتی سامانه شما مسدود خواهد شد</div>
+
+                <div class="form-group">
+                    <input type="submit" value="ارسال پیام" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+    }
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<web_sard.Models.tbls.customer.customer>
+
+@{
+    var s = (int)ViewBag.setsal;
+    var setsal = cl._ListSalmali.SingleOrDefault(a => a.Id == s);
+    ViewData["Title"] = "ارسال اطلاعات به سال" + setsal.Sal;
+
+
+}
+
+
+ 
+<table class="table">
+    <thead>
+        <tr>
+         
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NationalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addras)
+            </th>
+        
+            <th>
+                @Html.DisplayNameFor(model => model.IdOtherSystem)
+            </th>
+          
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var tt = cl._ListContractType(User._getuserSalMaliDef());
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NationalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mob)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Addras)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdOtherSystem)
+                </td>
+
+                <td>
+                    <a isModal="true" asp-action="CusSend" asp-controller="Year" asp-route-id="@item.Id"
+                       asp-route-setsal="@setsal.Id" asp-route-fagatcus="@true" class="btn btn-light fa fa-clone"></a>
+
+                    @foreach (var t in cl._ListContractType(setsal.Id))
+                    {
+                        var ttt = tt.SingleOrDefault(a => a.Code == t.Code);
+                        if (ttt != null)
+                        {
+                            <a isModal="true" asp-action="CusSend" asp-controller="Year" asp-route-id="@item.Id"
+                               asp-route-setsal="@setsal.Id" asp-route-fkType="@ttt.Id" asp-route-portage="@false" class="btn btn-light fa fa-clone">@t.Title بدون گردش</a>
+                            <a isModal="true" asp-action="CusSend" asp-controller="Year" asp-route-id="@item.Id"
+                               asp-route-setsal="@setsal.Id" asp-route-fkType="@ttt.Id" asp-route-portage="@true" class="btn btn-light fa fa-clone">@t.Title با گردش</a>
+
+                        }
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

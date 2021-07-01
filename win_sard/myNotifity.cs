@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace win_sard
 {
-  
-    class myNotifity : ApplicationContext
+
+   public class myNotifity : ApplicationContext
     {
         //Component declarations
         private NotifyIcon TrayIcon;
         private ContextMenuStrip TrayIconContextMenu;
         private ToolStripMenuItem CloseMenuItem;
         private ToolStripMenuItem SettingMenuItem;
-        public static  ClassService service;
+        private ToolStripMenuItem TestMenuItem;
+        public static ClassService service;
         public myNotifity()
         {
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
@@ -24,10 +22,11 @@ namespace win_sard
 
 
             service = new ClassService();
-            service.StrInterfacedelegate = (str) => {
-                TrayIcon.BalloonTipTitle = "وضعیت "+ DateTime.Now.ToLocalTime();
+            service.StrInterfacedelegate = (str) =>
+            {
+                TrayIcon.BalloonTipTitle = "وضعیت " + DateTime.Now.ToLocalTime();
                 TrayIcon.BalloonTipText = str;
-                TrayIcon.ShowBalloonTip(2000); 
+                TrayIcon.ShowBalloonTip(2000);
             };
             service.startbascul();
         }
@@ -54,13 +53,14 @@ namespace win_sard
             TrayIconContextMenu = new ContextMenuStrip();
             CloseMenuItem = new ToolStripMenuItem();
             SettingMenuItem = new ToolStripMenuItem();
+            TestMenuItem = new ToolStripMenuItem();
             TrayIconContextMenu.SuspendLayout();
 
             // 
             // TrayIconContextMenu
             // 
             this.TrayIconContextMenu.Items.AddRange(new ToolStripItem[] {
-            this.CloseMenuItem,this.SettingMenuItem});
+            this.CloseMenuItem,this.SettingMenuItem,this.TestMenuItem});
             this.TrayIconContextMenu.Name = "TrayIconContextMenu";
             this.TrayIconContextMenu.Size = new Size(153, 70);
             // 
@@ -77,7 +77,16 @@ namespace win_sard
             this.SettingMenuItem.Size = new Size(152, 22);
             this.SettingMenuItem.Text = "تنظیمات";
             this.SettingMenuItem.Click += new EventHandler(this.SettingMenuItem_Click);
-
+            // 
+            // SettingMenuItem
+            // 
+            this.TestMenuItem.Name = "TestMenuItem1";
+            this.TestMenuItem.Size = new Size(152, 22);
+            this.TestMenuItem.Text = "Test";
+            this.TestMenuItem.Click += new EventHandler(this.TestMenuItem_Click);
+         
+            
+            
             TrayIconContextMenu.ResumeLayout(false);
             TrayIcon.ContextMenuStrip = TrayIconContextMenu;
         }
@@ -107,6 +116,11 @@ namespace win_sard
         {
             new FormSetting().ShowDialog();
             service.startbascul();
+        }
+        private void TestMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormTest().Show();
+          
         }
     }
 }

@@ -3,145 +3,840 @@
 @{
 
 
- var  ContractType =(web_db.TblContractType)ViewData["type"];
+    var ContractType = (web_db.TblContractType)ViewData["type"];
 
 
-        ViewData["Title"] = "لیست قراردادها - "+(ContractType.Title);
+    ViewData["Title"] = "لیست قراردادها - " + (ContractType.Title);
+    var fkgroup = (Guid?)ViewData["fkgroup"];
+}
+<div>
+
+    <a asp-route-idtype="@ContractType.Id"
+       asp-route-fkgroup="@Guid.Empty" class="btn  btn-dark fa fa-list @(fkgroup==Guid.Empty?" active":"") shadow"> بدون گروه</a>
+
+    @foreach (var item in cl._ListGroup)
+    {
+        <a asp-route-idtype="@ContractType.Id"
+           asp-route-fkgroup="@item.Id" class="btn  btn-outline-@(item.Class) fa fa-list @(fkgroup==item.Id?" active":"") shadow"> @item.Title</a>
+    }
+    <a asp-route-idtype="@ContractType.Id"
+       asp-route-fkgroup="@null" class="btn  btn-light fa fa-list @(fkgroup==null?" active":"") shadow"> همه</a>
+
+</div>
+
+<p>
+    <a asp-action="Create" asp-route-idtype="@ContractType.Id" class="btn btn-outline-success fa fa-plus"> قرارداد جدید</a>
+    <a class="btn btn-outline-dark fa fa-money-check" data-toggle="modal" data-target="#myModalReprice">اصلاح نرخ</a>
+</p>
+ 
+
+@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
+    var conf = ContractType.ConfigASardKhane();
+
+
+
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th rowspan="3">
+                    <i class="	fa fa-sort-numeric-down"></i>
+                </th>
+                <th rowspan="3">
+                    <a class="btn btn-outline-info fa fa-check-square" onclick="checkAll();"></a> @Html.DisplayNameFor(model => model.Custumer)
+
+
+                </th>
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.ContractType)
+                </th>
+
+                <th rowspan="2" colspan="3" class="text-center">
+                    زمان
+                </th>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Txt)
+                </th>
+
+                <th colspan="8" class="text-center">
+                    قرارداد
+
+                </th>
+
+                <th rowspan="3"></th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center">
+                    ورود
+                </th>
+                <th colspan="4" class="text-center">
+                    خروج
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    قرارداد
+                </th>
+                <th>
+                    از
+                </th>
+                <th>
+                    تا
+                </th>
+
+
+                <th>
+                    قرارداد
+                </th>
+
+
+                <th>
+                    جمع
+                </th>
+                <th>
+                    مانده
+                </th>
+                <th>نرخ</th>
+
+                <th>
+                    قرارداد
+                </th>
+
+
+                <th>
+                    جمع
+                </th>
+
+                <th>
+                    مانده
+                </th>
+                <th>نرخ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr @(item.Txt.IsEmpty() == false ? "class=table-warning" : "")>
+                    <td>
+
+                        @i  @{i++; }
+                    </td>
+
+                    <td>
+                        @if (item.isEndVrud)
+                        {
+                            <span class="badge bg-danger text-white">In</span>
+                        }
+                        @if (item.isEndXroj)
+                        {
+                            <span class="badge bg-danger text-white">Out</span>
+                        }
+
+                        <label><input type="checkbox" id="checkP" onchange="checkPChange();" value="@item.Id" /> @Html.DisplayFor(modelItem => item.Code) @Html.DisplayFor(modelItem => item.Custumer)</label>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContractType.Title)
+
+                    </td>
+
+                    <td>
+                        @item.Date.ToPersianDate()
+                    </td>
+
+                    <td>
+                        @item.Azdate
+
+                    </td>
+                    <td>
+                        @item.Tadate
+                    </td>
+                    <td>
+                        <small>@Html.Raw(item.Txt)</small>
+                        @Html.Raw(string.Join("", item.prodocts.Select(a => " <span class='badge bg-info'>" + a.title + "</span> ").ToArray()))
+                        @Html.Raw(string.Join("", item.packings.Select(a => " <span class='badge bg-info'>" + a.title + "</span> ").ToArray()))
+
+                    </td>
+
+
+                  
+                        <td>
+                            @item.WeightMaxIn.GetValueOrDefault().ToKilo()
+                        </td>
+
+                   
+
+
+                    <td>
+                       <span class="badge bg-info )">@item._WeightIn.ToKilo()</span>
+                     
+
+                        <span class="badge bg-primary ">@item._CountIn</span>
+
+                    </td>
+                    <td>
+                        <span class="badge bg-info @(item._WeightForInMande<0?"bg-danger":"")">@item._WeightForInMande.ToKilo()</span>
+                   
+
+                        <span class="badge bg-primary @(item._CountForInMande<0?"bg-danger":"")">@item._CountForInMande</span>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxIn??0).ToString("###,###,##0.##"))">جعبه</span>
+                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfKiloIn??0).ToString("###,###,##0.##"))">کیلو</span>
+                        
+                    </td>
+
+                   
+                        <td>
+                            @if (item.PercentForOut.HasValue)
+                            {
+                                @item.PercentForOut <span>%</span>
+                            }
+                            else
+                            {
+                                @item.WeightMaxOut.GetValueOrDefault().ToKilo()
+
+
+                            }
+                        </td>
+
+                    
+                    <td>
+                       <span class="badge bg-info ">@item._WeightOut.ToKilo()</span>
+                    
+
+                        <span class="badge bg-primary ">@item._CountOut</span>
+
+                    </td>
+
+
+                    <td>
+                       <span class="badge bg-info  @(item._WeightForOutMande<0?"bg-danger":"")">@item._WeightForOutMande.ToKilo()</span>
+                   
+
+                        <span class="badge bg-primary @(item._CountForOutMande<0?"bg-danger":"")">@item._CountForOutMande</span>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxOut??0).ToString("###,###,##0.##"))">جعبه</span>
+                        
+                            <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfKiloOut??0).ToString("###,###,##0.##"))">کیلو</span>
+                        
+                    </td>
+                    <td>
+                        <a asp-action="Create" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
+                        <a asp-action="docs" asp-controller="ajax" asp-route-title="@ContractType.Title @item.Code @item.Custumer" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-dark fa fa-file"></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا مطمئن هستید؟')" class="btn btn-outline-warning fa fa-recycle"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7">جمع:</td>
+
+
+                
+                    <td>
+                        @Model.Sum(a => a.WeightMaxIn).GetValueOrDefault().ToString("###0.##")
+                    </td>
+
+               
+                <td>
+                    <span class="badge bg-info">@Model.Sum(a => a._WeightIn).ToKilo()</span>
+                
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountIn)</span>
+
+                </td>
+                <td>
+                    <span class="badge bg-info">@Model.Sum(a => a._WeightForInMande).ToKilo()</span>
+                
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountForInMande)</span>
+                </td>
+
+
+                <td> </td>
+
+
+
+
+               
+                    <td>
+                        @Model.Sum(a => a.WeightMaxOut).GetValueOrDefault().ToString("###0.##")
+                    </td>
+ 
+
+
+                <td>
+                    <span class="badge bg-info">@Model.Sum(a => a._WeightOut).ToKilo()</span>
+              
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountOut)</span>
+
+                </td>
+
+
+                <td>
+                   <span class="badge bg-info">@Model.Sum(a => a._WeightForOutMande).ToKilo()</span>
+               
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountForOutMande)</span>
+
+                </td>
+                <td colspan="2"> </td>
+
+
+            </tr>
+        </tfoot>
+    </table>
+
+
+    @section js{
+        <!-- Modal -->
+        <div id="myModalReprice" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">نرخ گذاری</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            فقط فیلد های پر اصلاح میگردد
+                        </p>
+                        <form asp-action="reprice" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="FkContractType" value="@ContractType.Id" />
+
+                            <div id="hideinput"></div>
+
+                            
+                                
+                                    <div class="form-group ">
+                                        <label class="control-label">حداکثر وزن ورود</label>
+                                        <input name="WeightMaxIn" type="number" class="form-control" />
+                                    </div>
+                                
+                                    @if (conf.OutControlByPercent)
+                                    {
+                                        <div class="form-group ">
+                                            <label class="control-label">حداکثر درصد خروج از مقدار ورودی</label>
+                                            <input name="PercentForOut" min="0" max="100" type="number" class="form-control" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group ">
+                                            <label class="control-label">حداکثر وزن خروج</label>
+                                            <input name="WeightMaxOut" type="number" class="form-control" />
+
+                                        </div>
+                                    }
+
+                                
+
+
+                          
+                            <hr />
+
+
+                            <div class="row">
+
+
+                                
+                                    <div class="form-group col-md-6 ">
+                                        <label class="control-label">نرخ هر جعبه ورود</label>
+                                        <input name="PriceOfBoxIn" type="number" class="form-control" />
+                                    </div>
+                               
+                                    <div class="form-group col-md-6 ">
+                                        <label class="control-label">نرخ هر جعبه خروج</label>
+                                        <input name="PriceOfBoxOut" type="number" class="form-control" />
+                                    </div>
+                               
+
+
+
+
+
+                            </div>
+                           
+                                <div class="row">
+
+                                    
+
+                                        <div class="form-group  col-md-6 ">
+                                            <label class="control-label">نرخ هر کیلو ورود</label>
+                                            <input name="PriceOfKiloIn" type="number" class="form-control" />
+                                        </div>
+                                    
+                                        <div class="form-group  col-md-6 ">
+                                            <label class="control-label">نرخ هر کیلو خروج</label>
+                                            <input name="PriceOfKiloOut" type="number" class="form-control" />
+                                        </div>
+                                   
+
+
+
+
+                                </div>
+                            
+                            <hr />
+
+
+                            <div class="form-group float-left">
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="sendSMS" value="true" checked id="sendSMS">
+                                    <label class="form-check-label" for="sendSMS">ارسال پیامک تغییرات</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary fa fa-save"> ثبت  </button>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <script>
+
+
+            function checkPChange() {
+                var inputs = $("#hideinput");
+                inputs.html("");
+                $("#checkP:checked").each(function (index, item) {
+                    inputs.append("<input type='hidden' value='" + $(item).val() + "' name='id'>");
+
+                })
+            };
+            function checkAll() {
+
+                $("#checkP ").each(function (index, item) {
+                    if ($(item).is(':checked')) {
+                        $(item).prop('checked', false); // Unchecks the box
+
+                    } else {
+                        $(item).prop('checked', true);  // Checks the box
+
+                    }
+
+                });
+                checkPChange();
+
+
+
+            }
+
+
+
+        </script>
+
+    }
+
+
+
+
+
+
+
+
+}
+else
+
+if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+    var conf = ContractType.ConfigASabad();
+
+
+
+
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th rowspan="3">
+                    <i class="	fa fa-sort-numeric-down"></i>
+                </th>
+                <th rowspan="3">
+                    <a class="btn btn-outline-info fa fa-check-square" onclick="checkAll();"></a> @Html.DisplayNameFor(model => model.Custumer)
+
+
+                </th>
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.ContractType)
+                </th>
+
+                <th rowspan="2" colspan="3" class="text-center">
+                    زمان
+                </th>
+
+                <th rowspan="3">
+                    @Html.DisplayNameFor(model => model.Txt)
+                </th>
+
+                <th colspan="8" class="text-center">
+                    قرارداد
+
+                </th>
+
+                <th rowspan="3"></th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-center">
+                    ورود
+                </th>
+                <th colspan="4" class="text-center">
+                    خروج
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    قرارداد
+                </th>
+                <th>
+                    از
+                </th>
+                <th>
+                    تا
+                </th>
+
+
+                <th>
+                    قرارداد
+                </th>
+
+
+                <th>
+                    جمع
+                </th>
+                <th>
+                    مانده
+                </th>
+                <th>نرخ</th>
+
+                <th>
+                    قرارداد
+                </th>
+
+
+                <th>
+                    جمع
+                </th>
+
+                <th>
+                    مانده
+                </th>
+                <th>نرخ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr @(item.Txt.IsEmpty() == false ? "class=table-warning" : "")>
+                    <td>
+
+                        @i  @{i++; }
+                    </td>
+
+                    <td>
+                        @if (item.isEndVrud)
+                        {
+                            <span class="badge bg-danger text-white">In</span>
+                        }
+                        @if (item.isEndXroj)
+                        {
+                            <span class="badge bg-danger text-white">Out</span>
+                        }
+
+                        <label><input type="checkbox" id="checkP" onchange="checkPChange();" value="@item.Id" /> @Html.DisplayFor(modelItem => item.Code) @Html.DisplayFor(modelItem => item.Custumer)</label>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContractType.Title)
+
+                    </td>
+
+                    <td>
+                        @item.Date.ToPersianDate()
+                    </td>
+
+                    <td>
+                        @item.Azdate
+
+                    </td>
+                    <td>
+                        @item.Tadate
+                    </td>
+                    <td>
+                        <small>@Html.Raw(item.Txt)</small>
+                        @Html.Raw(string.Join("", item.prodocts.Select(a => " <span class='badge bg-info'>" + a.title + "</span> ").ToArray()))
+                        @Html.Raw(string.Join("", item.packings.Select(a => " <span class='badge bg-info'>" + a.title + "</span> ").ToArray()))
+
+                    </td>
+
+
+                    
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountMaxIn)
+                        </td>
+                    
+
+
+                    <td>
+                      
+
+                        <span class="badge bg-primary ">@item._CountIn</span>
+
+                    </td>
+                    <td>
+                        
+
+                        <span class="badge bg-primary @(item._CountForInMande<0?"bg-danger":"")">@item._CountForInMande</span>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxIn??0).ToString("###,###,##0.##"))">جعبه</span>
+                       
+                    </td>
+
+                   
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountMaxOut)
+                        </td>
+                    
+                    <td>
+                       
+
+                        <span class="badge bg-primary ">@item._CountOut</span>
+
+                    </td>
+
+
+                    <td>
+                      
+
+                        <span class="badge bg-primary @(item._CountForOutMande<0?"bg-danger":"")">@item._CountForOutMande</span>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary badge-counter fa fa-money" data-toggle="tooltip" title="@((item.PriceOfBoxOut??0).ToString("###,###,##0.##"))">جعبه</span>
+                       
+                    </td>
+                    <td>
+                        <a asp-action="Create" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
+                        <a asp-action="docs" asp-controller="ajax" asp-route-title="@ContractType.Title @item.Code @item.Custumer" isModal="true" asp-route-id="@item.Id" class="btn btn-outline-dark fa fa-file"></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا مطمئن هستید؟')" class="btn btn-outline-warning fa fa-recycle"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7">جمع:</td>
+
+
+                
+                    <td>
+                        @Model.Sum(a => a.CountMaxIn)
+                    </td>
+              
+                <td>
+                  
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountIn)</span>
+
+                </td>
+                <td>
+                 
+
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountForInMande)</span>
+                </td>
+
+
+                <td> </td>
+
+
+
+
+                
+                    <td>
+                        @Model.Sum(a => a.CountMaxOut)
+                    </td>
+               
+
+
+                <td>
+                  
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountOut)</span>
+
+                </td>
+
+
+                <td>
+                   
+                    <span class="badge bg-primary">@Model.Sum(a => a._CountForOutMande)</span>
+
+                </td>
+                <td colspan="2"> </td>
+
+
+            </tr>
+        </tfoot>
+    </table>
+
+
+    @section js{
+        <!-- Modal -->
+        <div id="myModalReprice" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">نرخ گذاری</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            فقط فیلد های پر اصلاح میگردد
+                        </p>
+                        <form asp-action="reprice" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="FkContractType" value="@ContractType.Id" />
+
+                            <div id="hideinput"></div>
+
+                             
+                                @if (conf.IsEntry)
+                                {
+                                    <div class="form-group ">
+                                        <label class="control-label">حداکثر مقدار ورود</label>
+                                        <input name="CountMaxIn" type="number" class="form-control" />
+
+                                    </div>
+                                }
+                                @if (conf.IsExit)
+                                {
+                                  
+                                     
+                                        <div class="form-group ">
+                                            <label class="control-label">حداکثر مقدار خروج</label>
+                                            <input name="CountMaxOut" type="number" class="form-control" />
+
+                                        </div>
+                                 
+                                }
+
+
+                            
+                            <hr />
+
+
+                            <div class="row">
+
+
+                                @if (conf.IsEntry)
+                                {
+                                    <div class="form-group col-md-6 ">
+                                        <label class="control-label">نرخ هر جعبه ورود</label>
+                                        <input name="PriceOfBoxIn" type="number" class="form-control" />
+                                    </div>
+                                }
+                                @if (conf.IsExit)
+                                {
+                                    <div class="form-group col-md-6 ">
+                                        <label class="control-label">نرخ هر جعبه خروج</label>
+                                        <input name="PriceOfBoxOut" type="number" class="form-control" />
+                                    </div>
+                                }
+
+
+
+
+
+                            </div>
+                            
+                            <hr />
+
+
+                            <div class="form-group float-left">
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="sendSMS" value="true" checked id="sendSMS">
+                                    <label class="form-check-label" for="sendSMS">ارسال پیامک تغییرات</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary fa fa-save"> ثبت  </button>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <script>
+
+
+            function checkPChange() {
+                var inputs = $("#hideinput");
+                inputs.html("");
+                $("#checkP:checked").each(function (index, item) {
+                    inputs.append("<input type='hidden' value='" + $(item).val() + "' name='id'>");
+
+                })
+            };
+            function checkAll() {
+
+                $("#checkP ").each(function (index, item) {
+                    if ($(item).is(':checked')) {
+                        $(item).prop('checked', false); // Unchecks the box
+
+                    } else {
+                        $(item).prop('checked', true);  // Checks the box
+
+                    }
+
+                });
+                checkPChange();
+
+
+
+            }
+
+
+
+        </script>
+
+    }
+
+
+
+
 
 }
 
  
-<p>
-    <a asp-action="Create" asp-route-idtype="@ContractType.Id" class="btn btn-outline-success fa fa-plus"> قرارداد جدید</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-
-            <th>
-                <i class="	fa fa-sort-numeric-down"></i>
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Custumer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContractType)
-            </th>
-            @if (ContractType.IsEntry)
-            {
-                @if (ContractType.IsProduct1Packing0)
-                {
-                    <th>
-                        @Html.DisplayNameFor(model => model.WeightMaxIn)
-                    </th>
-
-                }
-                else
-                {
-                    <th>
-                        @Html.DisplayNameFor(model => model.CountMaxIn)
-                    </th>
-                }
-            }
-            @if (ContractType.IsExit)
-            {
-                @if (ContractType.IsProduct1Packing0)
-                {
-                    <th>
-                        @Html.DisplayNameFor(model => model.WeightMaxOut)
-                    </th>
-
-                }
-                else
-                {
-                    <th>
-                        @Html.DisplayNameFor(model => model.CountMaxOut)
-                    </th>
-                }
-            }
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Azdate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tadate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Txt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Custumer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContractType.Title)
-
-            </td>
-            @if (ContractType.IsEntry)
-            {
-                @if (ContractType.IsProduct1Packing0)
-                {
-                    <td>
-                        @item.WeightMaxIn.GetValueOrDefault().ToString("###0.##")
-                    </td>
-
-                }
-                else
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CountMaxIn)
-                    </td>
-                }
-            }
-            @if (ContractType.IsExit)
-            {
-                @if (ContractType.IsProduct1Packing0)
-                {
-                    <td>
-                        @item.WeightMaxOut.GetValueOrDefault().ToString("###0.##")
-                    </td>
-
-                }
-                else
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CountMaxOut)
-                    </td>
-                }
-            }
-
-            <td>
-                @item.Date.ToPersianDate()
-            </td>
-
-            <td>
-                @item.Azdate
-
-            </td>
-            <td>
-                @item.Tadate
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Txt)
-            </td>
-            <td>
-                <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"></a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-warning fa fa-recycle"></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

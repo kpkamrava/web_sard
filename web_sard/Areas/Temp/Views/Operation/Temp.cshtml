@@ -1,0 +1,172 @@
+﻿@model web_db._temp.TblTemp
+
+@{
+    ViewData["Title"] = "وضعیت روز";
+}
+<div class="card">
+    <div>
+        <h4>@Model._Date</h4>
+        <hr />
+        <div class="row">
+
+
+
+
+            <div class="col-sm-10">
+                @if (Model.FkuserTaiid.HasValue)
+                {@Html.DisplayFor(model => model.UserTaiid.Title)}
+            </div>
+
+            @if (Model.Txt.IsEmpty() == false)
+            {
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Txt)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Txt)
+                </div>
+            }
+
+
+            <div class=" col-sm-3">
+                <div class=" card">
+                    @if (Model.Sign != null)
+                    {
+                        <img src="@Model.Sign.imgToBase64()" class="card-img-top" />
+
+                    }
+
+                <div class="card-header">
+                    @if (Model.FkuserTaiid.HasValue == false)
+                    {
+                        @Html._Sign(Url.Action("addDoc", "Operation", new { id = Model.Id, kind = "Sign" }), "امضای ثبت کننده", "btn-primary") 
+                    } 
+                </div> 
+
+                    <div class="card-body">
+                        @Html.DisplayNameFor(model => model.FkuserAdd) :    @Html.DisplayFor(model => model.UserAdd.Title)
+
+                    </div>
+                </div>
+            </div>
+
+            <div class=" col-sm-3">
+                <div class=" card">
+                    @if (Model.Sign != null)
+                    {
+                        <img src="@Model.SignTaiid.imgToBase64()" class="card-img-top" />
+
+                    }
+
+                <div class="card-header">
+                    @if (User._getRolAny(_UserRol._Rolls.TempAdmin))
+                    {
+                        @Html._Sign(Url.Action("addDoc", "Operation", new { id = Model.Id, kind = "SignTaiid" }), "امضای تایید کننده", "btn-success")
+                        @if (Model.FkuserTaiid.HasValue)
+                        {
+                            <a href="@Url.Action("addDoc", "Operation", new { id = Model.Id, kind = "RemoveSignTaiid" })" class="btn btn-warning">حذف تایید</a>
+
+                        }
+                    }
+
+                </div>
+
+
+                    <div class="card-body ">
+                        @Html.DisplayNameFor(model => model.FkuserTaiid) :    @Html.DisplayFor(model => model.UserTaiid.Title)
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div>
+       
+            @Html.ActionLink("ویرایش", "Create", new { id = Model.Id })
+         
+            |<a asp-action="Index">برگشت به صفحه اصلی</a>
+
+    </div>
+</div>
+
+
+ 
+<div id="accordion">
+    @{ int i = 0;}
+    @foreach (var item in cl._ListLocation.Where(a => a.FkP == null&&a.ForProduct).OrderBy(a => a.Code))
+    {
+        i++;
+        <div class="card">
+            <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="#collapse@(i)">
+                    @item.Title
+                </a>
+            </div>
+            <div id="collapse@(i)" class="collapse @(i==1?"show":"")" data-parent="#accordion">
+                <div class="card-body">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    مکان
+                                </th>
+
+                                <th>
+                                    حداقل دما
+                                </th>
+                                <th>
+                                    حداکثر دما
+                                </th>
+                                <th>
+                                    میانگین دما
+
+                                </th>
+                                <th>
+                                    دمای موتورخانه
+                                </th>
+                                <th>
+                                    رطوبت
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        @foreach (var item2 in cl._ListLocation.Where(a => a.FkP == item.Id).OrderBy(a => a.Code))
+                        {
+                            <tr>
+
+                                <td>@item2.CodeFull</td>
+
+                                <td>@Model.TblTempRows.Where(a =>a.Location==item2.CodeFull&& a.MinDama.HasValue ).Min(a => a.MinDama).ToDama()</td>
+                                <td>@Model.TblTempRows.Where(a => a.Location == item2.CodeFull && a.MaxDama.HasValue).Max(a => a.MaxDama).ToDama()</td>
+                                <td>@(((Model.TblTempRows.Where(a => a.Location == item2.CodeFull && a.MaxDama.HasValue).Max(a => a.MaxDama)+Model.TblTempRows.Where(a => a.MinDama.HasValue).Min(a => a.MinDama))/2).ToDama())</td>
+                                <td>@Model.TblTempRows.Where(a => a.Location == item2.CodeFull && a.MotorDama.HasValue).Max(a => a.MotorDama).ToDama()</td>
+                                <td>@Model.TblTempRows.Where(a => a.Location == item2.CodeFull && a.R.HasValue).Max(a => a.R).ToDama()</td>
+
+                                <td>
+                                    <a asp-action="addTempRow" asp-route-idTemp="@Model.Id" asp-route-location="@item2.CodeFull" ismodal="true">ثبت مقدار</a>
+                                </td>
+                            </tr>
+
+
+
+
+
+                        }
+
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    }
+</div>
+ 

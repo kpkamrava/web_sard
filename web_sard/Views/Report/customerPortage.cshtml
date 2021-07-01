@@ -1,0 +1,345 @@
+﻿@model IEnumerable<web_sard.Models.tbls.portage.portage>
+
+@{
+    ViewData["Title"] = "customerPortage";
+    var ContractType = (web_db.TblContractType)ViewBag.ctype;
+
+}
+
+<h1>لیست ماشینهای @ViewBag.cus</h1>
+
+@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
+
+
+
+    <table class="table table-striped table-responsive ">
+        <thead>
+            <tr>
+                <th>
+                    <i class="	fa fa-sort-numeric-down"></i>
+
+                </th>
+                <th>
+                    <i class="	fa fa-sort-numeric-down"></i>
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer)
+                </th>
+
+ 
+                    <th>
+                        وزن
+                    </th>
+               
+
+                <th>
+                    @Html.DisplayNameFor(model => model.PackingCount)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.PackingOfWeight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Txt)
+                </th>
+                <th>
+                    <i class="	fa fa-calendar"></i>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+
+                        @i @{i++;}
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        <span class="fa fa-sms  @(item.SmsOk == true ? "text-success" : item.SmsOk == null ? "text-secondary" : "text-warning")" data-toggle="tooltip" title="@item.SmsVaziat"></span>
+                        @if (item.OtcodeResid.IsEmpty() == false)
+                        {
+                            <span class="fa fa-check  text-success " data-toggle="tooltip" title="@item.OtcodeResid"></span>
+
+                        }
+
+                        @Html.DisplayFor(modelItem => item.Customer.Title)
+                        (@Html.DisplayFor(modelItem => item.CarRanande) | @Html.DisplayFor(modelItem => item.CarMashin)  @Html.DisplayFor(modelItem => item.CarShMashin))
+
+                        @{var kindPortagee = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == item.KindCode);
+                        }
+                        <span class="badge bg-@(kindPortagee.classcolor)">@item.KindTitle </span>
+
+
+
+                    </td>
+
+
+                   
+                        <td>
+                            @item.WeightNet.GetValueOrDefault().ToString("###0.##")
+
+
+                        </td>
+                    
+                    <td>
+                        @item.PackingCount.GetValueOrDefault().ToString("###0.##")
+                    </td>
+
+
+                    <td>
+                        @item.PackingOfWeight.GetValueOrDefault().ToString("###0.##")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Txt)
+                    </td>
+                    <td>
+                        @if (item.Date2.HasValue)
+                        {
+
+                            @item.Date2.ToPersianDate()
+                        }
+
+                    </td>
+
+                    <td>
+
+                        @if (item.IsEnd)
+                        {
+                            <a asp-controller="Portage" asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-sm btn-light  fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                            <a asp-controller="Portage" asp-action="Print" asp-route-id="@item.Id" class="btn btn-sm btn-light  fa fa-print" data-toggle="tooltip" title="چاپ رسید" isModal="true"> </a>
+                            <a asp-controller="Portage" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="حذف خروج"> </a>
+
+                        }
+                        else
+                        {
+                            <a asp-controller="Portage" asp-action="CreateIn" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                            <a asp-controller="Portage" asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-share" data-toggle="tooltip" title="ثبت خروج"></a>
+                            <a asp-controller="Portage" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="ابطال برگه"> </a>
+                        }
+
+                        @if (item.TxtPermit.IsEmpty() == false)
+                        {
+                            <span class="badge text-danger fa fa-1x fa-certificate float-left" data-toggle="tooltip" title="@item.UsPermit * @item.TxtPermit "> </span>
+
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-left">
+                    جمع:
+                </th>
+               
+                    <th>
+                        @Model.Sum(a => a.WeightNet).GetValueOrDefault().ToString("###0.##")
+
+
+                    </th>
+                
+                <th>
+                    @Model.Sum(a => a.PackingCount).GetValueOrDefault().ToString("###0.##")
+                </th>
+
+
+                <th>
+                    @((Model.Sum(a => a.PackingOfWeight)/ Model.Count()).GetValueOrDefault().ToString("###0.##"))
+                </th>
+                <th colspan="3">
+
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+}
+else@if (ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+    var conf = ContractType.ConfigASabad();
+
+
+    <table class="table table-striped table-responsive ">
+        <thead>
+            <tr>
+                <th>
+                    <i class="	fa fa-sort-numeric-down"></i>
+
+                </th>
+                <th>
+                    <i class="	fa fa-sort-numeric-down"></i>
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer)
+                </th>
+
+
+                @if (conf.Needbascule)
+                {
+                    <th>
+                        وزن
+                    </th>
+                }
+
+                <th>
+                    @Html.DisplayNameFor(model => model.PackingCount)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.PackingOfWeight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Txt)
+                </th>
+                <th>
+                    <i class="	fa fa-calendar"></i>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+
+                    @i @{i++;}
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    <span class="fa fa-sms  @(item.SmsOk == true ? "text-success" : item.SmsOk == null ? "text-secondary" : "text-warning")" data-toggle="tooltip" title="@item.SmsVaziat"></span>
+                    @if (item.OtcodeResid.IsEmpty() == false)
+                    {
+                        <span class="fa fa-check  text-success " data-toggle="tooltip" title="@item.OtcodeResid"></span>
+
+                    }
+
+                    @Html.DisplayFor(modelItem => item.Customer.Title)
+                    (@Html.DisplayFor(modelItem => item.CarRanande) | @Html.DisplayFor(modelItem => item.CarMashin)  @Html.DisplayFor(modelItem => item.CarShMashin))
+
+                    @{var kindPortagee = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == item.KindCode);
+                    }
+                    <span class="badge bg-@(kindPortagee.classcolor)">@item.KindTitle </span>
+
+
+
+                </td>
+
+
+                @if (conf.Needbascule)
+                {
+                    <td>
+                        @item.WeightNet.GetValueOrDefault().ToString("###0.##")
+
+
+                    </td>
+                }
+                <td>
+                    @item.PackingCount.GetValueOrDefault().ToString("###0.##")
+                </td>
+
+
+                <td>
+                    @item.PackingOfWeight.GetValueOrDefault().ToString("###0.##")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Txt)
+                </td>
+                <td>
+                    @if (item.Date2.HasValue)
+                    {
+
+                        @item.Date2.ToPersianDate()
+                    }
+
+                </td>
+
+                <td>
+
+                    @if (item.IsEnd)
+                    {
+                        <a asp-controller="Portage" asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-sm btn-light  fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                        <a asp-controller="Portage" asp-action="Print" asp-route-id="@item.Id" class="btn btn-sm btn-light  fa fa-print" data-toggle="tooltip" title="چاپ رسید" isModal="true"> </a>
+                        <a asp-controller="Portage" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="حذف خروج"> </a>
+
+                    }
+                    else
+                    {
+                        <a asp-controller="Portage" asp-action="CreateIn" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-edit" data-toggle="tooltip" title="ویرایش"></a>
+                        <a asp-controller="Portage" asp-action="CreateOut" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-share" data-toggle="tooltip" title="ثبت خروج"></a>
+                        <a asp-controller="Portage" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light fa fa-recycle" data-toggle="tooltip" onclick="return confirm('آیا مطمئن هستید؟')" title="ابطال برگه"> </a>
+                    }
+
+
+                    @if (item.TxtPermit.IsEmpty() == false)
+                    {
+                        <span class="badge text-danger fa fa-1x fa-certificate float-left" data-toggle="tooltip" title="@item.UsPermit * @item.TxtPermit "> </span>
+
+                    }
+
+                </td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-left">
+                    جمع:
+                </th>
+                @if (conf.Needbascule)
+                {
+                    <th>
+                        @Model.Sum(a => a.WeightNet).GetValueOrDefault().ToString("###0.##")
+
+
+                    </th>
+                }
+                <th>
+                    @Model.Sum(a => a.PackingCount).GetValueOrDefault().ToString("###0.##")
+                </th>
+
+
+                <th>
+                    @((Model.Sum(a => a.PackingOfWeight)/ Model.Count()).GetValueOrDefault().ToString("###0.##"))
+                </th>
+                <th colspan="3">
+
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -5,171 +5,451 @@
 
     var listContract = (Dictionary<string, Guid>)ViewBag.ListContract;
     var defContract = (Guid)ViewBag.defContract;
+    var defContractt = listContract.SingleOrDefault(a => a.Value == defContract);
+
+
+
+    var injurys = (List<Guid>)ViewBag.injurys;
 }
-<div>
-    <a asp-action="Index" asp-route-idtype="@Model.FkContractType" class="fa fa-th-list btn btn-dark btn-block mb-3"> لیست ماشینهای داخل محوطه </a>
-</div>
 
 
-<div id="accordion">
-    <div class="card border-secondary shadow ">
-        <div class="card-header bg-secondary p-0" id="headingOne">
-            <h5>
-                <button class="btn btn-link btn-block text-white " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    مشخصات محموله
-                </button>
-            </h5>
-        </div>
 
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body ">
-                @{
-                    var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == Model.KindCode);
+@if (Model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASardKhane)
+{
 
-                }
+    <div class="mb-5">
+        <a asp-action="Index" asp-route-idtype="@Model.FkContractType" class=" btn btn-dark btn-block p-2  fa fa-th-list"> لیست ماشینهای داخل محوطه </a>
+    </div>
+
+
+    <div id="accordion" style="margin:-1rem;">
+        <div class="card border-secondary shadow ">
+            <div class="card-header bg-secondary p-0" id="headingOne">
                 <h5>
-                    @Model.Code - @Model.Customer.Title <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                    <button class="btn btn-link btn-block text-white @(ViewBag.openkind==1?"collapsed":"")" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        مشخصات محموله
+                    </button>
+
                 </h5>
-                <div>
+            </div>
 
-                    <ul class="list-group list-group-flush m-0 p-0">
-                        <li class="list-group-item">
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-truck"> </span>@Model.CarMashin
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-user-cog"> </span> @Model.CarRanande
-                        </li>
-                        <li class="list-group-item">
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-car-battery"> </span>@Model.CarShMashin
-                            <span class="badge badge-@(kindcontract.classcolor) fa fa-mobile"> </span>@Model.CarTell
-                        </li>
-                        <li class="list-group-item">
-                            @if (Model.ContractType.IsProduct1Packing0)
-                            {
-                                <span class="badge badge-@(kindcontract.classcolor) fa fa-hdd"> </span>@Model.Weight1.GetValueOrDefault().ToString("###0.##")
+            <div id="collapseOne" class="collapse  @(ViewBag.openkind==1?"show":"")" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body ">
+                    @{
+                        var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == Model.KindCode);
 
-                            }
-                            @if (Model.Txt.IsEmpty() == false)
-                            {
-                                <span class="badge badge-@(kindcontract.classcolor) fa fa-paperclip"> </span>
-                                @Model.Txt
-                            }
-                        </li>
+                    }
+                    <h5>
+                        @Model.Code - @Model.Customer.Title <span class="badge bg-@(kindcontract.classcolor)  float-xl-left float-md-left float-sm-none shadow">@kindcontract.txt</span>
+                    </h5>
 
+                    <div>
 
-                        <li>
+                        <ul class="list-group list-group-flush m-0 p-0">
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-truck"> </span>@Model.CarMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-user-cog"> </span> @Model.CarRanande
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-car-battery"> </span>@Model.CarShMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-mobile"> </span>@Model.CarTell
+                            </li>
+                            <li class="list-group-item">
+                                
+                                    <span class="badge bg-@(kindcontract.classcolor) fa fa-hdd"> </span>@Model.Weight1.GetValueOrDefault().ToString("###0.##")
 
-                            <div class="row ">
-                                <div class="col-sm-3">
-                                    <div class="card bg-info column">
-                                        <div class="card-header"> پیوست جدید</div>
-                                        <form asp-action="addDoc" enctype="multipart/form-data">
-                                            <input type="hidden" name="idp" value="@Model.Id" />
-                                            <div class="custom-file">
-                                                <input type="file" onchange="form.submit()" name="image" class="custom-file-input" lang="fa" accept="image/x-png ,image/jpeg" />
-                                                <label class="custom-file-label "> </label>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    @await Html.PartialAsync("li/paintsign", Model.Id)
-
-                                </div>
-
-                                @foreach (var item in Model.Documents)
+                              
+                                @if (Model.Txt.IsEmpty() == false)
                                 {
-                                    <div class="col-sm-3">
-                                        <div class="card  ">
-                                            <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
-                                            @if (item.Kind == "Yard")
+                                    <span class="badge bg-@(kindcontract.classcolor) fa fa-paperclip"> </span>
+                                    <span class="bg-warning"> @Model.Txt</span>
+                                }
+                            </li>
+                          
+                                <li class="list-group-item">
+
+                                    <form asp-action="setinjuryDef" method="post" class="m-3">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@Model.Id" />
+                                        <input type="hidden" name="defContract" value="@defContract" />
+                                        <div class="row">
+
+
+
+                                            @foreach (var item in cl._ListInjury.Where(a => a.IsActive))
                                             {
-                                                <div class="card-footer">
-                                                    <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-del="@true" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+                                                <div class="col-6 col-sm-4  col-auto form-check ">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" name="FkInjury" value="@item.Id" checked="@injurys.Contains(item.Id)" class="form-check-input shadow" /> @item.Title
+                                                    </label>
 
                                                 </div>
+
                                             }
+                                            <div class="col-md-12 col-auto  ">
+                                                <br />
+                                                <input type="submit" class="btn btn-outline-success fa fa-save" value="ثبت صدمات پیشفرض" />
+                                                @if (defContract != Guid.Empty)
+                                                {
+                                                    <input type="submit" class="btn btn-success fa fa-save btn-sm" onclick="return confirm('آیا مطمئن هستین که همه پالتهای کد @defContractt.Key تغییر کند؟')" name="submitall" value=" ثبت صدمات و اصلاح  کد @defContractt.Key" />
+                                                }
+                                            </div>
                                         </div>
+                                    </form>
+
+
+
+
+
+
+                                </li>
+
+                          
+                            <li class="list-group-item">
+
+                                <div class="row ">
+                                    <div class="col-sm-3">
+                                        <div class="card bg-info column">
+                                            <div class="card-header"> پیوست جدید</div>
+                                            <form asp-action="addDoc" method="post" enctype="multipart/form-data">
+
+                                                <input type="hidden" name="idp" value="@Model.Id" />
+                                                <input type="hidden" name="kind" value="Yard" />
+                                                <input type="hidden" name="defContract" value="@defContract" />
+                                                <div class="custom-file">
+                                                    <input type="file" onchange="form.submit()" name="image" class="custom-file-input" lang="fa" accept="image/x-png ,image/jpeg" />
+                                                    <label class="custom-file-label "> </label>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        @*<button type="button" class="btn btn-primary w-100  " data-toggle="modal" onclick="setupsign('Sign')" data-target="#examplesignModal">
+                                                رسم امضا
+                                            </button>
+                                            <button type="button" class="btn btn-danger w-100  " data-toggle="modal" onclick="setupsign('SignPermit')" data-target="#examplesignModal">
+                                                رسم مجوز
+                                            </button>*@
+
+
+                                        @Html._Sign(Url.Action("addDoc", "YARD", new { idp = Model.Id, kind = "Sign", defContract = defContract }), "رسم امضا", "btn-primary")
+                                        @Html._Sign(Url.Action("addDoc", "YARD", new { idp = Model.Id, kind = "SignPermit", defContract = defContract }), "رسم مجوز", "btn-warning")
+
+
                                     </div>
 
-                                }
+                                    @foreach (var item in Model.Documents)
+                                    {
+                                        <div class="col-sm-3  ">
+                                            <div class="card  ">
+                                                <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
+                                                @if (item.Kind == "Yard")
+                                                {
+                                                    <div class="card-footer">
+                                                        <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-del="@true" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="card-footer">
+
+                                                        <span>
+                                                            @(item.Kind=="Sign"?"امضا": item.Kind == "SignPermit" ? "مجوز":"")
+                                                        </span>
 
 
-                            </div>
-                        </li>
-                    </ul>
+                                                    </div>
+
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+
+
+                                </div>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+
+
 
 
 
                 </div>
+            </div>
 
+        </div>
 
-
-
-
+        <div class="card  bg-gradient bg-warning">
+            <div class="card-body">
+                @foreach (var item in listContract)
+                {
+                    <a asp-action="view" asp-route-id="@Model.Id" asp-route-defContract="@item.Value" class="btn btn-circle btn-info btn-lg  @(item.Value==defContract?"active":"")">@item.Key</a>
+                }
             </div>
         </div>
 
-    </div>
+        @if (defContract != Guid.Empty)
+        {
 
-    <div class="card bg-gradient-light">
-        <div class="card-body">
-            @foreach (var item in listContract)
-            {
-            <a asp-action="view" asp-route-id="@Model.Id" asp-route-defContract="@item.Value" class="btn btn-circle btn-info @(item.Value==defContract?"selected":"")">@item.Key</a>
-            }
-        </div>
-    </div>
-
-    @if (defContract != Guid.Empty)
-    {
-
-        <div class="card border-info shadow">
-            <div class="card-header bg-info p-0" id="headingTwo">
-                <h5>
-                    <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        وضعیت قرارداد
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body" id="contractvc">
-                </div>
-            </div>
-        </div>
-        <div class="card  border-success shadow">
-            <div class="card-header p-0 bg-success" id="headingThree">
-                <h5>
-                    <button class="btn btn-link btn-block text-white collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        @(Model.KindCode < 10 ? "تخلیه" : "بارگیری") بار
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                <div class="card-body">
-                    <input type="hidden" id="Id" value="@Model.Id" />
-                    <input type="hidden" id="fkcontract" value="@defContract" />
-                    <input type="hidden" id="FkContractType" value="@Model.FkContractType" />
-                    <input type="hidden" id="FkCustomer" value="@Model.FkCustomer" />
-                    <input type="hidden" id="IsEntry" value="@Model.ContractType.IsEntry" />
-                    <input type="hidden" id="IsProduct1Packing0" value="@Model.ContractType.IsProduct1Packing0" />
+            <div class="card border-info shadow">
+                <div class="card-header bg-info p-0" id="headingTwo">
                     <h5>
-                        @Model.Code - @Model.Customer.Title <span class="badge badge-@(kindcontract.classcolor) float-left shadow">@kindcontract.txt</span>
+                        <button class="btn btn-link btn-block text-white  @(ViewBag.openkind==2?"collapsed":"")" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            وضعیت قرارداد
+                        </button>
                     </h5>
-            
-                    <partial name="TaxlieBargiriPartial" />
+                </div>
+                <div id="collapseTwo" class="collapse  @(ViewBag.openkind==2?"show":"")" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body" id="contractvc">
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="card  border-success shadow">
+                <div class="card-header p-0 bg-success" id="headingThree">
+                    <h5>
+                        <button class="btn btn-link btn-block text-white @(ViewBag.openkind<1?"collapsed":"")" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            @(Model.KindCode < 10 ? "تخلیه" : "بارگیری") بار
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse  @(ViewBag.openkind<1?"show":"") " aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <input type="hidden" id="Id" value="@Model.Id" />
+                        <input type="hidden" id="fkcontract" value="@defContract" />
+                        <input type="hidden" id="FkContractType" value="@Model.FkContractType" />
+                        <input type="hidden" id="FkCustomer" value="@Model.FkCustomer" />
+                        <input type="hidden" id="KindCotractType" value="@Model.ContractType.KindCotractType" />
+                        <h5>
+                            @(defContractt.Key) | @Model.Customer.Title   <span class="badge bg-@(kindcontract.classcolor) float-xl-left float-md-left float-sm-none shadow">@kindcontract.txt</span>
+                        </h5>
+                        <br />
+
+                        <partial name="TaxlieBargiriPartial" />
+                    </div>
+                </div>
+            </div>
 
 
-        @section js{
-            <script>
-                Contractbutton("#FkContract", contractvc);
-            </script>
-            <script src="~/assets/js/Vue.js"></script>
-            <script src="~/assets/TaxlieBargirilJs.js"></script>
+            @section js{
+
+                <script>
+                    Contractbutton("#fkcontract", contractvc);
+                </script>
+                <script src="~/assets/js/Vue.js"></script>
+                <script src="~/assets/TaxlieBargirilJs.js"></script>
+
+
+
+            }
 
         }
 
-    }
+
+    </div>
 
 
-</div>
+}
+else
+if (Model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ASabad)
+{
+
+    <div class="mb-5">
+        <a asp-action="Index" asp-route-idtype="@Model.FkContractType" class=" btn btn-dark btn-block p-2  fa fa-th-list"> لیست ماشینهای داخل محوطه </a>
+    </div>
+
+
+    <div id="accordion" style="margin:-1rem;">
+        <div class="card border-secondary shadow ">
+            <div class="card-header bg-secondary p-0" id="headingOne">
+                <h5>
+                    <button class="btn btn-link btn-block text-white @(ViewBag.openkind==1?"collapsed":"")" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        مشخصات محموله
+                    </button>
+
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse  @(ViewBag.openkind==1?"show":"")" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body ">
+                    @{
+                        var kindcontract = web_sard.Models.tbls.portage.kindPortage.listkindcontract.Find(a => a.code == Model.KindCode);
+
+                    }
+                    <h5>
+                        @Model.Code - @Model.Customer.Title <span class="badge bg-@(kindcontract.classcolor)  float-xl-left float-md-left float-sm-none shadow">@kindcontract.txt</span>
+                    </h5>
+
+                    <div>
+
+                        <ul class="list-group list-group-flush m-0 p-0">
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-truck"> </span>@Model.CarMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-user-cog"> </span> @Model.CarRanande
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-car-battery"> </span>@Model.CarShMashin
+                                <span class="badge bg-@(kindcontract.classcolor) fa fa-mobile"> </span>@Model.CarTell
+                            </li>
+                            <li class="list-group-item">
+                               
+                                @if (Model.Txt.IsEmpty() == false)
+                                {
+                                    <span class="badge bg-@(kindcontract.classcolor) fa fa-paperclip"> </span>
+                                    <span class="bg-warning"> @Model.Txt</span>
+                                }
+                            </li>
+                             <li class="list-group-item">
+
+                                <div class="row ">
+                                    <div class="col-sm-3">
+                                        <div class="card bg-info column">
+                                            <div class="card-header"> پیوست جدید</div>
+                                            <form asp-action="addDoc" method="post" enctype="multipart/form-data">
+
+                                                <input type="hidden" name="idp" value="@Model.Id" />
+                                                <input type="hidden" name="kind" value="Yard" />
+                                                <input type="hidden" name="defContract" value="@defContract" />
+                                                <div class="custom-file">
+                                                    <input type="file" onchange="form.submit()" name="image" class="custom-file-input" lang="fa" accept="image/x-png ,image/jpeg" />
+                                                    <label class="custom-file-label "> </label>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        @*<button type="button" class="btn btn-primary w-100  " data-toggle="modal" onclick="setupsign('Sign')" data-target="#examplesignModal">
+                                                رسم امضا
+                                            </button>
+                                            <button type="button" class="btn btn-danger w-100  " data-toggle="modal" onclick="setupsign('SignPermit')" data-target="#examplesignModal">
+                                                رسم مجوز
+                                            </button>*@
+
+
+                                        @Html._Sign(Url.Action("addDoc", "YARD", new { idp = Model.Id, kind = "Sign", defContract = defContract }), "رسم امضا", "btn-primary")
+                                        @Html._Sign(Url.Action("addDoc", "YARD", new { idp = Model.Id, kind = "SignPermit", defContract = defContract }), "رسم مجوز", "btn-warning")
+
+
+                                    </div>
+
+                                    @foreach (var item in Model.Documents)
+                                    {
+                                        <div class="col-sm-3  ">
+                                            <div class="card  ">
+                                                <img src="@Url.Action("Doc","Ajax",new {id=item.Id })" class="card-img zoom" />
+                                                @if (item.Kind == "Yard")
+                                                {
+                                                    <div class="card-footer">
+                                                        <a asp-action="addDoc" asp-route-id="@item.Id" asp-route-del="@true" asp-route-idp="@Model.Id" class="btn btn-sm btn-danger fa fa-recycle float-left"></a>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="card-footer">
+
+                                                        <span>
+                                                            @(item.Kind=="Sign"?"امضا": item.Kind == "SignPermit" ? "مجوز":"")
+                                                        </span>
+
+
+                                                    </div>
+
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+
+
+                                </div>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card  bg-gradient bg-warning">
+            <div class="card-body">
+                @foreach (var item in listContract)
+                {
+                    <a asp-action="view" asp-route-id="@Model.Id" asp-route-defContract="@item.Value" class="btn btn-circle btn-info btn-lg  @(item.Value==defContract?"active":"")">@item.Key</a>
+                }
+            </div>
+        </div>
+
+        @if (defContract != Guid.Empty)
+        {
+
+            <div class="card border-info shadow">
+                <div class="card-header bg-info p-0" id="headingTwo">
+                    <h5>
+                        <button class="btn btn-link btn-block text-white  @(ViewBag.openkind==2?"collapsed":"")" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            وضعیت قرارداد
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse  @(ViewBag.openkind==2?"show":"")" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body" id="contractvc">
+                    </div>
+                </div>
+            </div>
+            <div class="card  border-success shadow">
+                <div class="card-header p-0 bg-success" id="headingThree">
+                    <h5>
+                        <button class="btn btn-link btn-block text-white @(ViewBag.openkind<1?"collapsed":"")" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            @(Model.KindCode < 10 ? "تخلیه" : "بارگیری") بار
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse  @(ViewBag.openkind<1?"show":"") " aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <input type="hidden" id="Id" value="@Model.Id" />
+                        <input type="hidden" id="fkcontract" value="@defContract" />
+                        <input type="hidden" id="FkContractType" value="@Model.FkContractType" />
+                        <input type="hidden" id="FkCustomer" value="@Model.FkCustomer" /> 
+                        <input type="hidden" id="KindCotractType" value="@Model.ContractType.KindCotractType" />
+                        <h5>
+                            @(defContractt.Key) | @Model.Customer.Title   <span class="badge bg-@(kindcontract.classcolor) float-xl-left float-md-left float-sm-none shadow">@kindcontract.txt</span>
+                        </h5>
+                        <br />
+
+                        <partial name="TaxlieBargiriPartial" />
+                    </div>
+                </div>
+            </div>
+
+
+            @section js{
+
+                <script>
+                    Contractbutton("#fkcontract", contractvc);
+                </script>
+                <script src="~/assets/js/Vue.js"></script>
+                <script src="~/assets/TaxlieBargirilJs.js"></script>
+
+
+
+            }
+
+        }
+
+
+    </div>
+
+
+}
+

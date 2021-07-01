@@ -1,0 +1,50 @@
+﻿@model IEnumerable<web_sard.Models.tbls.car.car>
+
+@{
+    ViewData["Title"] = "لیست خودرو ها";
+}
+
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-success fa fa-plus">خودرو جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceTowBascol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDel)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @item.PriceTowBascol.ToMoney()
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDel)
+            </td>
+
+            <td>
+                <a asp-action="Create"isModal="true" asp-route-id="@item.Id" class="btn btn-outline-info fa fa-edit"> </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

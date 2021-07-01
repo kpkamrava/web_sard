@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using static win_sard.ClassBascul;
 
@@ -17,7 +11,7 @@ namespace win_sard
             InitializeComponent();
         }
 
-       
+
 
         private void تنظیماتToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -63,10 +57,10 @@ namespace win_sard
                 parity = cmbPariti.SelectedIndex,
                 cont_addSahih = Convert.ToInt32(mp_TextBox3.Text),
                 cont_addAhshari = Convert.ToInt32(mp_TextBox4.Text),
-                urlServer=textBox1.Text.Trim()
+                urlServer = textBox1.Text.Trim()
             };
             reg.set("config", Newtonsoft.Json.JsonConvert.SerializeObject(row));
-             
+
 
             DialogResult = DialogResult.OK;
         }
@@ -75,5 +69,9 @@ namespace win_sard
         {
             this.Close();
         }
+
+
+
+
     }
 }

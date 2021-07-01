@@ -1,38 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using web_lib;
 
 namespace web_sard.Controllers
 {
+
+
     [LoginAuth(_UserRol._Rolls.EtelahatePaie)]
     public class InjuryController : Controller
     {
-        web_db.sardweb_Context db;
+
+        internal web_db.sardweb_Context db;
+
+
         public InjuryController(web_db.sardweb_Context db)
         {
             this.db = db;
         }
+
+
         public IActionResult Index()
         {
-            var list = db.TblInjury.OrderBy(a=>a.Ord).Select(a=>new Models.tbls.injury.injury(a));
+            var list = db.TblInjuries.OrderBy(a => a.Ord).Select(a => new Models.tbls.injury.injury(a));
+             
             return View(list.ToList());
         }
-        public IActionResult Create( Guid id)
+
+
+        public IActionResult Create(Guid id)
         {
-            var model = new Models.tbls.injury.injury();
-            var row = db.TblInjury.Find(id);
-            if (row!=null)
+            var model = new Models.tbls.injury.injury() { Id = Guid.NewGuid() };
+            var row = db.TblInjuries.Find(id);
+            if (row != null)
             {
                 model = new Models.tbls.injury.injury(row);
 
             }
             return View(model);
         }
+
+
         [HttpPost]
-        public IActionResult Create(Guid id, Models.tbls.injury.injury model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Models.tbls.injury.injury model)
         {
             if (!ModelState.IsValid)
             {
@@ -41,21 +51,21 @@ namespace web_sard.Controllers
             }
             try
             {
-                var x = db.TblInjury.Find(id);
+                var x = db.TblInjuries.Find(model.Id);
                 if (x == null)
                 {
-                    x = new web_db.TblInjury { Id = Guid.NewGuid() };
+                    x = new web_db.TblInjury { Id = model.Id };
 
-                    db.TblInjury.Add(x);
+                    db.TblInjuries.Add(x);
                 }
-               
+
                 x.IsActive = model.IsActive;
                 x.Title = model.Title;
-                
+
 
                 db.SaveChanges();
                 ViewBag.txt = "ثبت انجام شد";
-                Models.cl._ListInjury = db.TblInjury.OrderBy(a=>a.Ord).ToList();
+                Models.cl._ListInjury = db.TblInjuries.OrderBy(a => a.Ord).ToList();
                 return RedirectToAction(nameof(Index));
             }
             catch

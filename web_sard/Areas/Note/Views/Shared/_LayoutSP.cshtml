@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutSPMain.cshtml";
+}
+@{
+
+    var permis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<web_db.TblUserPermi>>(User._getuserPermis());
+}
+@section Menu{
+
+
+    <ul id="menu-content" class="menu-content collapse out">
+        <li class="rounded-bottom">
+              <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fa fa-calendar-alt"></i><span>تقویم کاری</span></a>
+           </li>
+        <li class="rounded-bottom">
+            <a class="nav-link" asp-action="List" asp-controller="Home"><i class="fa fa-list-ul"></i><span>لیست کارها</span></a>
+        </li>
+
+
+        @Html._menuSys(sys._SystemEnum.Note)
+    </ul>
+
+}
+@section js{  @RenderSection("js", required: false)
+@RenderSection("Scripts", required: false)
+}
+@RenderBody()

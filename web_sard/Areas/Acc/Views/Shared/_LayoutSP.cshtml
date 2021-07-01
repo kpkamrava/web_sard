@@ -1,0 +1,77 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutSPMain.cshtml";
+}
+@{
+
+    var permis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<web_db.TblUserPermi>>(User._getuserPermis());
+}
+@section Menu{
+
+
+    <ul id="menu-content" class="menu-content collapse out">
+        <li>
+
+            <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fa fa-dashboard"></i><span>داشبورد</span></a>
+        </li>
+
+        <li data-toggle="collapse" data-target="#pppfSN" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i>صدور فاکتور<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppfSN">
+                @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-action="index" asp-controller="Facture" asp-route-SanadShode="false" asp-route-fkContractType="@item.Id"><i class="fa fa-list-alt"></i><span>@item.Title</span></a>
+                    </li>
+                }
+
+
+
+            </ul>
+        </li>
+        <li data-toggle="collapse" data-target="#pppfS" class="collapsed">
+            <a href="#"><i class="fa fa-globe fa-lg"></i> لیست فاکتور ها <span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="pppfS">
+
+                @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-action="index" asp-controller="Facture" asp-route-SanadShode="true" asp-route-fkContractType="@item.Id"><i class="fa fa-list-alt"></i><span>@item.Title</span></a>
+                    </li>
+                }
+
+            </ul>
+        </li>
+
+        @if (User._getRolAny(_UserRol._Rolls.MainSuperVisor))
+        {
+            <li>
+
+                <a class="nav-link" asp-action="Index" asp-controller="Admin"><i class="fa fa-running"></i><span>تنظیمات</span></a>
+            </li>
+        }
+
+
+        <li data-toggle="collapse" data-target="#ppprep1" class="collapsed">
+            <a href="#"><i class="fa fa-car fa-lg"></i>گزارشات<span class="arrow"></span></a>
+            <ul class="sub-menu collapse" id="ppprep1">
+          
+
+                @foreach (var item in cl._ListContractType(User._getuserSalMaliDef()))
+                {
+                    <li> <a class="dropdown-item" asp-area="Acc" asp-action="Acc" asp-route-fktype="@item.Id" asp-controller="Report"><i class="fa fa-cube"></i><span>وضعیت مالی مشتریان @item.Title </span></a> </li>
+
+                }
+            </ul>
+        </li>
+
+
+
+        @Html._menuSys(sys._SystemEnum.Mali)
+    </ul>
+
+}
+@section js{  @RenderSection("js", required: false)
+@RenderSection("Scripts", required: false)
+}
+@RenderBody()

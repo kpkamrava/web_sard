@@ -1,0 +1,94 @@
+﻿@model web_db.TblSalMali
+
+@{
+    ViewData["Title"] = "دوره مالی " + (Model.Id > 0 ? ("ویرایش " + Model.Sal) : "جدید");
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" asp-controller="year">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+
+
+            <div class="form-group">
+                <label class="control-label">عنوان</label>
+                <input asp-for="Sal" required class="form-control" />
+                <span asp-validation-for="Sal" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOpen" /> فعال
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOrginal" /> اصلی
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-label">زمان شروع</label>
+
+                <input name="az" type="text" value="@Model.SalAz.ToPersianDate()" required class="form-control datepicker" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">زمان پایان</label>
+                <input name="ta" type="text" value="@Model.SalTa.ToPersianDate()" class="form-control datepicker" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="ثبت" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Id > 0)
+    {
+        <div class="col-md-6">
+            <form asp-action="SetPer" asp-controller="year">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+
+                @{
+                    List<Guid> ussel = ViewBag.usS;
+
+                }
+
+
+                <div class="form-group">
+                    دسترسی به کاربران:
+                    <select name="fkus" multiple class="form-control form-control-sm">
+
+                        @foreach (var item in (List<web_db.TblUser>)ViewBag.us)
+                        {
+                            @if (ussel.Any(a => a == item.Id))
+                            {
+                                <option value="@item.Id" selected>  @item.Title</option>
+
+                            }
+                            else
+                            {
+                                <option value="@item.Id">  @item.Title</option>
+
+                            }
+                        }
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="ثبت دسترسی به کاربران" class="btn btn-primary" />
+                </div>
+            </form>
+
+        </div>
+    }
+
+</div>
+
+<div>
+    <a asp-action="Index">بازگشت به لیست</a>
+</div>
+

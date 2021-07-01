@@ -1,0 +1,153 @@
+﻿@model web_db._queu.TblQueu
+
+@{
+    ViewData["Title"] = "IndexEdit";
+    List<web_db.TblPacking> listPacking = ViewBag.listPacking;
+    List<web_db.TblProduct> listProduct = ViewBag.listProduct;
+
+
+
+    var US_WeightMax = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.US_WeightMax) ?? new web_db.TblConf()).Value;
+    var US_WeightMin = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.US_WeightMin) ?? new web_db.TblConf()).Value;
+    var US_WeightVahed = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.US_WeightVahed) ?? new web_db.TblConf()).Value;
+     var US_WeightZarib = (cl._conf.SingleOrDefault(a => a.Key == web_db.TblConf.KeyEnum.US_WeightZarib) ?? new web_db.TblConf()).Value;
+
+}
+<h4>سیستم سفارش سردخانه</h4>
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Index" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <input name="p" value="2" type="hidden" /> 
+            <input asp-for="mob" type="hidden" />
+              
+            <div class="form-group">
+                <label asp-for="codemeli" class="control-label"></label>
+                <input asp-for="codemeli" class="form-control" />
+                <span asp-validation-for="codemeli" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="Product" class="control-label">میوه های مورد درخواست</label>
+
+                <select name="Product" multiple id="Product" class="form-control" required>
+                    @foreach (var item in listProduct)
+                    {
+                        if ((Model.CodeMahsuls ?? "").Contains(item.Id.ToString()))
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Packing" class="control-label">جعبه های مورد درخواست</label>
+
+                <select name="Packing" multiple id="Packing" class="form-control" required>
+                    @foreach (var item in listPacking)
+                    {
+                        if ((Model.CodeMahsuls ?? "").Contains(item.Id.ToString()))
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label">مقدار درخواست <small class="badge">@US_WeightVahed</small></label>
+                <input asp-for="Weight" max="@US_WeightMax" min="@US_WeightMin" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Addras" class="control-label"></label>
+                <input asp-for="Addras" class="form-control" />
+                <span asp-validation-for="Addras" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Txt" class="control-label"></label>
+                <input asp-for="Txt" class="form-control" />
+                <span asp-validation-for="Txt" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="codesend" class="control-label"></label>
+                    <div class="input-group">
+
+                        <input asp-for="codesend" max="999999" class="form-control" />
+                        <input type="submit" id="submit" value="ثبت درخواست" disabled class="btn btn-primary" />
+
+                    </div>
+
+                    <span asp-validation-for="codesend" class="text-danger"></span>
+                </div>
+
+            </div>
+        </form>
+
+
+        <p>
+            سیستم ثبت سفارش و نوبت گیری سردخانه
+        </p>
+        @if (string.IsNullOrWhiteSpace(ViewBag.error) == false)
+        {
+            <div class="alert alert-danger text-right">
+                <strong>خطا!</strong> @ViewBag.error
+            </div>
+
+        }
+        <div>
+            <a asp-action="Index">بازگشت</a>
+            @*<a asp-action="Index" asp-controller="Account"> بازگشت</a>*@
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+            $("#codesend").keyup(function () {
+                if ($("#codesend").val().length > 3) {
+                    $("#submit").removeAttr("disabled");
+                } else {
+                    $("#submit").attr("disabled","");
+                }
+            });
+
+        });
+    </script>
+
+}
+
+
+

@@ -1,0 +1,115 @@
+﻿ 
+
+<div class="m-2 p-2" style="direction:rtl">
+    <div class="row">
+        <div class="col-4 text-right">
+            <h4>
+                <label class="border border-secondary p-3 text-center">
+                    باسکول  
+                </label>
+            </h4>
+
+        </div>
+        <div class="col-8  text-left">
+            <h6 class="text-left pl-5"> شماره: {{ajax.Code}}</h6>
+
+            <h6 class="text-left pl-1"> تاریخ: {{ajax.Date1date}}</h6>
+        </div>
+
+
+    </div>
+
+     
+    <div class="row">
+        <h3 class="text-center ">
+            {{ajax.Customerstr}}
+        </h3>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col   pl-0">
+
+            <h6 class="text-center border border-secondary p-2 mb-0"> شماره </h6>
+
+            <h6 class="text-center border border-secondary p-2 "> <b>{{ajax.CarShMashin}}</b> </h6>
+             
+        </div>
+        <div class="col p-0">
+            <h6 class="text-center border border-secondary p-2 mb-0"> ماشین </h6>
+
+            <h6 class="text-center  border border-secondary p-2"> <b> {{ajax.CarMashin}}</b></h6>
+        </div> 
+        <div class="col pr-0">
+            <h6 class="text-center border border-secondary p-2 mb-0"> بار </h6>
+
+            <h6 class="text-center  border border-secondary p-2" v-for="item in ajax.ListRows"> <b>{{item.Product}} {{item.Packing}} </b> </h6>
+        </div>
+    </div> 
+ 
+  
+    <div class="row">
+        <div class="col  pl-0">
+            <h6 class="text-center border border-secondary p-2 mb-0"> توزین اول </h6>
+
+            <h6 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight1}}</b> </h6>
+        </div>
+        <div class="col   p-0">
+
+            <h6 class="text-center border border-secondary p-2 mb-0"> توزین دوم </h6>
+
+            <h6 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight2}}</b> </h6>
+
+        </div>
+
+        <div class="col   pr-0">
+            <h6 class="text-center border border-secondary p-2 mb-0"> وزن خالص </h6>
+
+            <h6 class="text-center  border border-secondary p-2"> <b> {{ajax.WeightNet}}</b></h6>
+        </div>
+    </div> 
+
+
+    <div class="row   mt-2 mb-2">
+        <p>توضیحات :<b> {{ajax.Txt}}</b></p>
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col  pl-0">
+            <h6 class="text-center   p-2 mb-0"> متصدی باسکول </h6>
+
+             <h6 class="text-center  p-2 " > <b>{{ajax.UsAdd1}}</b> </h6>
+
+
+            <h6 class="text-center  p-2 ">   </h6>
+            <h6 class="text-center   p-2 mb-0">  تایید کارشناس  </h6>
+        </div>
+        <div class="col   p-0">
+
+            <img class="img-thumbnail" v-if="ajax.DocumentSign!=null" v-bind:src="'/ajax/doc/'+ajax.DocumentSign.Id" v-bind:alt="'sign'+ajax.Customerstr" />
+            <h6 class="text-center  p-2 mb-0"> راننده </h6>
+
+            <h6 class="text-center   p-2 "> <b>{{ajax.CarRanande}}</b> </h6>
+
+        </div>
+    </div>
+
+
+    <div class="row border-top border-secondary ">
+        <h6>سامانه مشتریان:</h6>
+        <h3 class="text-center">
+            us.mivehtala.com
+        </h3>
+        <h6 class="text-center">
+            آدرس سردخانه: مهاباد - سه راهی ترشکان
+        </h6>
+        <h6 class="text-center">
+            09149447530 - 04442532243 - 04442532356
+        </h6>
+
+    </div>
+
+</div>

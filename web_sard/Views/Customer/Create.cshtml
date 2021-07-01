@@ -1,0 +1,63 @@
+﻿@model web_sard.Models.tbls.customer.customer
+
+@{
+    ViewData["Title"] = Model.Id == Guid.Empty ? "مشتری جدید" : " ویرایش " + Model.Title;
+}
+
+<h1>@ViewData["Title"]</h1>
+ 
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden"/>
+               
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" readonly />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NationalCode" class="control-label"></label>
+                <input asp-for="NationalCode" class="form-control" />
+                <span asp-validation-for="NationalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mob" class="control-label"></label>
+                <input asp-for="Mob" class="form-control" />
+                <span asp-validation-for="Mob" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Addras" class="control-label"></label>
+                <input asp-for="Addras" class="form-control" />
+                <span asp-validation-for="Addras" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsEnable" /> @Html.DisplayNameFor(model => model.IsEnable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdOtherSystem" class="control-label"></label>
+                <input asp-for="IdOtherSystem" class="form-control" />
+                <span asp-validation-for="IdOtherSystem" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="ثبت" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">بازگشت به لیست</a>
+</div>
+

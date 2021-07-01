@@ -1,0 +1,132 @@
+﻿@model IEnumerable<web_db.TblPortageMoney>
+@using web_lib
+@{
+
+    ViewData["Title"] = "";
+    var portage = (web_db.TblPortage)ViewBag.portage;
+}
+@if (portage.OtcodeResid.IsEmpty() == false)
+{
+    <div class="alert bg-info text-light"><strong class="alert-heading">شماره فاکتور</strong> @portage.OtcodeResid</div>
+}
+
+
+<form asp-action="CreateFacktorCustomer" asp-controller="Facture" method="post"> 
+     <div class="card">
+
+        <div class="card-body">
+
+            <table class="table table-striped table-responsive table-responsive-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Txt)
+                        </th>
+
+                        <th>
+                            محل
+                        </th>
+                        <th>
+                            جعبه و محصول
+                        </th>
+
+                        <th>
+                            ماشین
+                        </th>
+                        <th>
+                            نوع
+                        </th>
+                        <th>
+                            مقدار
+                        </th>
+
+                        <th>
+                            نرخ
+                        </th>
+                        <th>
+                            حساب
+                        </th>
+                        <th>
+                            زمان
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <label> <input type="checkbox" name="ids" value="@item.Id" checked />  @item.FkPortageNavigation.KindTitle</label>
+
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Txt)
+                            </td>
+
+
+                            <td>
+                                @((cl._ListLocation.SingleOrDefault(a=>a.Id== item.Fklocation)??new web_db.TblLocation()).Title)
+                            </td>
+                            <td>
+
+                                @((cl._ListPacking.SingleOrDefault(a => item.FkPacking == a.Id)??new web_db.TblPacking()).Title)
+                                @((cl._ListProduct.SingleOrDefault(a=>item.FkProduct==a.Id)??new web_db.TblProduct()).Title)
+                            </td>
+                            <td>
+                                @cl._ListCar.Single(a => item.FkCar == a.Id).Title
+                            </td>
+                            <td>
+                                @item.Kind
+                            </td>
+                            <td>
+                                @item.Weight.gadrmotlagh().ToMoney()
+                            </td>
+
+                            <td>
+                                @item.PriceOneWeight.gadrmotlagh().ToMoney()
+                            </td>
+                            <td>
+                                @item.PriceSum.gadrmotlagh().ToMoney()
+                            </td>
+
+                            <td>
+                                @item.Date.ToPersianDate()
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+
+
+
+                        <td colspan="8">
+                        </td>
+                        <td>
+                            @Model.Sum(a => a.PriceSum.gadrmotlagh()).ToMoney()
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+        <div class="card-header">
+
+            <button type="submit" class="btn btn-success fa fa-outdent">ارسال به برنامه حسابداری </button>
+
+
+        </div>
+    </div> 
+</form>
+
+
+

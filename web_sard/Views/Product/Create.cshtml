@@ -7,8 +7,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" asp-action="Create">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="id" type="hidden" />
             <div class="form-group">
                 <label asp-for="code" class="control-label"></label>
                 <input asp-for="code" class="form-control" />
@@ -19,15 +21,40 @@
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
             </div>
-         
+
             <div class="form-group form-check">
                 <label class="form-check-label">
 
                     <input class="form-check-input" asp-for="isActive" /> @Html.DisplayNameFor(model => model.isActive)
                 </label>
             </div>
-      
+            <div class="form-group form-check">
+                <label class="form-check-label">
 
+                    <input class="form-check-input" asp-for="IsNotAc" /> @Html.DisplayNameFor(model => model.IsNotAc)
+                </label>
+            </div>
+            <hr />
+            <div class="form-group">
+                <label asp-for="WightScale" class="control-label"></label>
+                <input asp-for="WightScale" class="form-control" />
+                <span asp-validation-for="WightScale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtcodeKala" class="control-label"></label>
+                <input asp-for="OtcodeKala" class="form-control" />
+                <span asp-validation-for="OtcodeKala" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtcodeVahedShomaresh" class="control-label"></label>
+                <input asp-for="OtcodeVahedShomaresh" class="form-control" />
+                <span asp-validation-for="OtcodeVahedShomaresh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtcodeKalaAcc" class="control-label"></label>
+                <input asp-for="OtcodeKalaAcc" class="form-control" />
+                <span asp-validation-for="OtcodeKalaAcc" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="ثبت" class="btn btn-primary" />
             </div>

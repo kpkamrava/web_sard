@@ -22,8 +22,14 @@
                 </th>
                 <th>
                     فعال
-                </th> 
-                <th></th>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.InContract)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OutContract)
+                </th>
+                <th></th> 
             </tr>
         </thead>
         <tbody>
@@ -40,10 +46,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.isActive)
                 </td>
-            
                 <td>
-                    <a asp-action="Create" asp-route-id="@item.id" class="btn btn-outline-info fa fa-edit"></a>
+                    @item.InContract.ToKilo()
                 </td>
+                <td>
+                    @item.OutContract.ToKilo()
+                </td>
+                <td>
+                    <a asp-action="Create" asp-route-id="@item.id" isModal="true" class="btn btn-outline-info fa fa-edit"></a>
+                </td>
+
             </tr>
             }
         </tbody>

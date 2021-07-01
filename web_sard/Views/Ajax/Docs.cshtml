@@ -1,0 +1,93 @@
+﻿@model ICollection< web_db.TblPortageDocument>
+
+ @if (Context.Request.IsAjaxRequest())
+ {
+     <h4>@ViewData["Title"]</h4>
+
+ }
+<div class="card">
+
+          <div class="label">Click me!</div>
+          <input id="files" name="files" type="file" size="1" multiple onchange="uploadFiles('files');" />
+      </div>       
+    
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">
+                  <div class="card">
+                    @if (item.Format == "" || item.Format == ".jpg" || item.Format == ".jpeg")
+                    {
+                        <img class="card-img card-img-top" style="max-height:100px;" src="@Url.Action("Doc","Ajax",new {item.Id })" />
+
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            @item.Kind
+                            <label>
+                                @item.Date.ToPersianDateTime()
+                            </label>
+                        </div>
+
+
+                    }
+                <div class="card-footer">
+                    <button class="btn btn-danger fa fa-recycle" onclick="removeFile('@item.Id');"  ></button>
+                    <a href="@Url.Action("Doc","Ajax",new {item.Id })" target="_blank" class="btn btn-primary fa fa-download" ></a>
+                </div>
+                </div>
+           
+        </div>
+
+    }
+
+</div>
+
+
+ 
+<script>
+    function removeFile(id) {
+
+        $.ajax(
+            {
+                url: "@Url.Action("DocRemove", "Ajax")/" + id,
+               
+                processData: false,
+                contentType: false,
+                type: "GET",
+                success: function (data) {
+                                  @Html.Raw(Context.Request.IsAjaxRequest() ? " modalreload();" : "location.reload();");
+                }
+            });
+        return false;
+      }
+      function uploadFiles(inputId) {
+          debugger;
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+
+        }
+
+        $.ajax(
+            {
+                url: "@Url.Action("DocUpload", "Ajax")?idp=@ViewData["idp"]",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+
+
+                                  @Html.Raw(Context.Request.IsAjaxRequest() ? " modalreload();" : "location.reload();");
+                }
+            }
+        );
+        return false;
+    }
+</script>
+ 

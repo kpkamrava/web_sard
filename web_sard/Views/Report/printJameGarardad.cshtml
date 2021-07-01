@@ -1,0 +1,119 @@
+﻿@model web_sard.Models.reports.rep_JameGarardad.Model
+@{
+    ViewData["Title"] = "گزارش جامع قراردادها";
+    web_sard.Models.reports.rep_JameGarardad.Report table = (web_sard.Models.reports.rep_JameGarardad.Report)(ViewBag.table);
+    var listcustumer = (List<web_sard.Models.tbls.customer.customer>)ViewData["listcustumer"];
+}
+
+
+<div class="card bg-gray-300">
+    <div class="card-body">
+
+
+        <form asp-action="printJameGarardad" method="get">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-4 ">
+
+                    <div class="form-group">
+                        <label asp-for="Customers" class="control-label"></label>
+                        <select asp-for="Customers" class="form-control form-control-sm" multiple>
+                            @foreach (var item in listcustumer)
+                            {
+                                <option value="@item.Id">@item.Code @item.Title</option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="Customers" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="kindContracts" class="control-label"></label>
+                        <select asp-for="kindContracts" class="form-control form-control-sm" multiple>
+                            @foreach (var item in web_sard.Models.cl._ListContractType(User._getuserSalMaliDef()))
+                            {
+                                <option value="@item.Id">  @item.Title</option>
+
+                            }
+
+                        </select>
+                        <span asp-validation-for="kindContracts" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+
+                 
+                    <div class="form-group">
+                        <label asp-for="GardeshYes" class="control-label"></label>
+                        <input asp-for="GardeshYes" class=" " />
+                        <span asp-validation-for="GardeshYes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="GardeshNo" class="control-label"></label>
+                        <input asp-for="GardeshNo" class="" />
+                        <span asp-validation-for="GardeshNo" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                 <input type="submit" value="گزارش" name="table" class="btn btn-success float-left" />
+            </div>
+        </form>
+
+    </div>
+</div>
+ 
+
+@if ( table != null)
+{
+     <div id="listcontracts">
+         @foreach (var item in table.customers)
+         {
+             <div class="card colSearch" idd="@item.id" kind="@string.Join("&kind=",Model.kindContracts.Select(a=>a.ToString()).ToArray())">
+                  
+                 <div class="card-header">
+                     @item.name
+                 </div>
+             </div>
+         }
+     </div>
+    
+
+
+
+    @section js{
+        <script>
+            $(document).ready(function () {
+
+                $("#listcontracts").find(".card").each(function (index, e) {
+
+
+                    setTimeout(function () {
+                        var idd = $(e).attr("idd");
+                        var kind = $(e).attr("kind");
+                        $.get("/contract/ViewContractAjax/" + idd + "?table=true&kind=" + kind +
+                            "&GardeshYes=@Model.GardeshYes" +
+                            "&GardeshNo=@Model.GardeshNo"  
+
+                            , function (data, status) {
+                                $(e).append(data)
+                        });
+
+                    }, index * 500);
+
+
+
+
+
+                })
+
+
+            });
+
+        </script>
+     }
+
+}
