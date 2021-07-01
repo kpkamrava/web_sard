@@ -273,3 +273,16 @@ D:\Source\Repos\web_sard\web_sard\obj\Debug\net5.0\web_sard.dll
 D:\Source\Repos\web_sard\web_sard\obj\Debug\net5.0\ref\web_sard.dll
 D:\Source\Repos\web_sard\web_sard\obj\Debug\net5.0\web_sard.pdb
 D:\Source\Repos\web_sard\web_sard\obj\Debug\net5.0\web_sard.genruntimeconfig.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.csproj.AssemblyReference.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.dll.config
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.GeneratedMSBuildEditorConfig.editorconfig
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.AssemblyInfoInputs.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.AssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.csproj.CoreCompileInputs.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.MvcApplicationPartsAssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.MvcApplicationPartsAssemblyInfo.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.RazorAssemblyInfo.cache
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.RazorAssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.dll
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\ref\web_sard.dll
+D:\Source\Repos\web_sardGitHub\web_sard\obj\Debug\net5.0\web_sard.pdb

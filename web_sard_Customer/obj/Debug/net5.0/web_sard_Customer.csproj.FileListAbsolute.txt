@@ -453,3 +453,15 @@ D:\Source\Repos\web_sard\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.dl
 D:\Source\Repos\web_sard\web_sard_Customer\obj\Debug\net5.0\ref\web_sard_Customer.dll
 D:\Source\Repos\web_sard\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.pdb
 D:\Source\Repos\web_sard\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.genruntimeconfig.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.csproj.AssemblyReference.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.AssemblyInfoInputs.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.AssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.csproj.CoreCompileInputs.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.MvcApplicationPartsAssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.MvcApplicationPartsAssemblyInfo.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.RazorAssemblyInfo.cache
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.RazorAssemblyInfo.cs
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.dll
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\ref\web_sard_Customer.dll
+D:\Source\Repos\web_sardGitHub\web_sard_Customer\obj\Debug\net5.0\web_sard_Customer.pdb

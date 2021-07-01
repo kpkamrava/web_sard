@@ -262,10 +262,7 @@ namespace web_lib
         {
             return number.HasValue ? number.Value.ToDama() : "";
         }
-        public static decimal Round(this decimal number)
-        {
-            return Math.Round(number);
-        }
+    
         public static string ToKilo(this long number)
         {
             return ((decimal)number).ToKilo();
