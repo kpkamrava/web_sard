@@ -250,6 +250,10 @@ namespace web_lib
         {
             return number.HasValue ? number.Value.ToKilo() : "";
         }
+        public static string ToKilo(this long? number)
+        {
+            return number.HasValue? number.Value.ToString("######,##0"):"";
+        }
         public static string ToDama(this decimal number)
         {
             return number.ToString("#####0.##");
@@ -258,9 +262,9 @@ namespace web_lib
         {
             return number.HasValue ? number.Value.ToDama() : "";
         }
-        public static string ToKilo(this long? number)
+        public static decimal Round(this decimal number)
         {
-            return number.HasValue ? ((decimal)number.Value).ToKilo() : "";
+            return Math.Round(number);
         }
         public static string ToKilo(this long number)
         {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -175,6 +175,7 @@
     <Folder Include="Areas\Note\Models\" />
     <Folder Include="Areas\Us\Data\" />
     <Folder Include="Areas\Us\Models\" />
+    <Folder Include="wwwroot\assets\fonts\nazanin\" />
   </ItemGroup>
 
   <ItemGroup>

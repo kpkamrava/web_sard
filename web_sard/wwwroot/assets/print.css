@@ -1,0 +1,12 @@
+﻿
+@font-face {
+    font-family: 'BNazanin';
+    src: url('fonts/nazanin/B Nazanin Bold_0.ttf') format('truetype');
+}
+
+* {
+    font-family: BNazanin,'BNazanin'!important;
+    font-size: 12px;
+    border-color: #000000 !important;
+    color: black!important;
+}
