@@ -53,12 +53,32 @@ namespace web_lib
 
             return null;
         }
-        public static int ToInt(this string n)
+        public static bool ToDecimal(this string n,out decimal  dec)
         {
-            int d = 0;
-            int.TryParse(n, out d);
 
+            if (decimal.TryParse(n, out var d))
+            {
+                dec= d;
+                return true;
+            }
+
+            dec= 0;
+            return false;
+        }
+        public static int ToInt(this string n,int def=0)
+        {
+          
+            if (int.TryParse(n, out int d))
+            { 
             return d;
+
+            }
+            else
+            {
+                return def;
+            }
+
+            
         }
         public static string RandomColorCss()
         { Random rnd = new Random();

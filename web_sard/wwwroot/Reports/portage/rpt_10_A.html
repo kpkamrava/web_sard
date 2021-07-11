@@ -62,7 +62,7 @@
     
     </div>
     <div class="row border-top  border-secondary" v-for="item in ajax.ListRows">
-        <div class="col-9"><b> {{item.Packing}}</b>  <br /> <small class="float-left">کد:({{item.CodeContract}})</small> </div>
+        <div class="col-9 p-0"><h6><small >({{item.CodeContract}})</small><b> {{item.Packing}}</b> <h6> </div>
         <div class="col-3  text-center">{{item.Count}}</div>
   
     </div>
@@ -75,28 +75,27 @@
 
 
     <div class="row   mt-2 mb-2">
-        <p>توضیحات :<b> {{ajax.Txt}}</b></p>
+        <p>توضیحات : <h5>{{ajax.Txt}}</h5>  </p>
     </div>
-
      
 
     <div class="row">
         <div class="col  pl-0">
             <h6 class="text-center   p-2 mb-0">  تحویل {{ajax.KindCode==1?"گیرنده":ajax.KindCode==15?"دهنده":ajax.KindCode==11?"دهنده":"گیرنده"}} </h6>
 
-            <h6 class="text-center  p-2 " v-if="ajax.ListRows!=null"> <b>{{ajax.ListRows[0].UserAddStr}}</b> </h6>
-            <h6 class="text-center  p-2 " v-if="ajax.ListRows==null"> <b>{{ajax.UsAdd1}}</b> </h6>
+            <h5 class="text-center  p-2 " v-if="ajax.ListRows!=null"> <b>{{ajax.ListRows[0].UserAddStr}}</b> </h5>
+            <h5 class="text-center  p-2 " v-if="ajax.ListRows==null"> <b>{{ajax.UsAdd1}}</b> </h5>
 
 
             <h6 class="text-center  p-2 ">   </h6>
-            <h6 class="text-center   p-2 mb-0">  تایید کارشناس  </h6>
+            <h5 class="text-center   p-2 mb-0">  تایید کارشناس  </h5>
         </div>
         <div class="col   p-0">
 
             <img  class="img-thumbnail" v-if="ajax.DocumentSign!=null" v-bind:src="'/ajax/doc/'+ajax.DocumentSign.Id" v-bind:alt="'sign'+ajax.Customerstr" /> 
             <h6 class="text-center  p-2 mb-0"> تحویل {{ajax.KindCode==1?"دهنده":ajax.KindCode==15?"گیرنده":ajax.KindCode==11?"گیرنده":"دهنده"}} </h6>
 
-            <h6 class="text-center   p-2 "> <b>{{ajax.CarRanande}}</b> </h6>
+            <h5 class="text-center   p-2 "> <b>{{ajax.CarRanande}}</b> </h5>
              
         </div> 
     </div>
@@ -110,9 +109,9 @@
         <h6 class="text-center">
             آدرس سردخانه: مهاباد - سه راهی ترشکان
         </h6>
-        <h6 class="text-center"> 
-            09149447530 - 04442532243 - 04442532356
-        </h6>
+        <h5 class="text-center"> 
+            09145586701 - 04442532243 - 04442532356
+        </h5>
 
     </div>
 

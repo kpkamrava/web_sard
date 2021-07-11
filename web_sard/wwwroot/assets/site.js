@@ -127,7 +127,7 @@ function printtag(item) {
 
 
     win.document.close();
-    setTimeout(function () { win.print(); /* win.close();*/  }, 1000)
+    setTimeout(function () { win.print();  win.close();  }, 1000)
 
 }
 
