@@ -53,19 +53,20 @@
         <div class="col  pl-0">
             <h6 class="text-center border border-secondary p-2 mb-0"> توزین اول </h6>
 
-            <h4 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight1}}</b> </h4>
+            <h4 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight1}}</b> <span v-if="ajax.Weight1IsBascul==false" class="text-dark">🤏</span></h4>
+            <h6 class="text-center border border-secondary p-2 "> <b>{{ajax.Dateadd1}}</b> </h6>
         </div>
         <div class="col   p-0">
 
             <h6 class="text-center border border-secondary p-2 mb-0"> توزین دوم </h6>
 
-            <h4 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight2}}</b> </h4>
+            <h4 class="text-center border border-secondary p-2 "> <b>{{ajax.Weight2}}</b> <span v-if="ajax.Weight2IsBascul==false" class="text-dark">🤏</span> </h4>
+            <h6 class="text-center border border-secondary p-2 "> <b>{{ajax.Dateadd2}}</b> </h6>
 
         </div>
 
         <div class="col   pr-0">
-            <h6 class="text-center border border-secondary p-2 mb-0"> وزن خالص </h6>
-
+            <h6 class="text-center border border-secondary p-2 mb-0"> وزن خالص </h6> 
             <h4 class="text-center  border border-secondary p-2"> <b> {{ajax.WeightNet}}</b></h4>
         </div>
     </div> 
