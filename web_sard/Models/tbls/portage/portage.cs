@@ -74,6 +74,7 @@
 
             this.Dateadd1 = row.Dateadd1.ToPersianDateTime();
             this.Dateedit1 = row.Dateedit1.ToPersianDateTime();
+
             this.UsAdd1 = (db.TblUsers.Find(row.FkUsAdd1) ?? new web_db.TblUser()).Title;
             this.UsEdit1 = (db.TblUsers.Find(row.FkUsEdit1) ?? new web_db.TblUser()).Title;
 
