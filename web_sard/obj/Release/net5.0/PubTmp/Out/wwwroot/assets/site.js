@@ -113,6 +113,7 @@ function printtag(item) {
     var pageTitle = 'چاپ  ',
         stylesheet1 = '/libs/bootstrap/scss/bootstrap.css',
         stylesheet2 = '/assets/rtl.css',
+        stylesheet3 = '/assets/print.css',
         win = window.open('', 'Print', 'width=700,height=600');
      
     var strtag = $($.parseHTML(str.html()));
@@ -121,6 +122,7 @@ function printtag(item) {
     win.document.write('<html><head><title>' + pageTitle + '</title>' +
         '<link rel="stylesheet" href="' + stylesheet1 + '">' +
         '<link rel="stylesheet" href="' + stylesheet2 + '">' +
+        '<link rel="stylesheet" href="' + stylesheet3 + '">' +
         '</head><body dir="rtl">' + strtag.prop('outerHTML') + '</body></html>');
 
 

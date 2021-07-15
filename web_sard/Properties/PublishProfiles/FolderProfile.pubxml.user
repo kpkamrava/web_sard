@@ -6,7 +6,8 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>Z:\main</_PublishTargetUrl>
+    <_PublishTargetUrl>Y:\main</_PublishTargetUrl>
+    <History>True|2021-07-15T14:33:36.9566488Z;False|2021-07-15T19:00:22.7068605+04:30;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.Development.json">
