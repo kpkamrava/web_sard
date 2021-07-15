@@ -119,6 +119,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
+
                                 <div class="form-group">
                                     <label asp-for="Txt" class="control-label"></label>
                                     <textarea asp-for="Txt" class="form-control"></textarea>
@@ -732,6 +733,24 @@ else
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
+                                    <label class="control-label">بسته</label>
+                                    <select name="ListRows[0].FkPacking" class="form-control form-control-sm" required>
+                                        <option> </option>
+                                        @foreach (var item in cl._ListPacking.Where(a => (a.ForContractTypeJson ?? "").Contains(Model.ContractType.Code.ToString())))
+                                        {
+                                            if ((Model.ListRows.FirstOrDefault() ?? new web_sard.Models.tbls.portage.PortageRow()).FkPacking == item.Id)
+                                            {
+                                                <option value="@item.Id" selected>@item.Code @item.Title</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Code @item.Title</option>
+}
+                                        }
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="Txt" class="control-label"></label>
                                     <textarea asp-for="Txt" class="form-control"></textarea>
                                     <span asp-validation-for="Txt" class="text-danger"></span>
@@ -776,8 +795,7 @@ else
             </div>
         </div>
         <div class="form-group float-left">
-            @if (Model.ListRows.Any())
-            {
+            
                 <div class="form-check form-check-inline">
                     <input type="checkbox" class="form-check-input" name="resendSms" value="true" @*@(Model.SmsOk == null ? "checked" : "")*@ id="resendSms">
                     <label class="form-check-label" for="resendSms">ارسال پیامک</label>
@@ -785,7 +803,7 @@ else
                 <button type="submit" class="btn btn-primary fa fa-save"> ثبت خروج خودرو</button>
                 <button type="submit" name="print" class="btn btn-info fa fa-print" value="ثبت و چاپ"> ثبت و چاپ</button>
 
-            }
+           
 
         </div>
         <br />
@@ -812,36 +830,7 @@ else
                 }
             </div>
 
-            <table class="table">
-
-                <thead>
-                    <tr>
-                        <td>زمان</td>
-                        <td>محصول و سبد </td>
-                        <td>شرح</td>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in Model.ListRows)
-                    {
-
-                        <tr>
-                            <td>@item.Date.ToPersianDateTime()</td>
-                             <td>
-                                @item.Product  @item.Packing
-                            </td>
-                            <td>@item.Txt</td>
-
-                        </tr>
-
-
-                    }
-                </tbody>
-               
-
-            </table>
-
+     
 
         </div>
         <div class="col-md-3">

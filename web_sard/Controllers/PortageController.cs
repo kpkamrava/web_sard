@@ -849,7 +849,7 @@
 
             }
             else
-                     if (model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ABaskul)
+            if (model.ContractType.KindCotractType == web_db.TblContractType.KindCotractTypeEnum.ABaskul)
             {
 
                 ModelState.Remove("Date1date");
@@ -916,7 +916,11 @@
 
 
 
-
+                    var c = db.TblPortageRows.FirstOrDefault(a => a.FkPortage == x.Id);
+                  
+                  
+                   c.FkPacking = model.ListRows.First().FkPacking;
+                     
 
 
 

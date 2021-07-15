@@ -94,8 +94,12 @@ namespace web_lib
 
             public KPvalusAttribute()
             {
+           
+            }
 
+            public override string ToString() {
 
+                return Description ?? "";
             }
         }
 
