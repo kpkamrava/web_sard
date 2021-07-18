@@ -14,7 +14,6 @@ D:\Source\Repos\web_sardGitHub\web_lib\bin\Debug\net5.0\web_lib.deps.json
 D:\Source\Repos\web_sardGitHub\web_lib\bin\Debug\net5.0\web_lib.dll
 D:\Source\Repos\web_sardGitHub\web_lib\bin\Debug\net5.0\ref\web_lib.dll
 D:\Source\Repos\web_sardGitHub\web_lib\bin\Debug\net5.0\web_lib.pdb
-D:\Source\Repos\web_sardGitHub\web_lib\obj\Debug\net5.0\web_lib.csproj.AssemblyReference.cache
 D:\Source\Repos\web_sardGitHub\web_lib\obj\Debug\net5.0\web_lib.GeneratedMSBuildEditorConfig.editorconfig
 D:\Source\Repos\web_sardGitHub\web_lib\obj\Debug\net5.0\web_lib.AssemblyInfoInputs.cache
 D:\Source\Repos\web_sardGitHub\web_lib\obj\Debug\net5.0\web_lib.AssemblyInfo.cs
